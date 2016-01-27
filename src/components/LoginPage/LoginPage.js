@@ -11,7 +11,7 @@ import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './LoginPage.scss';
 
-const title = 'Log In';
+const title = 'SpotKnocker';
 
 class LoginPage extends Component {
 

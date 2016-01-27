@@ -7,25 +7,34 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-.root {
+$nav-link-color: #00A0FF;
+$nav-link-hover-color: #828587;
+$nav-link-active-color: orange;
+$nav-link-visited-color: pink;
+$nav-link-font-weight: 600;
 
+.root {
 }
 
 .link {
   display: inline-block;
   padding: 3px 8px;
   text-decoration: none;
-  font-size: 1.125em; /* ~18px */
+  font-size: 0.9rem;
+  font-weight: $nav-link-font-weight;
+  margin: 1px 0 0 0;
 }
 
-.link,
-.link:active,
-.link:visited {
-  color: rgba(255, 255, 255, .6);
+.link {
+  color: $nav-link-color;
 }
-
+.link:active {
+  color: $nav-link-active-color;
+}
 .link:hover {
-  color: rgba(255, 255, 255, 1);
+  color: $nav-link-hover-color;
+}
+.link:visited {
 }
 
 .highlight {

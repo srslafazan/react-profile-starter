@@ -12,46 +12,41 @@
 $brand-color: #61dafb;
 
 .root {
-  background: #373277;
+  background: $primary-color;
   color: #fff;
+  border-bottom: $primary-border;
 }
 
 .container {
   margin: 0 auto;
-  padding: 20px 0;
-  max-width: $max-content-width;
+  padding: 10px 20px 10px 40px;
+  // max-width: $max-content-width;
+  height: 39px;
 }
 
 .brand {
-  color: color($brand-color lightness(+10%));
+  // color: color($brand-color lightness(+10%));
+  color: #000;
   text-decoration: none;
   font-size: 1.75em; /* ~28px */
+  position: absolute;
+  // top: -12px;
+  top: 3px;
 }
 
-.brandTxt {
-  margin-left: 10px;
+.brandBlue {
+  color: blue;
+  vertical-align: middle;
 }
+.brandImg {
+  vertical-align: middle;
+}
+.brandTxt {
+  vertical-align: middle;
+}
+
 
 .nav {
   float: right;
   margin-top: 6px;
-}
-
-.banner {
-  text-align: center;
-}
-
-.bannerTitle {
-  margin: 0;
-  padding: 10px;
-  font-weight: normal;
-  font-size: 4em;
-  line-height: 1em;
-}
-
-.bannerDesc {
-  padding: 0;
-  color: rgba(255, 255, 255, .5);
-  font-size: 1.25em;
-  margin: 0;
 }
