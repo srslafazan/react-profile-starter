@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import s from './Section0.scss';
+import s from './Splash.scss';
 
-class Section0 extends Component {
+class Splash extends Component {
 
   render() {
     return (
@@ -15,4 +15,4 @@ class Section0 extends Component {
 
 }
 
-export default withStyles(Section0, s);
+export default withStyles(Splash, s);

@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './ProfilePage.scss';
-import Section0 from './Section0';
+import Splash from './Splash';
 
 
 const title = 'Shain Lafazan';
@@ -22,7 +22,7 @@ class ProfilePage extends Component {
       <div className={s.root}>
         <div className={s.container}>
 
-          <Section0></Section0>
+          <Splash></Splash>
 
 
                   
