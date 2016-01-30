@@ -1,0 +1,16 @@
+
+@import '../../variables.scss';
+
+.root {
+	width: 100%;
+  border-bottom: $primary-border;
+  background-color: #F5F5F5;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0 0 40px;
+  width: 100%;
+  max-width: $max-content-width;
+  height: 70vh;
+}

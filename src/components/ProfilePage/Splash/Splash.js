@@ -8,11 +8,15 @@ class Splash extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
+        	<div>
+          </div>
         </div>
       </div>
     );
   }
 
 }
+        		// <h1>Shain Lafazan</h1>
+        		// <h2 className={s.subheading}>Software Developer</h2>
 
 export default withStyles(Splash, s);

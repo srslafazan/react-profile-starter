@@ -1,11 +1,15 @@
 
 @import '../variables.scss';
 
+body {
+	background-color: #BCB7A5;
+}
+
 .root {
-	width: 100%
+	width: 100%;
 }
 
 .container {
   margin: 0 auto;
-  padding: 0 0 40px;
+  padding: 0;
 }

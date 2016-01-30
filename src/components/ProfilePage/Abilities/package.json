@@ -1,0 +1,6 @@
+{
+  "name": "Abilities",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Abilities.js"
+}

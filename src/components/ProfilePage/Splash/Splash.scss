@@ -3,14 +3,27 @@
 
 .root {
 	width: 100%;
-	background-color: green;
+	// background: url("https://static.pexels.com/photos/2318/vintage-technology-keyboard-old.jpg") center;
+  // background-size: cover;
 }
 
 .container {
   margin: 0 auto;
-  padding: 0 0 40px;
+  padding: 1rem;
   width: 100%;
   max-width: $max-content-width;
-  height: calc(100vh - 60px);
-  background-color: orange;
+  height: 100vh;
+  background-size: cover;
+  text-align: center;
+  // border-bottom: $primary-border;
+}
+
+h1 {
+	font-size: 4rem;
+	margin: 0 0 0 0;
+}
+
+.subheading {
+	font-size: 2rem;
+	margin: 0;
 }

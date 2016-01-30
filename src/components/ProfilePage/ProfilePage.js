@@ -3,6 +3,11 @@ import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './ProfilePage.scss';
 import Splash from './Splash';
+import Profile from './Profile';
+import Projects from './Projects';
+import Contact from './Contact';
+
+import {Parallax, Background} from 'react-parallax';
 
 
 const title = 'Shain Lafazan';
@@ -22,10 +27,13 @@ class ProfilePage extends Component {
       <div className={s.root}>
         <div className={s.container}>
 
-          <Splash></Splash>
-
-
-                  
+          <Parallax strength={300} bgImage={'https://static.pexels.com/photos/2318/vintage-technology-keyboard-old.jpg'}>
+              <Splash></Splash>
+          </Parallax>
+          
+          <Profile></Profile>
+          <Projects></Projects>
+          <Contact></Contact>
 
         </div>
       </div>
@@ -33,5 +41,7 @@ class ProfilePage extends Component {
   }
 
 }
+
+// bgImage={'./Splash/background.jpg'}
 
 export default withStyles(ProfilePage, s);
