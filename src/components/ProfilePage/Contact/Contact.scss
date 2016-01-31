@@ -4,12 +4,37 @@
 .root {
 	width: 100%;
   border-bottom: $primary-border;
+  border-top: $primary-border;
+  background-color: #5E696D;
 }
 
 .container {
   margin: 0 auto;
-  padding: 0 0 40px;
+  padding: 21vh 0 21vh 0;
   width: 100%;
-  max-width: $max-content-width;
-  height: 45vh;
+  text-align: center;
 }
+
+.heading {
+	font-size: 3.5rem;
+	color: $primary-white;
+	font-weight: 600;
+	margin: 2rem 0 2rem 0;
+
+	@media screen and (max-width: $screen-sm-min) {
+  	font-size: 2.5rem;  
+  }
+}
+
+.tagline {
+	font-size: 2.5rem;
+	color: $primary-white;
+	font-weight: 600;
+	margin: 2rem 0;
+	
+	@media screen and (max-width: $screen-sm-min) {
+  	font-size: 1.75rem;  
+
+  }
+}
+
