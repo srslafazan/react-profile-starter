@@ -9,6 +9,8 @@ class Splash extends Component {
       <div className={s.root}>
         <div className={s.container}>
         	<div>
+            <h1>J.V. Estolas</h1>
+            <h2>Full Stack Web Developer</h2>
           </div>
         </div>
       </div>
@@ -16,7 +18,5 @@ class Splash extends Component {
   }
 
 }
-        		// <h1>Shain Lafazan</h1>
-        		// <h2 className={s.subheading}>Software Developer</h2>
 
 export default withStyles(Splash, s);

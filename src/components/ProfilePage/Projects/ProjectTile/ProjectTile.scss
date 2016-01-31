@@ -1,0 +1,18 @@
+@import '../../../variables.scss';
+
+.projectThumb {
+	max-width: 200px;
+	height: 200px;
+	background-color: green;
+}
+
+.testmonialImg {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.testimionialText {
+	display: inline-block;
+}

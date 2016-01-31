@@ -46,6 +46,13 @@ class Html extends Component {
         <meta name="description" content={this.props.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+       <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+       <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" />
+       <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
+
         <style id="css" dangerouslySetInnerHTML={{ __html: this.props.css }} />
       </head>
       <body>

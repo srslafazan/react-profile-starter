@@ -1,0 +1,6 @@
+{
+  "name": "ProjectTile",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ProjectTile.js"
+}
