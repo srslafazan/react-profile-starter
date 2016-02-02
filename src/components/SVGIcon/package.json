@@ -1,0 +1,6 @@
+{
+  "name": "SVGIcon",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./SVGIcon.js"
+}

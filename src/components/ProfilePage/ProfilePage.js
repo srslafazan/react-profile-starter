@@ -40,6 +40,4 @@ class ProfilePage extends Component {
 
 }
 
-// bgImage={'./Splash/background.jpg'}
-
 export default withStyles(ProfilePage, s);

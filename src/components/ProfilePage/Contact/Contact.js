@@ -28,7 +28,7 @@ class Contact extends Component {
 					    <Input s={6} label="Phone number"><Icon>phone</Icon></Input>
 					    <Input s={6} label="Website"><Icon>website</Icon></Input>
 					    
-					    <label for="textarea1">Textarea</label>
+					    <label>Textarea</label>
 					    <textarea id={s.textarea1} className='materialize-textarea' length="120"
 					    	placeholder='Tell me about your project... &#13;&#10;
 					    		1) What is it? &#13;&#10;
