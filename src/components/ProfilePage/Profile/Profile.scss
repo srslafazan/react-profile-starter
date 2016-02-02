@@ -18,6 +18,22 @@
 .heading {
   margin: 0 0 1rem 0;
 }
+.subheading {
+  margin: 0 0 1rem 0; 
+  @media screen and (max-width: $screen-md-min) {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+  @media screen and (min-width: $screen-xs-min) {
+    margin: 0.5rem 0 1rem 0;
+  }
+  @media screen and (min-width: $screen-sm-min) {
+    margin: 1rem 0 1.5rem 0;
+  }
+  @media screen and (min-width: $screen-md-min) {
+    margin: 1.5rem 0 2.0rem 0;
+  }
+}
 
 .profileImg {
  border-radius: 50%;
@@ -27,17 +43,19 @@
 
 .photoContainer {
   text-align: right;
-  @media screen and (max-width: $screen-sm-min) {
+  @media screen and (max-width: $screen-md-min) {
     text-align: center;
   }
 }
 
 .profileTextContainer {
-  text-align: left;
+  text-align: center;
   p {
-    margin: 0 0 0 0;
-    @media screen and (min-width: $screen-md-min) {
-      margin-top: 4rem;
+    margin: 0 3rem;
+    text-align: justified;
+    @media screen and (max-width: $screen-md-min) {
+      margin: 0 0 0 0;
+      // text-align: center;
     }
   }
 }

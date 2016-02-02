@@ -15,8 +15,19 @@ class Profile extends Component {
               <img className={s.profileImg} src="jv.jpg" alt='profile photo'/>
             </Col>
             <Col s={12} m={6} l={8} className={s.profileTextContainer}>
+              <h2 className={s.subheading}>I code, therefore I am</h2>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. Donec cursus libero tortor, eget pretium elit aliquet ut. Suspendisse interdum interdum ex lacinia cursus. Integer in risus lacinia, dictum augue sed, tincidunt orci. Sed ullamcorper eleifend dui, vel tristique diam porta vel. Morbi consectetur augue ac sapien luctus egestas. Proin non sagittis leo. Morbi eu finibus turpis. Vivamus porttitor egestas enim. Pellentesque at justo ut lacus pharetra maximus nec et risus. Suspendisse quis lectus id quam congue scelerisque a non erat. Donec porttitor, massa ullamcorper pellentesque rutrum, eros libero venenatis purus, ac aliquam metus sem vitae orci.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. 
+                Donec cursus libero tortor, eget pretium elit aliquet ut. 
+                Suspendisse interdum interdum ex lacinia cursus. 
+                Integer in risus lacinia, dictum augue sed, tincidunt orci. 
+                Sed ullamcorper eleifend dui, vel tristique diam porta vel. 
+                Morbi consectetur augue ac sapien luctus egestas. 
+                Proin non sagittis leo. 
+                Morbi eu finibus turpis. 
+                Vivamus porttitor egestas enim. 
+                Pellentesque at justo ut lacus pharetra maximus nec et risus.
               </p>
             </Col>
           </Row>
