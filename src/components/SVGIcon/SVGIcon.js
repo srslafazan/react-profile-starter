@@ -1,3 +1,5 @@
+// http://dmfrancisco.github.io/react-icons/
+
 import React, { Component } from 'react';
 
 var SVGIcon = React.createClass({
