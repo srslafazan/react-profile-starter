@@ -35,6 +35,10 @@ const router = new Router(on => {
   on('/', async () => <ProfilePage />);
   on('/profile', async () => <ProfilePage />);
 
+  // var myProjectsData = "hello world";
+
+  // on('/myProjects', async () => {return myProjectsData});
+
 
 
   on('*', async (state) => {

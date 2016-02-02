@@ -6,7 +6,6 @@ import Splash from './Splash';
 import Profile from './Profile';
 import Projects from './Projects';
 import Contact from './Contact';
-
 import {Parallax, Background} from 'react-parallax';
 
 
@@ -27,11 +26,11 @@ class ProfilePage extends Component {
       <div className={s.root}>
         <div className={s.container}>
           <Parallax strength={300} bgImage={"dummy_bg_1.png"}>
-            <Splash></Splash>          
+            <Splash />
           </Parallax>
-          <Profile></Profile>
-          <Projects></Projects>
-          <Contact></Contact>
+          <Profile />
+          <Projects url="/myProjects" pollInterval={2000} />
+          <Contact />
 
         </div>
       </div>
