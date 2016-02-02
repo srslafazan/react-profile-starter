@@ -10,13 +10,34 @@
 
 .container {
   margin: 0 auto;
-  padding: 0 0 40px;
+  padding: 2rem 0;
   width: 100%;
-  min-height: 600px;
-  max-width: $max-content-width;
+  min-height: 400px;
+}
+
+.heading {
+  margin: 0 0 1rem 0;
 }
 
 .profileImg {
-	border-radius: 50px;
-	max-height: 150px;
+ border-radius: 50%;
+ height: 300px;
+ margin: 0 0 34px 0;
+}
+
+.photoContainer {
+  text-align: right;
+  @media screen and (max-width: $screen-sm-min) {
+    text-align: center;
+  }
+}
+
+.profileTextContainer {
+  text-align: left;
+  p {
+    margin: 0 0 0 0;
+    @media screen and (min-width: $screen-md-min) {
+      margin-top: 4rem;
+    }
+  }
 }

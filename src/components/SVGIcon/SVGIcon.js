@@ -1,6 +1,8 @@
+// http://dmfrancisco.github.io/react-icons/
+
 import React, { Component } from 'react';
 
-var Icon = React.createClass({
+var SVGIcon = React.createClass({
 
   handleClick: function(e){
     console.log('hey, clicked!', e);
@@ -80,6 +82,10 @@ var Icon = React.createClass({
             <path d="M20 4h-16c-1.1 0-1.99.9-1.99 2l-.01 12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-12c0-1.1-.9-2-2-2zm0 4l-8 5-8-5v-2l8 5 8-5v2z"></path>
           </g>
         );
+      case 'keyboard-arrow-down':
+        return (
+          <g><path d="M7.41 7.84l4.59 4.58 4.59-4.58 1.41 1.41-6 6-6-6z"></path></g>
+        );
     }
   },
   render() {
@@ -103,4 +109,4 @@ var Icon = React.createClass({
   }
 });
 
-export default Icon;
+export default SVGIcon;

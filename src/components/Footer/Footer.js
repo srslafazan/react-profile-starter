@@ -11,7 +11,7 @@ import React, { Component } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Footer.scss';
 import Link from '../Link';
-import Icon from '../Icon';
+import SVGIcon from '../SVGIcon';
 
 class Footer extends Component {
 
@@ -21,18 +21,15 @@ class Footer extends Component {
         <div className={s.container}>
 
         <div className={s.iconBar}>
-          <div className={s.footerIcon}>
-            <Icon size="2.5rem" icon="post-facebook" />
-          </div>
-          <div className={s.footerIcon}>
-            <Icon size="2.5rem" icon="post-linkedin" />
-          </div>
-          <div className={s.footerIcon}>
-            <Icon size="2.5rem" icon="post-github" />
-          </div>
-          <div className={s.footerIcon}>
-            <Icon size="2.5rem" icon="email" />
-          </div>
+          <a href='https://www.facebook.com/slafazan' className={s.footerIcon}>
+            <SVGIcon size="2.5rem" icon="post-facebook" />            
+          </a>
+          <a href='https://www.linkedin.com/in/shainlafazan' className={s.footerIcon}>
+            <SVGIcon size="2.5rem" icon="post-linkedin" />
+          </a>
+          <a href='https://github.com/srslafazan' className={s.footerIcon}>
+            <SVGIcon size="2.5rem" icon="post-github" />
+          </a>
         </div>
 
         <div className={s.lowerText}>
