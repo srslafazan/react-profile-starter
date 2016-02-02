@@ -19,23 +19,23 @@ class Projects extends React.Component {
 	// --- I most likely did not use proper routing with the url property. See ProfilePage.js lines 35-36.
 	// ---				- J.V.
 
-	loadProjectsFromServer() {
-		$.ajax({
-			url: this.props.url,
-			dataType: 'json',
-			cache: false,
-			success: function(data) {
-				this.setState({data: data});
-			}.bind(this), 
-			error: function (xhr, status, err) {
-				console.log(this.props.url, status, err.toString());
-			}.bind(this)
-		});
-	};
-	componentDidMount() {
-		this.loadProjectsFromServer();
-		setInterval(this.loadProjectsFromServer.bind(this), this.props.pollInterval);
-	};
+	// loadProjectsFromServer() {
+	// 	$.ajax({
+	// 		url: this.props.url,
+	// 		dataType: 'json',
+	// 		cache: false,
+	// 		success: function(data) {
+	// 			this.setState({data: data});
+	// 		}.bind(this), 
+	// 		error: function (xhr, status, err) {
+	// 			console.log(this.props.url, status, err.toString());
+	// 		}.bind(this)
+	// 	});
+	// };
+	// componentDidMount() {
+	// 	this.loadProjectsFromServer();
+	// 	setInterval(this.loadProjectsFromServer.bind(this), this.props.pollInterval);
+	// };
     render() {
 	    return (	
 	    	<div className={s.container}>
@@ -45,7 +45,7 @@ class Projects extends React.Component {
 					</Col>
 				</Row>
 				<Row>
-				    <ProjectTile data={this.state.data} />
+				    <ProjectTile data={this.props.data} />
 			    </Row>
 	    	</div>
 	    );
