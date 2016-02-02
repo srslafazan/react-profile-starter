@@ -61,8 +61,9 @@
 .footerIcon {
   margin: 0 0.5rem;
   display: inline-block;
+  cursor: pointer;
   :hover {
-    color: blue;
+    color: #26a69a;
     @include icon-spin
   }
 }
