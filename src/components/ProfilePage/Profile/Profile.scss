@@ -1,8 +1,7 @@
-
 @import '../../variables.scss';
 
 .root {
-	width: 100%;
+  width: 100%;
   border-bottom: $primary-border;
   border-top: $primary-border;
   background-color: #FFFFFF;
@@ -10,13 +9,52 @@
 
 .container {
   margin: 0 auto;
-  padding: 0 0 40px;
+  padding: 2rem 0;
   width: 100%;
-  min-height: 600px;
-  max-width: $max-content-width;
+  min-height: 400px;
+}
+
+.heading {
+  margin: 0 0 1rem 0;
+}
+.subheading {
+  margin: 0 0 1rem 0; 
+  @media screen and (max-width: $screen-md-min) {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+  @media screen and (min-width: $screen-xs-min) {
+    margin: 0.5rem 0 1rem 0;
+  }
+  @media screen and (min-width: $screen-sm-min) {
+    margin: 1rem 0 1.5rem 0;
+  }
+  @media screen and (min-width: $screen-md-min) {
+    margin: 1.5rem 0 2.0rem 0;
+  }
 }
 
 .profileImg {
-	border-radius: 50px;
-	max-height: 150px;
+ border-radius: 50%;
+ height: 300px;
+ margin: 0 0 34px 0;
+}
+
+.photoContainer {
+  text-align: right;
+  @media screen and (max-width: $screen-md-min) {
+    text-align: center;
+  }
+}
+
+.profileTextContainer {
+  text-align: center;
+  p {
+    margin: 0 3rem;
+    text-align: justified;
+    @media screen and (max-width: $screen-md-min) {
+      margin: 0 0 0 0;
+      // text-align: center;
+    }
+  }
 }
