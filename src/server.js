@@ -8,8 +8,10 @@
  */
 
 import 'babel-polyfill';
+import fs from 'fs';
 import path from 'path';
 import express from 'express';
+import bodyParser from 'body-parser';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
@@ -18,6 +20,8 @@ import assets from './assets';
 import { port } from './config';
 
 const server = global.server = express();
+
+
 
 //
 // Register Node.js middleware
@@ -28,6 +32,25 @@ server.use(express.static(path.join(__dirname, 'public')));
 // Register API middleware
 // -----------------------------------------------------------------------------
 server.use('/api/content', require('./api/content').default);
+
+// 
+// Hooking up a pseudo-database file in json format
+//
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({extended: true}));
+var PROJECTS_FILE = path.join(__dirname, './content/myProjects.json');
+
+server.use('/myProjects', function(req, res) {
+  fs.readFile(PROJECTS_FILE, function(err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.setHeader('Cache-Control', 'no-cache');
+    // res.json(JSON.parse(data));
+  });
+});
+// /End json pseudo-database
 
 //
 // Register server-side rendering middleware
