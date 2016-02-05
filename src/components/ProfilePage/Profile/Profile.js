@@ -9,7 +9,11 @@ class Profile extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
+<<<<<<< HEAD
         	<h1 className={s.heading}>About Me</h1>
+=======
+          <h1 className={s.heading}>About Me</h1>
+>>>>>>> myProjects
           <Row>
             <Col s={12} m={6} l={4} className={s.photoContainer}>
               <img className={s.profileImg} src="jv.jpg" alt='profile photo'/>

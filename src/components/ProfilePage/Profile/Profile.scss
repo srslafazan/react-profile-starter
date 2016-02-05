@@ -1,8 +1,7 @@
-
 @import '../../variables.scss';
 
 .root {
-	width: 100%;
+  width: 100%;
   border-bottom: $primary-border;
   border-top: $primary-border;
   background-color: #FFFFFF;
@@ -39,6 +38,7 @@
  border-radius: 50%;
  height: 300px;
  margin: 0 0 34px 0;
+<<<<<<< HEAD
 }
 
 .photoContainer {
@@ -48,6 +48,17 @@
   }
 }
 
+=======
+}
+
+.photoContainer {
+  text-align: right;
+  @media screen and (max-width: $screen-md-min) {
+    text-align: center;
+  }
+}
+
+>>>>>>> myProjects
 .profileTextContainer {
   text-align: center;
   p {
