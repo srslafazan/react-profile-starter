@@ -4,7 +4,7 @@ import s from './Projects.scss';
 import {Row, Col} from 'react-materialize';
 import ProjectTile from './ProjectTile';
 
-class Projects extends React.Component {
+class Projects extends Component {
 	constructor() {
 		super();
 		this.state = {data: []}

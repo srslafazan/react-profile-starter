@@ -11,17 +11,7 @@ import {Parallax, Background} from 'react-parallax';
 
 const title = 'J.V. Estolas';
 
-class ProfilePage extends Component {
-
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-  };
-
-  componentWillMount() {
-    this.context.onSetTitle(title);
-  };
-
-  static myProjects =  [
+  var myProjects =  [
   {
     "id": 101,
     "projName": "Project 1",
@@ -51,6 +41,16 @@ class ProfilePage extends Component {
   }
 ];
 
+class ProfilePage extends Component {
+
+  static contextTypes = {
+    onSetTitle: PropTypes.func.isRequired,
+  };
+
+  componentWillMount() {
+    this.context.onSetTitle(title);
+  };
+
   render() {
     return (
       <div className={s.root}>
@@ -59,7 +59,7 @@ class ProfilePage extends Component {
             <Splash />
           </Parallax>
           <Profile />
-          <Projects data={this.myProjects} pollInterval={2000} />
+          <Projects data={myProjects} pollInterval={2000} />
           <Contact />
 
         </div>
@@ -68,7 +68,5 @@ class ProfilePage extends Component {
   }
 
 }
-
-// bgImage={'./Splash/background.jpg'}
 
 export default withStyles(ProfilePage, s);
