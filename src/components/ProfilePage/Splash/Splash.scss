@@ -1,11 +1,7 @@
 @import '../../variables.scss';
 
 .root {
-<<<<<<< HEAD
 	width: 100%;
-=======
-  width: 100%;
->>>>>>> myProjects
 }
 
 $container-height: 100vh;
@@ -53,15 +49,9 @@ h1.heading {
 }
 
 h2.subheading {
-<<<<<<< HEAD
 	font-size: 3rem;
   font-weight: 800;
 	margin: 0 0 5vh 0;
-=======
-  font-size: 3rem;
-  font-weight: 800;
-  margin: 0 0 5vh 0;
->>>>>>> myProjects
   color: $primary-white;
 
   @media screen and (max-width: $screen-sm-min) {
@@ -75,7 +65,6 @@ h2.subheading {
   position: absolute;
   bottom: 0;
   padding: 3rem 0 2rem 0;
-<<<<<<< HEAD
 }
 
 .bottomLink {
@@ -84,21 +73,6 @@ h2.subheading {
   color: $primary-white;
   font-size: 1.2rem;
   font-weight: 400;
-  cursor: pointer;
-}
-
-.arrowIcon {
-  margin-top: 1rem;
-=======
-}
-
-.bottomLink {
-  display: block;
-  text-align: center;
-  color: $primary-white;
-  font-size: 1.2rem;
-  font-weight: 400;
->>>>>>> myProjects
   cursor: pointer;
 }
 
