@@ -8,7 +8,7 @@ class Contact extends Component {
 
   render() {
     return (
-      <div className={s.root}>
+      <div className={s.root} id='contact'>
         <div className={s.container}>
 
         	<h1 className={s.heading}>Want to work together?</h1>

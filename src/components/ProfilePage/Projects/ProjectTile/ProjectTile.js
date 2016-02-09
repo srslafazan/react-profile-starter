@@ -10,7 +10,6 @@ class ProjectTile extends Component {
     			<img className={s.projectThumb} src="http://bit.ly/1NIoQcL" />
     			<h2>Project Name</h2>
     			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. Donec cursus libero tortor, eget pretium elit aliquet ut.</p>
-    			<Button>Check it out!</Button>
     			<Row>
     				<Col s={3} m={3} l={3}>
 		    			<img className={s.testmonialImg} src="http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg" />
@@ -24,5 +23,6 @@ class ProjectTile extends Component {
 		)
 	}
 }
+    			// <Button>Check it out!</Button>
 
 export default withStyles(ProjectTile, s);

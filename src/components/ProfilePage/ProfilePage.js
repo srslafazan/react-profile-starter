@@ -10,7 +10,7 @@ import Contact from './Contact';
 import {Parallax, Background} from 'react-parallax';
 
 
-const title = 'J.V. Estolas';
+const title = 'Shain Lafazan';
 
 class ProfilePage extends Component {
 
@@ -26,7 +26,7 @@ class ProfilePage extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <Parallax strength={300} bgImage={"dummy_bg_1.png"}>
+          <Parallax strength={300} bgImage={"bg-blur.jpg"} className={s.parallax}>
             <Splash></Splash>          
           </Parallax>
           <Profile></Profile>

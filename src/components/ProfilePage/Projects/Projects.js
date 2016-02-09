@@ -8,7 +8,7 @@ class Projects extends Component {
 
   render() {
     return (	
-	<div className={s.container}>
+	<div className={s.container} id='projects'>
 		<Row>
 			<Col s={12} m={4} l={4} className="offset-l4">
 				<h1>My Projects</h1>	        	

@@ -42,7 +42,6 @@ h1.heading {
   font-weight: 800;
   margin: 0 0 3vh 0;
   color: $primary-white;
-
   @media screen and (max-width: $screen-sm-min) {
     font-size: 2rem;
   }
@@ -50,15 +49,29 @@ h1.heading {
 }
 
 h2.subheading {
-	font-size: 3rem;
+	font-size: 2.5rem;
   font-weight: 800;
-	margin: 0 0 5vh 0;
+	margin: 2.5vh 0 2.5vh 0;
   color: $primary-white;
 
   @media screen and (max-width: $screen-sm-min) {
     font-size: 1.5rem;
   }
 }
+
+h2.subheading2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 2.5vh 0 5vh 0;
+  color: $primary-white;
+
+  @media screen and (max-width: $screen-sm-min) {
+    font-size: 1.0rem;
+  }
+}
+
+
+
 
 .bottomTextContainer {
   width: 100%;
@@ -71,10 +84,13 @@ h2.subheading {
 .bottomLink {
   display: block;
   text-align: center;
-  color: $primary-white;
+  color: $accent-color;
   font-size: 1.2rem;
   font-weight: 400;
   cursor: pointer;
+  &:hover {
+    color: white;
+  }
 }
 
 .arrowIcon {
