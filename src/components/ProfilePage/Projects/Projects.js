@@ -9,7 +9,7 @@ var projects = [
 	{
 		name: "Spot Knocker",
 		description: "Peer-to-peer advertising that's rocking the ad world.",
-		imageUrl: "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
+		imageUrl: "spotknockerProject.png",
 		reference: {
 			name: "Joseph Estolas",
 			quote: "\"Shain is a champion of the free world, justice, code, and coffee.\"",
@@ -19,7 +19,7 @@ var projects = [
 	{
 		name: "Forte",
 		description: "Sharing music performance with underprivileged youths.",
-		imageUrl: "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
+		imageUrl: "forteProject.png",
 		reference: {
 			name: "Daniel Kim",
 			quote: "\"Shain is a champion of the free world, justice, code, and coffee.\"",
@@ -29,7 +29,7 @@ var projects = [
 	{
 		name: "Capuchin",
 		description: "Split the bill with ease, like it was always meant to be.",
-		imageUrl: "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
+		imageUrl: "capuchinProject.png",
 		reference: {
 			name: "Skyler Gonsalves",
 			quote: "\"Shain is a champion of the free world, justice, code, and coffee.\"",

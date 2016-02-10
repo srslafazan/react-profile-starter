@@ -20,22 +20,11 @@ class ProjectTile extends Component {
     			<p className={s.referenceQuote}>{this.props.project.reference.quote}</p>
     			<p className={s.referenceName}>-{this.props.project.reference.name}</p>
 
-
     		</Col>
 
 		)
 	}
 }
-    			// <Row s={12} m={12} l={12} className={s.topRow}>
-	    		// 	<img className={s.projectThumb} src={this.props.project.imageUrl} />
-    			// </Row>
-
-    			// <Row className={s.projectRow} s={4} m={12} l={12}>
-    			// 	<Col s={3} m={3} l={3}>
-	    		// 	</Col>
-	    		// 	<Col s={9} m={9} l={9}>
-	    		// 	</Col>
-    			// </Row>
     			// <Button>Check it out!</Button>
 
 export default withStyles(ProjectTile, s);
