@@ -4,12 +4,15 @@
 .root {
 	width: 100%;
   border-bottom: $primary-border;
-  background-color: #F5F5F5;
 }
 
 .container {
   margin: 0 auto;
-  padding: 0;
+  padding: 2rem 0;
   max-width: 100%;
-  min-height: 800px;
+  background-color: #e4e1ce;
+}
+
+.heading {
+	margin-top: 0;
 }
