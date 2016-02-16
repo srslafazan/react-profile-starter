@@ -3,8 +3,6 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './ProjectTile.scss';
 import {Button, Row, Col} from 'react-materialize';
 
-// projData below is a placeholder for data coming from 'this.props.data' which is being mapped to projectNodes. It can be named anything. 
-
 class ProjectTile extends Component {
 	render() {
 		return (
@@ -24,11 +22,6 @@ class ProjectTile extends Component {
 
     		</Col>
 
-		});
-		return (
-			<Row className={s.container}>
-				{projectNodes}
-			</Row>
 		)
 	}
 }

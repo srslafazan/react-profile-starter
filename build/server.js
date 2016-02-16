@@ -58,35 +58,43 @@ module.exports =
   
   __webpack_require__(3);
   
-  var _path = __webpack_require__(4);
+  var _fs = __webpack_require__(4);
+  
+  var _fs2 = _interopRequireDefault(_fs);
+  
+  var _path = __webpack_require__(5);
   
   var _path2 = _interopRequireDefault(_path);
   
-  var _express = __webpack_require__(5);
+  var _express = __webpack_require__(6);
   
   var _express2 = _interopRequireDefault(_express);
   
-  var _react = __webpack_require__(6);
+  var _bodyParser = __webpack_require__(7);
+  
+  var _bodyParser2 = _interopRequireDefault(_bodyParser);
+  
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _server = __webpack_require__(7);
+  var _server = __webpack_require__(9);
   
   var _server2 = _interopRequireDefault(_server);
   
-  var _routes = __webpack_require__(8);
+  var _routes = __webpack_require__(10);
   
   var _routes2 = _interopRequireDefault(_routes);
   
-  var _Html = __webpack_require__(115);
+  var _Html = __webpack_require__(117);
   
   var _Html2 = _interopRequireDefault(_Html);
   
-  var _assets = __webpack_require__(116);
+  var _assets = __webpack_require__(118);
   
   var _assets2 = _interopRequireDefault(_assets);
   
-  var _config = __webpack_require__(40);
+  var _config = __webpack_require__(42);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -109,7 +117,26 @@ module.exports =
   //
   // Register API middleware
   // -----------------------------------------------------------------------------
-  server.use('/api/content', __webpack_require__(117).default);
+  server.use('/api/content', __webpack_require__(119).default);
+  
+  //
+  // Hooking up a pseudo-database file in json format
+  //
+  server.use(_bodyParser2.default.json());
+  server.use(_bodyParser2.default.urlencoded({ extended: true }));
+  var PROJECTS_FILE = _path2.default.join(__dirname, './content/myProjects.json');
+  
+  server.use('/myProjects', function (req, res) {
+    _fs2.default.readFile(PROJECTS_FILE, function (err, data) {
+      if (err) {
+        console.error(err);
+        process.exit(1);
+      }
+      res.setHeader('Cache-Control', 'no-cache');
+      // res.json(JSON.parse(data));
+    });
+  });
+  // /End json pseudo-database
   
   //
   // Register server-side rendering middleware
@@ -216,28 +243,40 @@ module.exports =
 /* 4 */
 /***/ function(module, exports) {
 
-  module.exports = require("path");
+  module.exports = require("fs");
 
 /***/ },
 /* 5 */
 /***/ function(module, exports) {
 
-  module.exports = require("express");
+  module.exports = require("path");
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-  module.exports = require("react");
+  module.exports = require("express");
 
 /***/ },
 /* 7 */
 /***/ function(module, exports) {
 
-  module.exports = require("react-dom/server");
+  module.exports = require("body-parser");
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+  module.exports = require("react");
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+  module.exports = require("react-dom/server");
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -254,47 +293,47 @@ module.exports =
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Router = __webpack_require__(9);
+  var _Router = __webpack_require__(11);
   
   var _Router2 = _interopRequireDefault(_Router);
   
-  var _fetch = __webpack_require__(38);
+  var _fetch = __webpack_require__(40);
   
   var _fetch2 = _interopRequireDefault(_fetch);
   
-  var _App = __webpack_require__(41);
+  var _App = __webpack_require__(43);
   
   var _App2 = _interopRequireDefault(_App);
   
-  var _ContentPage = __webpack_require__(78);
+  var _ContentPage = __webpack_require__(80);
   
   var _ContentPage2 = _interopRequireDefault(_ContentPage);
   
-  var _ContactPage = __webpack_require__(81);
+  var _ContactPage = __webpack_require__(83);
   
   var _ContactPage2 = _interopRequireDefault(_ContactPage);
   
-  var _LoginPage = __webpack_require__(84);
+  var _LoginPage = __webpack_require__(86);
   
   var _LoginPage2 = _interopRequireDefault(_LoginPage);
   
-  var _RegisterPage = __webpack_require__(87);
+  var _RegisterPage = __webpack_require__(89);
   
   var _RegisterPage2 = _interopRequireDefault(_RegisterPage);
   
-  var _NotFoundPage = __webpack_require__(90);
+  var _NotFoundPage = __webpack_require__(92);
   
   var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
   
-  var _ErrorPage = __webpack_require__(93);
+  var _ErrorPage = __webpack_require__(95);
   
   var _ErrorPage2 = _interopRequireDefault(_ErrorPage);
   
-  var _ProfilePage = __webpack_require__(96);
+  var _ProfilePage = __webpack_require__(98);
   
   var _ProfilePage2 = _interopRequireDefault(_ProfilePage);
   
@@ -406,6 +445,10 @@ module.exports =
       }, _callee6, undefined);
     })));
   
+    // var myProjectsData = "hello world";
+  
+    // on('/myProjects', async () => {return myProjectsData});
+  
     on('*', function () {
       var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(state) {
         var response, content;
@@ -461,7 +504,7 @@ module.exports =
   exports.default = router;
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -470,35 +513,35 @@ module.exports =
     value: true
   });
   
-  var _slicedToArray2 = __webpack_require__(10);
+  var _slicedToArray2 = __webpack_require__(12);
   
   var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
   
-  var _regenerator = __webpack_require__(15);
+  var _regenerator = __webpack_require__(17);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _getIterator2 = __webpack_require__(13);
+  var _getIterator2 = __webpack_require__(15);
   
   var _getIterator3 = _interopRequireDefault(_getIterator2);
   
-  var _asyncToGenerator2 = __webpack_require__(29);
+  var _asyncToGenerator2 = __webpack_require__(31);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _create = __webpack_require__(22);
+  var _create = __webpack_require__(24);
   
   var _create2 = _interopRequireDefault(_create);
   
-  var _classCallCheck2 = __webpack_require__(30);
+  var _classCallCheck2 = __webpack_require__(32);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(31);
+  var _createClass2 = __webpack_require__(33);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _Route = __webpack_require__(34);
+  var _Route = __webpack_require__(36);
   
   var _Route2 = _interopRequireDefault(_Route);
   
@@ -822,18 +865,18 @@ module.exports =
   exports.default = Router;
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
   
   exports.__esModule = true;
   
-  var _isIterable2 = __webpack_require__(11);
+  var _isIterable2 = __webpack_require__(13);
   
   var _isIterable3 = _interopRequireDefault(_isIterable2);
   
-  var _getIterator2 = __webpack_require__(13);
+  var _getIterator2 = __webpack_require__(15);
   
   var _getIterator3 = _interopRequireDefault(_getIterator2);
   
@@ -878,18 +921,6 @@ module.exports =
   }();
 
 /***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-  module.exports = { "default": __webpack_require__(12), __esModule: true };
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-  module.exports = require("core-js/library/fn/is-iterable");
-
-/***/ },
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -899,10 +930,22 @@ module.exports =
 /* 14 */
 /***/ function(module, exports) {
 
-  module.exports = require("core-js/library/fn/get-iterator");
+  module.exports = require("core-js/library/fn/is-iterable");
 
 /***/ },
 /* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+  module.exports = { "default": __webpack_require__(16), __esModule: true };
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+  module.exports = require("core-js/library/fn/get-iterator");
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
   // This method of obtaining a reference to the global object needs to be
@@ -923,7 +966,7 @@ module.exports =
   // Force reevalutation of runtime.js.
   g.regeneratorRuntime = undefined;
   
-  module.exports = __webpack_require__(16);
+  module.exports = __webpack_require__(18);
   
   if (hadRuntime) {
     // Restore the original runtime.
@@ -941,32 +984,32 @@ module.exports =
 
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
   /* WEBPACK VAR INJECTION */(function(module) {"use strict";
   
-  var _promise = __webpack_require__(18);
+  var _promise = __webpack_require__(20);
   
   var _promise2 = _interopRequireDefault(_promise);
   
-  var _setPrototypeOf = __webpack_require__(20);
+  var _setPrototypeOf = __webpack_require__(22);
   
   var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
   
-  var _create = __webpack_require__(22);
+  var _create = __webpack_require__(24);
   
   var _create2 = _interopRequireDefault(_create);
   
-  var _typeof2 = __webpack_require__(24);
+  var _typeof2 = __webpack_require__(26);
   
   var _typeof3 = _interopRequireDefault(_typeof2);
   
-  var _iterator = __webpack_require__(25);
+  var _iterator = __webpack_require__(27);
   
   var _iterator2 = _interopRequireDefault(_iterator);
   
-  var _symbol = __webpack_require__(27);
+  var _symbol = __webpack_require__(29);
   
   var _symbol2 = _interopRequireDefault(_symbol);
   
@@ -1596,10 +1639,10 @@ module.exports =
   // object, this seems to be the most reliable technique that does not
   // use indirect eval (which violates Content Security Policy).
   (typeof global === "undefined" ? "undefined" : (0, _typeof3.default)(global)) === "object" ? global : (typeof window === "undefined" ? "undefined" : (0, _typeof3.default)(window)) === "object" ? window : (typeof self === "undefined" ? "undefined" : (0, _typeof3.default)(self)) === "object" ? self : undefined);
-  /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)(module)))
+  /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)(module)))
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports) {
 
   module.exports = function(module) {
@@ -1615,18 +1658,6 @@ module.exports =
 
 
 /***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-  module.exports = { "default": __webpack_require__(19), __esModule: true };
-
-/***/ },
-/* 19 */
-/***/ function(module, exports) {
-
-  module.exports = require("core-js/library/fn/promise");
-
-/***/ },
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1636,7 +1667,7 @@ module.exports =
 /* 21 */
 /***/ function(module, exports) {
 
-  module.exports = require("core-js/library/fn/object/set-prototype-of");
+  module.exports = require("core-js/library/fn/promise");
 
 /***/ },
 /* 22 */
@@ -1648,10 +1679,22 @@ module.exports =
 /* 23 */
 /***/ function(module, exports) {
 
-  module.exports = require("core-js/library/fn/object/create");
+  module.exports = require("core-js/library/fn/object/set-prototype-of");
 
 /***/ },
 /* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+  module.exports = { "default": __webpack_require__(25), __esModule: true };
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+  module.exports = require("core-js/library/fn/object/create");
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -1660,11 +1703,11 @@ module.exports =
   
   exports.__esModule = true;
   
-  var _iterator = __webpack_require__(25);
+  var _iterator = __webpack_require__(27);
   
   var _iterator2 = _interopRequireDefault(_iterator);
   
-  var _symbol = __webpack_require__(27);
+  var _symbol = __webpack_require__(29);
   
   var _symbol2 = _interopRequireDefault(_symbol);
   
@@ -1677,18 +1720,6 @@ module.exports =
   };
 
 /***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-  module.exports = { "default": __webpack_require__(26), __esModule: true };
-
-/***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-  module.exports = require("core-js/library/fn/symbol/iterator");
-
-/***/ },
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1698,17 +1729,29 @@ module.exports =
 /* 28 */
 /***/ function(module, exports) {
 
-  module.exports = require("core-js/library/fn/symbol");
+  module.exports = require("core-js/library/fn/symbol/iterator");
 
 /***/ },
 /* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+  module.exports = { "default": __webpack_require__(30), __esModule: true };
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+  module.exports = require("core-js/library/fn/symbol");
+
+/***/ },
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
   
   exports.__esModule = true;
   
-  var _promise = __webpack_require__(18);
+  var _promise = __webpack_require__(20);
   
   var _promise2 = _interopRequireDefault(_promise);
   
@@ -1744,7 +1787,7 @@ module.exports =
   };
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports) {
 
   "use strict";
@@ -1758,14 +1801,14 @@ module.exports =
   };
 
 /***/ },
-/* 31 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
   
   exports.__esModule = true;
   
-  var _defineProperty = __webpack_require__(32);
+  var _defineProperty = __webpack_require__(34);
   
   var _defineProperty2 = _interopRequireDefault(_defineProperty);
   
@@ -1790,19 +1833,19 @@ module.exports =
   }();
 
 /***/ },
-/* 32 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-  module.exports = { "default": __webpack_require__(33), __esModule: true };
+  module.exports = { "default": __webpack_require__(35), __esModule: true };
 
 /***/ },
-/* 33 */
+/* 35 */
 /***/ function(module, exports) {
 
   module.exports = require("core-js/library/fn/object/define-property");
 
 /***/ },
-/* 34 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -1811,19 +1854,19 @@ module.exports =
     value: true
   });
   
-  var _classCallCheck2 = __webpack_require__(30);
+  var _classCallCheck2 = __webpack_require__(32);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(31);
+  var _createClass2 = __webpack_require__(33);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _pathToRegexp = __webpack_require__(35);
+  var _pathToRegexp = __webpack_require__(37);
   
   var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
   
-  var _Match = __webpack_require__(37);
+  var _Match = __webpack_require__(39);
   
   var _Match2 = _interopRequireDefault(_Match);
   
@@ -1856,10 +1899,10 @@ module.exports =
   exports.default = Route;
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-  var isarray = __webpack_require__(36)
+  var isarray = __webpack_require__(38)
   
   /**
    * Expose `pathToRegexp`.
@@ -2252,7 +2295,7 @@ module.exports =
 
 
 /***/ },
-/* 36 */
+/* 38 */
 /***/ function(module, exports) {
 
   module.exports = Array.isArray || function (arr) {
@@ -2261,7 +2304,7 @@ module.exports =
 
 
 /***/ },
-/* 37 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2270,11 +2313,11 @@ module.exports =
     value: true
   });
   
-  var _create = __webpack_require__(22);
+  var _create = __webpack_require__(24);
   
   var _create2 = _interopRequireDefault(_create);
   
-  var _classCallCheck2 = __webpack_require__(30);
+  var _classCallCheck2 = __webpack_require__(32);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
@@ -2313,7 +2356,7 @@ module.exports =
   exports.default = Match;
 
 /***/ },
-/* 38 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2323,11 +2366,11 @@ module.exports =
   });
   exports.Response = exports.Headers = exports.Request = exports.default = undefined;
   
-  var _nodeFetch = __webpack_require__(39);
+  var _nodeFetch = __webpack_require__(41);
   
   var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
   
-  var _config = __webpack_require__(40);
+  var _config = __webpack_require__(42);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -2362,13 +2405,13 @@ module.exports =
   exports.Response = _nodeFetch.Response;
 
 /***/ },
-/* 39 */
+/* 41 */
 /***/ function(module, exports) {
 
   module.exports = require("node-fetch");
 
 /***/ },
-/* 40 */
+/* 42 */
 /***/ function(module, exports) {
 
   'use strict';
@@ -2390,7 +2433,7 @@ module.exports =
   var googleAnalyticsId = exports.googleAnalyticsId = 'UA-XXXXX-X';
 
 /***/ },
-/* 41 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2399,43 +2442,43 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _emptyFunction = __webpack_require__(47);
+  var _emptyFunction = __webpack_require__(49);
   
   var _emptyFunction2 = _interopRequireDefault(_emptyFunction);
   
-  var _App = __webpack_require__(48);
+  var _App = __webpack_require__(50);
   
   var _App2 = _interopRequireDefault(_App);
   
-  var _Header = __webpack_require__(56);
+  var _Header = __webpack_require__(58);
   
   var _Header2 = _interopRequireDefault(_Header);
   
-  var _Footer = __webpack_require__(74);
+  var _Footer = __webpack_require__(76);
   
   var _Footer2 = _interopRequireDefault(_Footer);
   
@@ -2511,48 +2554,48 @@ module.exports =
   exports.default = App;
 
 /***/ },
-/* 42 */
+/* 44 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/core-js/object/get-prototype-of");
 
 /***/ },
-/* 43 */
+/* 45 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/classCallCheck");
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/createClass");
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/possibleConstructorReturn");
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/inherits");
 
 /***/ },
-/* 47 */
+/* 49 */
 /***/ function(module, exports) {
 
   module.exports = require("fbjs/lib/emptyFunction");
 
 /***/ },
-/* 48 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(49);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(51);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -2562,40 +2605,25 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./App.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./App.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 49 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */\n\n/**\n * 1. Set default font family to sans-serif.\n * 2. Prevent iOS and IE text size adjust after device orientation change,\n *    without disabling user zoom.\n */\n\nhtml {\n  font-family: sans-serif; /* 1 */\n  -ms-text-size-adjust: 100%; /* 2 */\n  -webkit-text-size-adjust: 100%; /* 2 */\n}\n\n/**\n * Remove default margin.\n */\n\nbody {\n  margin: 0;\n}\n\n/* HTML5 display definitions\n   ========================================================================== */\n\n/**\n * Correct `block` display not defined for any HTML5 element in IE 8/9.\n * Correct `block` display not defined for `details` or `summary` in IE 10/11\n * and Firefox.\n * Correct `block` display not defined for `main` in IE 11.\n */\n\narticle, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {\n  display: block;\n}\n\n/**\n * 1. Correct `inline-block` display not defined in IE 8/9.\n * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.\n */\n\naudio, canvas, progress, video {\n  display: inline-block; /* 1 */\n  vertical-align: baseline; /* 2 */\n}\n\n/**\n * Prevent modern browsers from displaying `audio` without controls.\n * Remove excess height in iOS 5 devices.\n */\n\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n\n/**\n * Address `[hidden]` styling not present in IE 8/9/10.\n * Hide the `template` element in IE 8/9/10/11, Safari, and Firefox < 22.\n */\n\n[hidden], template {\n  display: none;\n}\n\n/* Links\n   ========================================================================== */\n\n/**\n * Remove the gray background color from active links in IE 10.\n */\n\na {\n  background-color: transparent;\n}\n\n/**\n * Improve readability of focused elements when they are also in an\n * active/hover state.\n */\n\na:active, a:hover {\n  outline: 0;\n}\n\n/* Text-level semantics\n   ========================================================================== */\n\n/**\n * Address styling not present in IE 8/9/10/11, Safari, and Chrome.\n */\n\nabbr[title] {\n  border-bottom: 1px dotted;\n}\n\n/**\n * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.\n */\n\nb, strong {\n  font-weight: bold;\n}\n\n/**\n * Address styling not present in Safari and Chrome.\n */\n\ndfn {\n  font-style: italic;\n}\n\n/**\n * Address variable `h1` font-size and margin within `section` and `article`\n * contexts in Firefox 4+, Safari, and Chrome.\n */\n\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\n\n/**\n * Address styling not present in IE 8/9.\n */\n\nmark {\n  background: #ff0;\n  color: #000;\n}\n\n/**\n * Address inconsistent and variable font size in all browsers.\n */\n\nsmall {\n  font-size: 80%;\n}\n\n/**\n * Prevent `sub` and `sup` affecting `line-height` in all browsers.\n */\n\nsub, sup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\n\nsup {\n  top: -0.5em;\n}\n\nsub {\n  bottom: -0.25em;\n}\n\n/* Embedded content\n   ========================================================================== */\n\n/**\n * Remove border when inside `a` element in IE 8/9/10.\n */\n\nimg {\n  border: 0;\n}\n\n/**\n * Correct overflow not hidden in IE 9/10/11.\n */\n\nsvg:not(:root) {\n  overflow: hidden;\n}\n\n/* Grouping content\n   ========================================================================== */\n\n/**\n * Address margin not present in IE 8/9 and Safari.\n */\n\nfigure {\n  margin: 1em 40px;\n}\n\n/**\n * Address differences between Firefox and other browsers.\n */\n\nhr {\n  -webkit-box-sizing: content-box;\n          box-sizing: content-box;\n  height: 0;\n}\n\n/**\n * Contain overflow in all browsers.\n */\n\npre {\n  overflow: auto;\n}\n\n/**\n * Address odd `em`-unit font size rendering in all browsers.\n */\n\ncode, kbd, pre, samp {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\n\n/* Forms\n   ========================================================================== */\n\n/**\n * Known limitation: by default, Chrome and Safari on OS X allow very limited\n * styling of `select`, unless a `border` property is set.\n */\n\n/**\n * 1. Correct color not being inherited.\n *    Known issue: affects color of disabled elements.\n * 2. Correct font properties not being inherited.\n * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.\n */\n\nbutton, input, optgroup, select, textarea {\n  color: inherit; /* 1 */\n  font: inherit; /* 2 */\n  margin: 0; /* 3 */\n}\n\n/**\n * Address `overflow` set to `hidden` in IE 8/9/10/11.\n */\n\nbutton {\n  overflow: visible;\n}\n\n/**\n * Address inconsistent `text-transform` inheritance for `button` and `select`.\n * All other form control elements do not inherit `text-transform` values.\n * Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.\n * Correct `select` style inheritance in Firefox.\n */\n\nbutton, select {\n  text-transform: none;\n}\n\n/**\n * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`\n *    and `video` controls.\n * 2. Correct inability to style clickable `input` types in iOS.\n * 3. Improve usability and consistency of cursor style between image-type\n *    `input` and others.\n */\n\nbutton, html input[type=\"button\"], input[type=\"reset\"], input[type=\"submit\"] {\n  -webkit-appearance: button; /* 2 */\n  cursor: pointer; /* 3 */\n}\n\n/**\n * Re-set default cursor for disabled elements.\n */\n\nbutton[disabled], html input[disabled] {\n  cursor: default;\n}\n\n/**\n * Remove inner padding and border in Firefox 4+.\n */\n\nbutton::-moz-focus-inner, input::-moz-focus-inner {\n  border: 0;\n  padding: 0;\n}\n\n/**\n * Address Firefox 4+ setting `line-height` on `input` using `!important` in\n * the UA stylesheet.\n */\n\ninput {\n  line-height: normal;\n}\n\n/**\n * It's recommended that you don't attempt to style these elements.\n * Firefox's implementation doesn't respect box-sizing, padding, or width.\n *\n * 1. Address box sizing set to `content-box` in IE 8/9/10.\n * 2. Remove excess padding in IE 8/9/10.\n */\n\ninput[type=\"checkbox\"], input[type=\"radio\"] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box; /* 1 */\n  padding: 0; /* 2 */\n}\n\n/**\n * Fix the cursor style for Chrome's increment/decrement buttons. For certain\n * `font-size` values of the `input`, it causes the cursor style of the\n * decrement button to change from `default` to `text`.\n */\n\ninput[type=\"number\"]::-webkit-inner-spin-button, input[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\n\n/**\n * 1. Address `appearance` set to `searchfield` in Safari and Chrome.\n * 2. Address `box-sizing` set to `border-box` in Safari and Chrome.\n */\n\ninput[type=\"search\"] {\n  -webkit-appearance: textfield; /* 1 */\n  -webkit-box-sizing: content-box;\n          box-sizing: content-box; /* 2 */\n}\n\n/**\n * Remove inner padding and search cancel button in Safari and Chrome on OS X.\n * Safari (but not Chrome) clips the cancel button when the search input has\n * padding (and `textfield` appearance).\n */\n\ninput[type=\"search\"]::-webkit-search-cancel-button, input[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n\n/**\n * Define consistent border, margin, and padding.\n */\n\nfieldset {\n  border: 1px solid #c0c0c0;\n  margin: 0 2px;\n  padding: 0.35em 0.625em 0.75em;\n}\n\n/**\n * 1. Correct `color` not being inherited in IE 8/9/10/11.\n * 2. Remove padding so people aren't caught out if they zero out fieldsets.\n */\n\nlegend {\n  border: 0; /* 1 */\n  padding: 0; /* 2 */\n}\n\n/**\n * Remove default vertical scrollbar in IE 8/9/10/11.\n */\n\ntextarea {\n  overflow: auto;\n}\n\n/**\n * Don't inherit the `font-weight` (applied by a rule above).\n * NOTE: the default cannot safely be changed in Chrome and Safari on OS X.\n */\n\noptgroup {\n  font-weight: bold;\n}\n\n/* Tables\n   ========================================================================== */\n\n/**\n * Remove most spacing between table cells.\n */\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\n\ntd, th {\n  padding: 0;\n}\n\n/*! React Starter Kit | MIT License | https://www.reactstarterkit.com/ */\n\n/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: App_spin_1lc;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: App_spin_1lc;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: App_spin_1lc;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: App_spin_1lc;\n\n\t     -o-animation-name: App_spin_1lc;\n\n\t        animation-name: App_spin_1lc;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes App_spin_1lc {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes App_spin_1lc {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes App_spin_1lc {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n/*\n * Base styles\n * ========================================================================== */\n\nhtml {\n  color: #222;\n  font-weight: 100;\n  font-size: 1em; /* ~16px; */\n  font-family: 'Segoe UI','HelveticaNeue-Light',sans-serif;\n  line-height: 1.375; /* ~22px */\n}\n\n/*\n * Remove text-shadow in selection highlight:\n * https://twitter.com/miketaylr/status/12228805301\n *\n * These selection rule sets have to be separate.\n * Customize the background color to match your design.\n */\n\n::-moz-selection {\n  background: #b3d4fc;\n  text-shadow: none;\n}\n\n::selection {\n  background: #b3d4fc;\n  text-shadow: none;\n}\n\n/*\n * A better looking default horizontal rule\n */\n\nhr {\n  display: block;\n  height: 1px;\n  border: 0;\n  border-top: 1px solid #ccc;\n  margin: 1em 0;\n  padding: 0;\n}\n\n/*\n * Remove the gap between audio, canvas, iframes,\n * images, videos and the bottom of their containers:\n * https://github.com/h5bp/html5-boilerplate/issues/440\n */\n\naudio, canvas, iframe, img, svg, video {\n  vertical-align: middle;\n}\n\n/*\n * Remove default fieldset styles.\n */\n\nfieldset {\n  border: 0;\n  margin: 0;\n  padding: 0;\n}\n\n/*\n * Allow only vertical resizing of textareas.\n */\n\ntextarea {\n  resize: vertical;\n}\n\n/*\n * Browser upgrade prompt\n * ========================================================================== */\n\n.browserupgrade {\n  margin: 0.2em 0;\n  background: #ccc;\n  color: #000;\n  padding: 0.2em 0;\n}\n\n/*\n * Print styles\n * Inlined to avoid the additional HTTP request:\n * http://www.phpied.com/delay-loading-your-print-css/\n * ========================================================================== */\n\n@media print {\n  *, *:before, *:after {\n    background: transparent !important;\n    color: #000 !important; /* Black prints faster: http://www.sanbeiji.com/archives/953 */\n    -webkit-box-shadow: none !important;\n            box-shadow: none !important;\n    text-shadow: none !important;\n  }\n\n  a, a:visited {\n    text-decoration: underline;\n  }\n\n  a[href]:after {\n    content: \" (\" attr(href) \")\";\n  }\n\n  abbr[title]:after {\n    content: \" (\" attr(title) \")\";\n  }\n\n  /*\n   * Don't show links that are fragment identifiers,\n   * or use the `javascript:` pseudo protocol\n   */\n\n  a[href^=\"#\"]:after, a[href^=\"javascript:\"]:after {\n    content: \"\";\n  }\n\n  pre, blockquote {\n    border: 1px solid #999;\n    page-break-inside: avoid;\n  }\n\n  /*\n   * Printing Tables:\n   * http://css-discuss.incutio.com/wiki/Printing_Tables\n   */\n\n  thead {\n    display: table-header-group;\n  }\n\n  tr, img {\n    page-break-inside: avoid;\n  }\n\n  img {\n    max-width: 100% !important;\n  }\n\n  p, h2, h3 {\n    orphans: 3;\n    widows: 3;\n  }\n\n  h2, h3 {\n    page-break-after: avoid;\n  }\n}\n\n/*\n * Additional Base Styles\n * ========================================================================== */\n\nh1 {\n  font-size: 2.5rem;\n  font-weight: 600;\n  display: block;\n  text-align: center;\n  margin-top: 2rem;\n}\n\nh2 {\n  font-size: 2.0rem;\n  font-weight: 600;\n  display: block;\n  text-align: center;\n  margin-top: 2rem;\n}", "", {"version":3,"sources":["/./src/components/App/App.scss","/./node_modules/normalize.css/normalize.css","/./src/components/variables.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;ACPH,4EAA4E;;AAE5E;;;;GAIG;;AAEH;EACE,wBAAwB,CAAC,OAAO;EAChC,2BAA2B,CAAC,OAAO;EACnC,+BAA+B,CAAC,OAAO;CACxC;;AAED;;GAEG;;AAEH;EACE,UAAU;CACX;;AAED;gFACgF;;AAEhF;;;;;GAKG;;AAEH;EAaE,eAAe;CAChB;;AAED;;;GAGG;;AAEH;EAIE,sBAAsB,CAAC,OAAO;EAC9B,yBAAyB,CAAC,OAAO;CAClC;;AAED;;;GAGG;;AAEH;EACE,cAAc;EACd,UAAU;CACX;;AAED;;;GAGG;;AAEH;EAEE,cAAc;CACf;;AAED;gFACgF;;AAEhF;;GAEG;;AAEH;EACE,8BAA8B;CAC/B;;AAED;;;GAGG;;AAEH;EAEE,WAAW;CACZ;;AAED;gFACgF;;AAEhF;;GAEG;;AAEH;EACE,0BAA0B;CAC3B;;AAED;;GAEG;;AAEH;EAEE,kBAAkB;CACnB;;AAED;;GAEG;;AAEH;EACE,mBAAmB;CACpB;;AAED;;;GAGG;;AAEH;EACE,eAAe;EACf,iBAAiB;CAClB;;AAED;;GAEG;;AAEH;EACE,iBAAiB;EACjB,YAAY;CACb;;AAED;;GAEG;;AAEH;EACE,eAAe;CAChB;;AAED;;GAEG;;AAEH;EAEE,eAAe;EACf,eAAe;EACf,mBAAmB;EACnB,yBAAyB;CAC1B;;AAED;EACE,YAAY;CACb;;AAED;EACE,gBAAgB;CACjB;;AAED;gFACgF;;AAEhF;;GAEG;;AAEH;EACE,UAAU;CACX;;AAED;;GAEG;;AAEH;EACE,iBAAiB;CAClB;;AAED;gFACgF;;AAEhF;;GAEG;;AAEH;EACE,iBAAiB;CAClB;;AAED;;GAEG;;AAEH;EACE,gCAAwB;UAAxB,wBAAwB;EACxB,UAAU;CACX;;AAED;;GAEG;;AAEH;EACE,eAAe;CAChB;;AAED;;GAEG;;AAEH;EAIE,kCAAkC;EAClC,eAAe;CAChB;;AAED;gFACgF;;AAEhF;;;GAGG;;AAEH;;;;;GAKG;;AAEH;EAKE,eAAe,CAAC,OAAO;EACvB,cAAc,CAAC,OAAO;EACtB,UAAU,CAAC,OAAO;CACnB;;AAED;;GAEG;;AAEH;EACE,kBAAkB;CACnB;;AAED;;;;;GAKG;;AAEH;EAEE,qBAAqB;CACtB;;AAED;;;;;;GAMG;;AAEH;EAIE,2BAA2B,CAAC,OAAO;EACnC,gBAAgB,CAAC,OAAO;CACzB;;AAED;;GAEG;;AAEH;EAEE,gBAAgB;CACjB;;AAED;;GAEG;;AAEH;EAEE,UAAU;EACV,WAAW;CACZ;;AAED;;;GAGG;;AAEH;EACE,oBAAoB;CACrB;;AAED;;;;;;GAMG;;AAEH;EAEE,+BAAuB;UAAvB,uBAAuB,CAAC,OAAO;EAC/B,WAAW,CAAC,OAAO;CACpB;;AAED;;;;GAIG;;AAEH;EAEE,aAAa;CACd;;AAED;;;GAGG;;AAEH;EACE,8BAA8B,CAAC,OAAO;EACtC,gCAAwB;UAAxB,wBAAwB,CAAC,OAAO;CACjC;;AAED;;;;GAIG;;AAEH;EAEE,yBAAyB;CAC1B;;AAED;;GAEG;;AAEH;EACE,0BAA0B;EAC1B,cAAc;EACd,+BAA+B;CAChC;;AAED;;;GAGG;;AAEH;EACE,UAAU,CAAC,OAAO;EAClB,WAAW,CAAC,OAAO;CACpB;;AAED;;GAEG;;AAEH;EACE,eAAe;CAChB;;AAED;;;GAGG;;AAEH;EACE,kBAAkB;CACnB;;AAED;gFACgF;;AAEhF;;GAEG;;AAEH;EACE,0BAA0B;EAC1B,kBAAkB;CACnB;;AAED;EAEE,WAAW;CACZ;;AD5ZD,yEAAyE;;AEXzE;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,qCAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,kCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,iCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,qCAAqB;;MAArB,gCAAqB;;SAArB,6BAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;AF1ED;;gFAEgF;;AAEhF;EACE,YAAY;EACZ,iBAAiB;EACjB,eAAe,CAAC,YAAY;EAC5B,yDAA+B;EAC/B,mBAAmB,CAAC,WAAW;CAChC;;AAED;;;;;;GAMG;;AAEH;EACE,oBAAoB;EACpB,kBAAkB;CACnB;;AAED;EACE,oBAAoB;EACpB,kBAAkB;CACnB;;AAED;;GAEG;;AAEH;EACE,eAAe;EACf,YAAY;EACZ,UAAU;EACV,2BAA2B;EAC3B,cAAc;EACd,WAAW;CACZ;;AAED;;;;GAIG;;AAEH;EAME,uBAAuB;CACxB;;AAED;;GAEG;;AAEH;EACE,UAAU;EACV,UAAU;EACV,WAAW;CACZ;;AAED;;GAEG;;AAEH;EACE,iBAAiB;CAClB;;AAED;;gFAEgF;;AAEhF;EACE,gBAAgB;EAChB,iBAAiB;EACjB,YAAY;EACZ,iBAAiB;CAClB;;AAED;;;;gFAIgF;;AAEhF;EACE;IAGE,mCAAmC;IACnC,uBAAuB,CAAC,+DAA+D;IACvF,oCAA4B;YAA5B,4BAA4B;IAC5B,6BAA6B;GAC9B;;EAED;IAEE,2BAA2B;GAC5B;;EAED;IACE,6BAA6B;GAC9B;;EAED;IACE,8BAA8B;GAC/B;;EAED;;;KAGG;;EAEH;IAEE,YAAY;GACb;;EAED;IAEE,uBAAuB;IACvB,yBAAyB;GAC1B;;EAED;;;KAGG;;EAEH;IACE,4BAA4B;GAC7B;;EAED;IAEE,yBAAyB;GAC1B;;EAED;IACE,2BAA2B;GAC5B;;EAED;IAGE,WAAW;IACX,UAAU;GACX;;EAED;IAEE,wBAAwB;GACzB;CACF;;AAGD;;gFAEgF;;AAEhF;EACE,kBAAkB;EAClB,iBAAiB;EACjB,eAAe;EACf,mBAAmB;EACnB,iBAAiB;CAClB;;AACD;EACE,kBAAkB;EAClB,iBAAiB;EACjB,eAAe;EACf,mBAAmB;EACnB,iBAAiB;CAClB","file":"App.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n@import '../../../node_modules/normalize.css/normalize.css';\n\n/*! React Starter Kit | MIT License | https://www.reactstarterkit.com/ */\n\n@import '../variables.scss';\n\n/*\n * Base styles\n * ========================================================================== */\n\nhtml {\n  color: #222;\n  font-weight: 100;\n  font-size: 1em; /* ~16px; */\n  font-family: $font-family-base;\n  line-height: 1.375; /* ~22px */\n}\n\n/*\n * Remove text-shadow in selection highlight:\n * https://twitter.com/miketaylr/status/12228805301\n *\n * These selection rule sets have to be separate.\n * Customize the background color to match your design.\n */\n\n::-moz-selection {\n  background: #b3d4fc;\n  text-shadow: none;\n}\n\n::selection {\n  background: #b3d4fc;\n  text-shadow: none;\n}\n\n/*\n * A better looking default horizontal rule\n */\n\nhr {\n  display: block;\n  height: 1px;\n  border: 0;\n  border-top: 1px solid #ccc;\n  margin: 1em 0;\n  padding: 0;\n}\n\n/*\n * Remove the gap between audio, canvas, iframes,\n * images, videos and the bottom of their containers:\n * https://github.com/h5bp/html5-boilerplate/issues/440\n */\n\naudio,\ncanvas,\niframe,\nimg,\nsvg,\nvideo {\n  vertical-align: middle;\n}\n\n/*\n * Remove default fieldset styles.\n */\n\nfieldset {\n  border: 0;\n  margin: 0;\n  padding: 0;\n}\n\n/*\n * Allow only vertical resizing of textareas.\n */\n\ntextarea {\n  resize: vertical;\n}\n\n/*\n * Browser upgrade prompt\n * ========================================================================== */\n\n:global(.browserupgrade) {\n  margin: 0.2em 0;\n  background: #ccc;\n  color: #000;\n  padding: 0.2em 0;\n}\n\n/*\n * Print styles\n * Inlined to avoid the additional HTTP request:\n * http://www.phpied.com/delay-loading-your-print-css/\n * ========================================================================== */\n\n@media print {\n  *,\n  *:before,\n  *:after {\n    background: transparent !important;\n    color: #000 !important; /* Black prints faster: http://www.sanbeiji.com/archives/953 */\n    box-shadow: none !important;\n    text-shadow: none !important;\n  }\n\n  a,\n  a:visited {\n    text-decoration: underline;\n  }\n\n  a[href]:after {\n    content: \" (\" attr(href) \")\";\n  }\n\n  abbr[title]:after {\n    content: \" (\" attr(title) \")\";\n  }\n\n  /*\n   * Don't show links that are fragment identifiers,\n   * or use the `javascript:` pseudo protocol\n   */\n\n  a[href^=\"#\"]:after,\n  a[href^=\"javascript:\"]:after {\n    content: \"\";\n  }\n\n  pre,\n  blockquote {\n    border: 1px solid #999;\n    page-break-inside: avoid;\n  }\n\n  /*\n   * Printing Tables:\n   * http://css-discuss.incutio.com/wiki/Printing_Tables\n   */\n\n  thead {\n    display: table-header-group;\n  }\n\n  tr,\n  img {\n    page-break-inside: avoid;\n  }\n\n  img {\n    max-width: 100% !important;\n  }\n\n  p,\n  h2,\n  h3 {\n    orphans: 3;\n    widows: 3;\n  }\n\n  h2,\n  h3 {\n    page-break-after: avoid;\n  }\n}\n\n\n/*\n * Additional Base Styles\n * ========================================================================== */\n\nh1 {\n  font-size: 2.5rem;\n  font-weight: 600;\n  display: block;\n  text-align: center;\n  margin-top: 2rem;\n}\nh2 {\n  font-size: 2.0rem;\n  font-weight: 600;\n  display: block;\n  text-align: center;\n  margin-top: 2rem;\n}","/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */\n\n/**\n * 1. Set default font family to sans-serif.\n * 2. Prevent iOS and IE text size adjust after device orientation change,\n *    without disabling user zoom.\n */\n\nhtml {\n  font-family: sans-serif; /* 1 */\n  -ms-text-size-adjust: 100%; /* 2 */\n  -webkit-text-size-adjust: 100%; /* 2 */\n}\n\n/**\n * Remove default margin.\n */\n\nbody {\n  margin: 0;\n}\n\n/* HTML5 display definitions\n   ========================================================================== */\n\n/**\n * Correct `block` display not defined for any HTML5 element in IE 8/9.\n * Correct `block` display not defined for `details` or `summary` in IE 10/11\n * and Firefox.\n * Correct `block` display not defined for `main` in IE 11.\n */\n\narticle,\naside,\ndetails,\nfigcaption,\nfigure,\nfooter,\nheader,\nhgroup,\nmain,\nmenu,\nnav,\nsection,\nsummary {\n  display: block;\n}\n\n/**\n * 1. Correct `inline-block` display not defined in IE 8/9.\n * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.\n */\n\naudio,\ncanvas,\nprogress,\nvideo {\n  display: inline-block; /* 1 */\n  vertical-align: baseline; /* 2 */\n}\n\n/**\n * Prevent modern browsers from displaying `audio` without controls.\n * Remove excess height in iOS 5 devices.\n */\n\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n\n/**\n * Address `[hidden]` styling not present in IE 8/9/10.\n * Hide the `template` element in IE 8/9/10/11, Safari, and Firefox < 22.\n */\n\n[hidden],\ntemplate {\n  display: none;\n}\n\n/* Links\n   ========================================================================== */\n\n/**\n * Remove the gray background color from active links in IE 10.\n */\n\na {\n  background-color: transparent;\n}\n\n/**\n * Improve readability of focused elements when they are also in an\n * active/hover state.\n */\n\na:active,\na:hover {\n  outline: 0;\n}\n\n/* Text-level semantics\n   ========================================================================== */\n\n/**\n * Address styling not present in IE 8/9/10/11, Safari, and Chrome.\n */\n\nabbr[title] {\n  border-bottom: 1px dotted;\n}\n\n/**\n * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.\n */\n\nb,\nstrong {\n  font-weight: bold;\n}\n\n/**\n * Address styling not present in Safari and Chrome.\n */\n\ndfn {\n  font-style: italic;\n}\n\n/**\n * Address variable `h1` font-size and margin within `section` and `article`\n * contexts in Firefox 4+, Safari, and Chrome.\n */\n\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\n\n/**\n * Address styling not present in IE 8/9.\n */\n\nmark {\n  background: #ff0;\n  color: #000;\n}\n\n/**\n * Address inconsistent and variable font size in all browsers.\n */\n\nsmall {\n  font-size: 80%;\n}\n\n/**\n * Prevent `sub` and `sup` affecting `line-height` in all browsers.\n */\n\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\n\nsup {\n  top: -0.5em;\n}\n\nsub {\n  bottom: -0.25em;\n}\n\n/* Embedded content\n   ========================================================================== */\n\n/**\n * Remove border when inside `a` element in IE 8/9/10.\n */\n\nimg {\n  border: 0;\n}\n\n/**\n * Correct overflow not hidden in IE 9/10/11.\n */\n\nsvg:not(:root) {\n  overflow: hidden;\n}\n\n/* Grouping content\n   ========================================================================== */\n\n/**\n * Address margin not present in IE 8/9 and Safari.\n */\n\nfigure {\n  margin: 1em 40px;\n}\n\n/**\n * Address differences between Firefox and other browsers.\n */\n\nhr {\n  box-sizing: content-box;\n  height: 0;\n}\n\n/**\n * Contain overflow in all browsers.\n */\n\npre {\n  overflow: auto;\n}\n\n/**\n * Address odd `em`-unit font size rendering in all browsers.\n */\n\ncode,\nkbd,\npre,\nsamp {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\n\n/* Forms\n   ========================================================================== */\n\n/**\n * Known limitation: by default, Chrome and Safari on OS X allow very limited\n * styling of `select`, unless a `border` property is set.\n */\n\n/**\n * 1. Correct color not being inherited.\n *    Known issue: affects color of disabled elements.\n * 2. Correct font properties not being inherited.\n * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.\n */\n\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  color: inherit; /* 1 */\n  font: inherit; /* 2 */\n  margin: 0; /* 3 */\n}\n\n/**\n * Address `overflow` set to `hidden` in IE 8/9/10/11.\n */\n\nbutton {\n  overflow: visible;\n}\n\n/**\n * Address inconsistent `text-transform` inheritance for `button` and `select`.\n * All other form control elements do not inherit `text-transform` values.\n * Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.\n * Correct `select` style inheritance in Firefox.\n */\n\nbutton,\nselect {\n  text-transform: none;\n}\n\n/**\n * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`\n *    and `video` controls.\n * 2. Correct inability to style clickable `input` types in iOS.\n * 3. Improve usability and consistency of cursor style between image-type\n *    `input` and others.\n */\n\nbutton,\nhtml input[type=\"button\"], /* 1 */\ninput[type=\"reset\"],\ninput[type=\"submit\"] {\n  -webkit-appearance: button; /* 2 */\n  cursor: pointer; /* 3 */\n}\n\n/**\n * Re-set default cursor for disabled elements.\n */\n\nbutton[disabled],\nhtml input[disabled] {\n  cursor: default;\n}\n\n/**\n * Remove inner padding and border in Firefox 4+.\n */\n\nbutton::-moz-focus-inner,\ninput::-moz-focus-inner {\n  border: 0;\n  padding: 0;\n}\n\n/**\n * Address Firefox 4+ setting `line-height` on `input` using `!important` in\n * the UA stylesheet.\n */\n\ninput {\n  line-height: normal;\n}\n\n/**\n * It's recommended that you don't attempt to style these elements.\n * Firefox's implementation doesn't respect box-sizing, padding, or width.\n *\n * 1. Address box sizing set to `content-box` in IE 8/9/10.\n * 2. Remove excess padding in IE 8/9/10.\n */\n\ninput[type=\"checkbox\"],\ninput[type=\"radio\"] {\n  box-sizing: border-box; /* 1 */\n  padding: 0; /* 2 */\n}\n\n/**\n * Fix the cursor style for Chrome's increment/decrement buttons. For certain\n * `font-size` values of the `input`, it causes the cursor style of the\n * decrement button to change from `default` to `text`.\n */\n\ninput[type=\"number\"]::-webkit-inner-spin-button,\ninput[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\n\n/**\n * 1. Address `appearance` set to `searchfield` in Safari and Chrome.\n * 2. Address `box-sizing` set to `border-box` in Safari and Chrome.\n */\n\ninput[type=\"search\"] {\n  -webkit-appearance: textfield; /* 1 */\n  box-sizing: content-box; /* 2 */\n}\n\n/**\n * Remove inner padding and search cancel button in Safari and Chrome on OS X.\n * Safari (but not Chrome) clips the cancel button when the search input has\n * padding (and `textfield` appearance).\n */\n\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n\n/**\n * Define consistent border, margin, and padding.\n */\n\nfieldset {\n  border: 1px solid #c0c0c0;\n  margin: 0 2px;\n  padding: 0.35em 0.625em 0.75em;\n}\n\n/**\n * 1. Correct `color` not being inherited in IE 8/9/10/11.\n * 2. Remove padding so people aren't caught out if they zero out fieldsets.\n */\n\nlegend {\n  border: 0; /* 1 */\n  padding: 0; /* 2 */\n}\n\n/**\n * Remove default vertical scrollbar in IE 8/9/10/11.\n */\n\ntextarea {\n  overflow: auto;\n}\n\n/**\n * Don't inherit the `font-weight` (applied by a rule above).\n * NOTE: the default cannot safely be changed in Chrome and Safari on OS X.\n */\n\noptgroup {\n  font-weight: bold;\n}\n\n/* Tables\n   ========================================================================== */\n\n/**\n * Remove most spacing between table cells.\n */\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\n\ntd,\nth {\n  padding: 0;\n}\n","/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:700}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}\n\n/*! React Starter Kit | MIT License | https://www.reactstarterkit.com/ */mixin icon-spin(){-moz-animation-name:_1lcW;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_1lcW;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_1lcW;animation-name:_1lcW;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _1lcW{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _1lcW{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}html{color:#222;font-weight:100;font-size:1em;font-family:Segoe UI,HelveticaNeue-Light,sans-serif;line-height:1.375}::-moz-selection{background:#b3d4fc;text-shadow:none}::selection{background:#b3d4fc;text-shadow:none}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}audio,canvas,iframe,img,svg,video{vertical-align:middle}fieldset{border:0;margin:0;padding:0}textarea{resize:vertical}.browserupgrade{margin:.2em 0;background:#ccc;color:#000;padding:.2em 0}@media print{*,:after,:before{background:transparent!important;color:#000!important;box-shadow:none!important;text-shadow:none!important}a,a:visited{text-decoration:underline}a[href]:after{content:\" (\" attr(href) \")\"}abbr[title]:after{content:\" (\" attr(title) \")\"}a[href^=\"#\"]:after,a[href^=\"javascript:\"]:after{content:\"\"}blockquote,pre{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}img,tr{page-break-inside:avoid}img{max-width:100%!important}h2,h3,p{orphans:3;widows:3}h2,h3{page-break-after:avoid}}h1{font-size:2.5rem}h1,h2{font-weight:600;display:block;text-align:center;margin-top:2rem}h2{font-size:2rem}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "App_spin_1lc"
+  	"spin": "_1lcW"
   };
 
 /***/ },
-/* 50 */
+/* 52 */
 /***/ function(module, exports) {
 
   /*
@@ -2651,24 +2679,24 @@ module.exports =
 
 
 /***/ },
-/* 51 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
   
-  var _stringify = __webpack_require__(52);
+  var _stringify = __webpack_require__(54);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
-  var _slicedToArray2 = __webpack_require__(53);
+  var _slicedToArray2 = __webpack_require__(55);
   
   var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
   
-  var _assign = __webpack_require__(54);
+  var _assign = __webpack_require__(56);
   
   var _assign2 = _interopRequireDefault(_assign);
   
-  var _getIterator2 = __webpack_require__(55);
+  var _getIterator2 = __webpack_require__(57);
   
   var _getIterator3 = _interopRequireDefault(_getIterator2);
   
@@ -2842,31 +2870,31 @@ module.exports =
   module.exports = insertCss;
 
 /***/ },
-/* 52 */
+/* 54 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/core-js/json/stringify");
 
 /***/ },
-/* 53 */
+/* 55 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/slicedToArray");
 
 /***/ },
-/* 54 */
+/* 56 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/core-js/object/assign");
 
 /***/ },
-/* 55 */
+/* 57 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/core-js/get-iterator");
 
 /***/ },
-/* 56 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2875,43 +2903,43 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Header = __webpack_require__(58);
+  var _Header = __webpack_require__(60);
   
   var _Header2 = _interopRequireDefault(_Header);
   
-  var _Link = __webpack_require__(60);
+  var _Link = __webpack_require__(62);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Navigation = __webpack_require__(69);
+  var _Navigation = __webpack_require__(71);
   
   var _Navigation2 = _interopRequireDefault(_Navigation);
   
@@ -2957,18 +2985,18 @@ module.exports =
   exports.default = (0, _withStyles2.default)(Header, _Header2.default);
 
 /***/ },
-/* 57 */
+/* 59 */
 /***/ function(module, exports) {
 
   module.exports = require("isomorphic-style-loader/lib/withStyles");
 
 /***/ },
-/* 58 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(59);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(61);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -2978,45 +3006,30 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Header.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Header.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 59 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: Header_spin_1xR;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: Header_spin_1xR;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: Header_spin_1xR;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: Header_spin_1xR;\n\n\t     -o-animation-name: Header_spin_1xR;\n\n\t        animation-name: Header_spin_1xR;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes Header_spin_1xR {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes Header_spin_1xR {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes Header_spin_1xR {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.Header_root_14I {\n  /* background: $primary-color;*/\n  /* color: $primary-nav-font-color;*/\n  /* border-bottom: $primary-border;*/\n  background: transparent;\n  position: absolute;\n  top: 0;\n  width: 100%;\n  z-index: 1;\n}\n\n.Header_container_izf {\n  margin: 0 auto;\n  padding: 10px 20px 10px 40px;\n  /* max-width: $max-content-width;*/\n  height: 39px;\n}\n\n.Header_brand_1-T {\n  color: rgba(255, 255, 255, .5);\n  text-decoration: none;\n  font-size: 1.75em;\n  /* position: absolute;*/\n  /* top: 3px;*/\n  vertical-align: bottom;\n}\n\n.Header_brandTxt_162 {\n  vertical-align: middle;\n}\n\n.Header_nav_3wx {\n  float: right;\n  margin-top: 6px;\n}", "", {"version":3,"sources":["/./src/components/Header/Header.scss","/./src/components/variables.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;ACPH;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,wCAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,qCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,oCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,wCAAqB;;MAArB,mCAAqB;;SAArB,gCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;AD5ED;EACE,gCAA8B;EAC9B,oCAAkC;EAClC,oCAAkC;EAClC,wBAAwB;EACxB,mBAAmB;EACnB,OAAO;EACP,YAAY;EACZ,WAAW;CACZ;;AAED;EACE,eAAe;EACf,6BAA6B;EAC7B,mCAAiC;EACjC,aAAa;CACd;;AAED;EACE,+BAA+B;EAC/B,sBAAsB;EACtB,kBAAkB;EAClB,wBAAsB;EACtB,cAAY;EACZ,uBAAuB;CACxB;;AAGD;EACE,uBAAuB;CACxB;;AAGD;EACE,aAAa;EACb,gBAAgB;CACjB","file":"Header.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n@import '../variables.scss';\n\n$brand-color: #61dafb;\n\n.root {\n  // background: $primary-color;\n  // color: $primary-nav-font-color;\n  // border-bottom: $primary-border;\n  background: transparent;\n  position: absolute;\n  top: 0;\n  width: 100%;\n  z-index: 1;\n}\n\n.container {\n  margin: 0 auto;\n  padding: 10px 20px 10px 40px;\n  // max-width: $max-content-width;\n  height: 39px;\n}\n\n.brand {\n  color: $primary-nav-font-color;\n  text-decoration: none;\n  font-size: 1.75em;\n  // position: absolute;\n  // top: 3px;\n  vertical-align: bottom;\n}\n\n\n.brandTxt {\n  vertical-align: middle;\n}\n\n\n.nav {\n  float: right;\n  margin-top: 6px;\n}","/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_1xR0;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_1xR0;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_1xR0;animation-name:_1xR0;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _1xR0{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _1xR0{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._14IZ{background:transparent;position:absolute;top:0;width:100%;z-index:1}.izfM{margin:0 auto;padding:10px 20px 10px 40px;height:39px}._1-TO{color:hsla(0,0%,100%,.5);text-decoration:none;font-size:1.75em;vertical-align:bottom}._162t{vertical-align:middle}._3wxE{float:right;margin-top:6px}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "Header_spin_1xR",
-  	"root": "Header_root_14I",
-  	"container": "Header_container_izf",
-  	"brand": "Header_brand_1-T",
-  	"brandTxt": "Header_brandTxt_162",
-  	"nav": "Header_nav_3wx"
+  	"spin": "_1xR0",
+  	"root": "_14IZ",
+  	"container": "izfM",
+  	"brand": "_1-TO",
+  	"brandTxt": "_162t",
+  	"nav": "_3wxE"
   };
 
 /***/ },
-/* 60 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3025,43 +3038,43 @@ module.exports =
     value: true
   });
   
-  var _objectWithoutProperties2 = __webpack_require__(61);
+  var _objectWithoutProperties2 = __webpack_require__(63);
   
   var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
   
-  var _extends2 = __webpack_require__(62);
+  var _extends2 = __webpack_require__(64);
   
   var _extends3 = _interopRequireDefault(_extends2);
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _parsePath = __webpack_require__(63);
+  var _parsePath = __webpack_require__(65);
   
   var _parsePath2 = _interopRequireDefault(_parsePath);
   
-  var _Location = __webpack_require__(64);
+  var _Location = __webpack_require__(66);
   
   var _Location2 = _interopRequireDefault(_Location);
   
@@ -3154,25 +3167,25 @@ module.exports =
   exports.default = Link;
 
 /***/ },
-/* 61 */
+/* 63 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/objectWithoutProperties");
 
 /***/ },
-/* 62 */
+/* 64 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/extends");
 
 /***/ },
-/* 63 */
+/* 65 */
 /***/ function(module, exports) {
 
   module.exports = require("history/lib/parsePath");
 
 /***/ },
-/* 64 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3181,17 +3194,17 @@ module.exports =
     value: true
   });
   
-  var _ExecutionEnvironment = __webpack_require__(65);
+  var _ExecutionEnvironment = __webpack_require__(67);
   
-  var _createBrowserHistory = __webpack_require__(66);
+  var _createBrowserHistory = __webpack_require__(68);
   
   var _createBrowserHistory2 = _interopRequireDefault(_createBrowserHistory);
   
-  var _createMemoryHistory = __webpack_require__(67);
+  var _createMemoryHistory = __webpack_require__(69);
   
   var _createMemoryHistory2 = _interopRequireDefault(_createMemoryHistory);
   
-  var _useQueries = __webpack_require__(68);
+  var _useQueries = __webpack_require__(70);
   
   var _useQueries2 = _interopRequireDefault(_useQueries);
   
@@ -3211,31 +3224,31 @@ module.exports =
   exports.default = location;
 
 /***/ },
-/* 65 */
+/* 67 */
 /***/ function(module, exports) {
 
   module.exports = require("fbjs/lib/ExecutionEnvironment");
 
 /***/ },
-/* 66 */
+/* 68 */
 /***/ function(module, exports) {
 
   module.exports = require("history/lib/createBrowserHistory");
 
 /***/ },
-/* 67 */
+/* 69 */
 /***/ function(module, exports) {
 
   module.exports = require("history/lib/createMemoryHistory");
 
 /***/ },
-/* 68 */
+/* 70 */
 /***/ function(module, exports) {
 
   module.exports = require("history/lib/useQueries");
 
 /***/ },
-/* 69 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3244,47 +3257,47 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _classnames = __webpack_require__(70);
+  var _classnames = __webpack_require__(72);
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Navigation = __webpack_require__(71);
+  var _Navigation = __webpack_require__(73);
   
   var _Navigation2 = _interopRequireDefault(_Navigation);
   
-  var _Link = __webpack_require__(60);
+  var _Link = __webpack_require__(62);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _reactMaterialize = __webpack_require__(73);
+  var _reactMaterialize = __webpack_require__(75);
   
   var _reactMaterialize2 = _interopRequireDefault(_reactMaterialize);
   
@@ -3360,18 +3373,18 @@ module.exports =
   exports.default = (0, _withStyles2.default)(Navigation, _Navigation2.default);
 
 /***/ },
-/* 70 */
+/* 72 */
 /***/ function(module, exports) {
 
   module.exports = require("classnames");
 
 /***/ },
-/* 71 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(72);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(74);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -3381,50 +3394,35 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Navigation.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Navigation.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 72 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n /*\n * Colors\n * ========================================================================== */\n\n /* #222 */\n\n /* #404040 */\n\n /* #555 */\n\n /* #777 */\n\n /* #eee */\n\n /*\n * Typography\n * ========================================================================== */\n\n /*\n * Layout\n * ========================================================================== */\n\n /*\n * Media queries breakpoints\n * ========================================================================== */\n\n /* Extra small screen / phone */\n\n /* Small screen / tablet */\n\n /* Medium screen / desktop */\n\n /* Large screen / wide desktop */\n\n /*\n * Animations\n * ========================================================================== */\n\n mixin icon-spin() {\n\t-webkit-animation-name: Navigation_spin_2GI;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: Navigation_spin_2GI;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: Navigation_spin_2GI;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: Navigation_spin_2GI;\n\n\t     -o-animation-name: Navigation_spin_2GI;\n\n\t        animation-name: Navigation_spin_2GI;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n @-webkit-keyframes Navigation_spin_2GI {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n @-o-keyframes Navigation_spin_2GI {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n @keyframes Navigation_spin_2GI {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n /* color: #26a69a;*/\n\n /*   :hover {*/\n\n /*     color: #2BBBAD;*/\n\n /*     @include icon-spin;*/\n\n /*   }*/\n\n .Navigation_root_2Gx {\n}\n\n .Navigation_link_12k {\n  display: inline-block;\n  cursor: pointer;\n  padding: 3px 8px;\n  text-decoration: none;\n  font-size: 0.9rem;\n  font-weight: 600;\n  margin: 1px 0 0 0;\n  /* color: #989898;*/\n  color: #26a69a;\n}\n\n .Navigation_link_12k {\n  /* color: $primary-nav-font-color;*/\n}\n\n .Navigation_link_12k:active {\n  /* color: $nav-link-active-color;*/\n}\n\n .Navigation_link_12k:hover {\n  color: #FFF;\n}\n\n .Navigation_link_12k:visited {\n}\n\n .Navigation_highlight_2cu {\n  margin-right: 8px;\n  margin-left: 8px;\n  border-radius: 3px;\n  background: rgba(0, 0, 0, .15);\n  color: #fff;\n}\n\n .Navigation_highlight_2cu:hover {\n  background: rgba(0, 0, 0, .3);\n}\n\n .Navigation_spacer_2MV {\n  color: rgba(255, 255, 255, .3);\n  /* color: $accent-color;*/\n}\n", "", {"version":3,"sources":["/./src/components/Navigation/Navigation.scss","/./src/components/variables.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;CCPH;;gFAEgF;;CAGxB,UAAU;;CACV,aAAa;;CACb,UAAU;;CACV,UAAU;;CACV,UAAU;;CAclE;;gFAEgF;;CAIhF;;gFAEgF;;CAIhF;;gFAEgF;;CAEhD,gCAAgC;;CAChC,2BAA2B;;CAC3B,6BAA6B;;CAC7B,iCAAiC;;CAEjE;;gFAEgF;;CAKhF;CACC,4CAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,yCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,wCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,4CAAqB;;MAArB,uCAAqB;;SAArB,oCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;CASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;CACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;CAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;CDvED,oBAAkB;;CAClB,eAAa;;CACb,wBAAsB;;CACtB,4BAA0B;;CAC1B,QAAM;;CAEN;CACC;;CAED;EACE,sBAAsB;EACtB,gBAAgB;EAChB,iBAAiB;EACjB,sBAAsB;EACtB,kBAAkB;EAClB,iBAAmC;EACnC,kBAAkB;EAClB,oBAAkB;EAClB,eAAqB;CACtB;;CAED;EACE,oCAAkC;CACnC;;CACD;EACE,mCAAiC;CAClC;;CACD;EACE,YAA6B;CAC9B;;CACD;CACC;;CAED;EACE,kBAAkB;EAClB,iBAAiB;EACjB,mBAAmB;EACnB,+BAA+B;EAC/B,YAAY;CACb;;CAED;EACE,8BAA8B;CAC/B;;CAED;EACE,+BAA+B;EAC/B,0BAAwB;CACzB","file":"Navigation.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n @import '../variables.scss';\n\n$nav-link-color: #00A0FF;\n$nav-link-hover-color: #FFF;\n$nav-link-active-color: orange;\n$nav-link-visited-color: pink;\n$nav-link-font-weight: 600;\n\n\n// color: #26a69a;\n//   :hover {\n//     color: #2BBBAD;\n//     @include icon-spin;\n//   }\n\n.root {\n}\n\n.link {\n  display: inline-block;\n  cursor: pointer;\n  padding: 3px 8px;\n  text-decoration: none;\n  font-size: 0.9rem;\n  font-weight: $nav-link-font-weight;\n  margin: 1px 0 0 0;\n  // color: #989898;\n  color: $accent-color;\n}\n\n.link {\n  // color: $primary-nav-font-color;\n}\n.link:active {\n  // color: $nav-link-active-color;\n}\n.link:hover {\n  color: $nav-link-hover-color;\n}\n.link:visited {\n}\n\n.highlight {\n  margin-right: 8px;\n  margin-left: 8px;\n  border-radius: 3px;\n  background: rgba(0, 0, 0, .15);\n  color: #fff;\n}\n\n.highlight:hover {\n  background: rgba(0, 0, 0, .3);\n}\n\n.spacer {\n  color: rgba(255, 255, 255, .3);\n  // color: $accent-color;\n}\n","/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_2GIk;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_2GIk;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_2GIk;animation-name:_2GIk;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _2GIk{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _2GIk{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._12ku{display:inline-block;cursor:pointer;padding:3px 8px;text-decoration:none;font-size:.9rem;font-weight:600;margin:1px 0 0;color:#26a69a}._12ku:hover{color:#fff}._2cuA{margin-right:8px;margin-left:8px;border-radius:3px;background:rgba(0,0,0,.15);color:#fff}._2cuA:hover{background:rgba(0,0,0,.3)}._2MVO{color:hsla(0,0%,100%,.3)}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "Navigation_spin_2GI",
-  	"root": "Navigation_root_2Gx",
-  	"link": "Navigation_link_12k",
-  	"highlight": "Navigation_highlight_2cu",
-  	"spacer": "Navigation_spacer_2MV"
+  	"spin": "_2GIk",
+  	"root": "_2Gxu",
+  	"link": "_12ku",
+  	"highlight": "_2cuA",
+  	"spacer": "_2MVO"
   };
 
 /***/ },
-/* 73 */
+/* 75 */
 /***/ function(module, exports) {
 
   module.exports = require("react-materialize");
 
 /***/ },
-/* 74 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3433,43 +3431,43 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Footer = __webpack_require__(75);
+  var _Footer = __webpack_require__(77);
   
   var _Footer2 = _interopRequireDefault(_Footer);
   
-  var _Link = __webpack_require__(60);
+  var _Link = __webpack_require__(62);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _SVGIcon = __webpack_require__(77);
+  var _SVGIcon = __webpack_require__(79);
   
   var _SVGIcon2 = _interopRequireDefault(_SVGIcon);
   
@@ -3552,12 +3550,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(Footer, _Footer2.default);
 
 /***/ },
-/* 75 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(76);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(78);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -3567,49 +3565,34 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Footer.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Footer.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 76 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: Footer_spin_NWN;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: Footer_spin_NWN;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: Footer_spin_NWN;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: Footer_spin_NWN;\n\n\t     -o-animation-name: Footer_spin_NWN;\n\n\t        animation-name: Footer_spin_NWN;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes Footer_spin_NWN {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes Footer_spin_NWN {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes Footer_spin_NWN {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.Footer_root_3dP {\n  background: #333;\n  color: #fff;\n  width: 100%;\n}\n\n.Footer_container_26p {\n  margin: 0 auto;\n  padding: 10vh 15px;\n  max-width: 1000px;\n  text-align: center;\n}\n\n.Footer_text_tTp {\n  color: rgba(255, 255, 255, .5);\n}\n\n.Footer_textMuted_1h3 {\n  color: rgba(255, 255, 255, .3);\n}\n\n.Footer_spacer_3n7 {\n  color: rgba(255, 255, 255, .3);\n}\n\n.Footer_text_tTp, .Footer_link_NoJ {\n  padding: 2px 5px;\n  font-size: 1em;\n}\n\n.Footer_link_NoJ, .Footer_link_NoJ:active, .Footer_link_NoJ:visited {\n  color: rgba(255, 255, 255, .6);\n  text-decoration: none;\n}\n\n.Footer_link_NoJ:hover {\n  color: rgba(255, 255, 255, 1);\n}\n\n.Footer_lowerText_uPx {\n  margin-top: 1rem;\n}\n\n.Footer_iconBar_1zN {\n  margin-bottom: 1rem;\n}\n\n.Footer_footerIcon_w7b {\n  margin: 0 0.5rem;\n  display: inline-block;\n  cursor: pointer;\n  color: #26a69a;\n}\n\n.Footer_footerIcon_w7b :hover {\n\tcolor: #2BBBAD;\n\n\t@include icon-spin;\n}\n\n", "", {"version":3,"sources":["/./src/components/Footer/Footer.scss","/./src/components/variables.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;ACPH;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,wCAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,qCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,oCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,wCAAqB;;MAArB,mCAAqB;;SAArB,gCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;AD9ED;EACE,iBAAiB;EACjB,YAAY;EACZ,YAAY;CACb;;AAED;EACE,eAAe;EACf,mBAAmB;EACnB,kBAA8B;EAC9B,mBAAmB;CACpB;;AAED;EACE,+BAA+B;CAChC;;AAED;EAEE,+BAA+B;CAChC;;AAED;EACE,+BAA+B;CAChC;;AAED;EAEE,iBAAiB;EACjB,eAAe;CAChB;;AAED;EAGE,+BAA+B;EAC/B,sBAAsB;CACvB;;AAED;EACE,8BAA8B;CAC/B;;AAED;EACE,iBAAiB;CAClB;;AACD;EACE,oBAAoB;CACrB;;AACD;EACE,iBAAiB;EACjB,sBAAsB;EACtB,gBAAgB;EAChB,eAAe;CAKhB;;AAJC;CACE,eAAe;;CACf,mBAAmB;CACpB","file":"Footer.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n@import '../variables.scss';\n\n.root {\n  background: #333;\n  color: #fff;\n  width: 100%;\n}\n\n.container {\n  margin: 0 auto;\n  padding: 10vh 15px;\n  max-width: $max-content-width;\n  text-align: center;\n}\n\n.text {\n  color: rgba(255, 255, 255, .5);\n}\n\n.textMuted {\n  composes: text;\n  color: rgba(255, 255, 255, .3);\n}\n\n.spacer {\n  color: rgba(255, 255, 255, .3);\n}\n\n.text,\n.link {\n  padding: 2px 5px;\n  font-size: 1em;\n}\n\n.link,\n.link:active,\n.link:visited {\n  color: rgba(255, 255, 255, .6);\n  text-decoration: none;\n}\n\n.link:hover {\n  color: rgba(255, 255, 255, 1);\n}\n\n.lowerText {\n  margin-top: 1rem;\n}\n.iconBar {\n  margin-bottom: 1rem;\n}\n.footerIcon {\n  margin: 0 0.5rem;\n  display: inline-block;\n  cursor: pointer;\n  color: #26a69a;\n  :hover {\n    color: #2BBBAD;\n    @include icon-spin;\n  }\n}\n\n","/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:NWN9;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:NWN9;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:NWN9;animation-name:NWN9;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes NWN9{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes NWN9{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._3dP9{background:#333;color:#fff;width:100%}._26pK{margin:0 auto;padding:10vh 15px;max-width:1000px;text-align:center}.tTpl{color:hsla(0,0%,100%,.5)}._1h3n,._3n7L{color:hsla(0,0%,100%,.3)}.NoJN,.tTpl{padding:2px 5px;font-size:1em}.NoJN,.NoJN:active,.NoJN:visited{color:hsla(0,0%,100%,.6);text-decoration:none}.NoJN:hover{color:#fff}.uPxX{margin-top:1rem}._1zNC{margin-bottom:1rem}.w7b5{margin:0 .5rem;display:inline-block;cursor:pointer;color:#26a69a}.w7b5 :hover{color:#2bbbad;@include icon-spin}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "Footer_spin_NWN",
-  	"root": "Footer_root_3dP",
-  	"container": "Footer_container_26p",
-  	"text": "Footer_text_tTp",
-  	"textMuted": "Footer_textMuted_1h3 Footer_text_tTp",
-  	"spacer": "Footer_spacer_3n7",
-  	"link": "Footer_link_NoJ",
-  	"lowerText": "Footer_lowerText_uPx",
-  	"iconBar": "Footer_iconBar_1zN",
-  	"footerIcon": "Footer_footerIcon_w7b"
+  	"spin": "NWN9",
+  	"root": "_3dP9",
+  	"container": "_26pK",
+  	"text": "tTpl",
+  	"textMuted": "_1h3n tTpl",
+  	"spacer": "_3n7L",
+  	"link": "NoJN",
+  	"lowerText": "uPxX",
+  	"iconBar": "_1zNC",
+  	"footerIcon": "w7b5"
   };
 
 /***/ },
-/* 77 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3618,7 +3601,7 @@ module.exports =
     value: true
   });
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
@@ -3737,7 +3720,7 @@ module.exports =
   exports.default = SVGIcon;
 
 /***/ },
-/* 78 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3746,35 +3729,35 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ContentPage = __webpack_require__(79);
+  var _ContentPage = __webpack_require__(81);
   
   var _ContentPage2 = _interopRequireDefault(_ContentPage);
   
@@ -3829,12 +3812,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(ContentPage, _ContentPage2.default);
 
 /***/ },
-/* 79 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(80);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(82);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -3844,42 +3827,27 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ContentPage.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ContentPage.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 80 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: ContentPage_spin_r9x;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: ContentPage_spin_r9x;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: ContentPage_spin_r9x;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: ContentPage_spin_r9x;\n\n\t     -o-animation-name: ContentPage_spin_r9x;\n\n\t        animation-name: ContentPage_spin_r9x;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes ContentPage_spin_r9x {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes ContentPage_spin_r9x {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes ContentPage_spin_r9x {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.ContentPage_root_1Kg {\n\n}\n\n.ContentPage_container_1JT {\n  margin: 0 auto;\n  padding: 0 0 40px;\n  max-width: 1000px;\n}\n", "", {"version":3,"sources":["/./src/components/ContentPage/ContentPage.scss","/./src/components/variables.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;ACPH;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,6CAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,0CAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,yCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,6CAAqB;;MAArB,wCAAqB;;SAArB,qCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;AD9ED;;CAEC;;AAED;EACE,eAAe;EACf,kBAAkB;EAClB,kBAA8B;CAC/B","file":"ContentPage.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n@import '../variables.scss';\n\n.root {\n\n}\n\n.container {\n  margin: 0 auto;\n  padding: 0 0 40px;\n  max-width: $max-content-width;\n}\n","/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:r9xu;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:r9xu;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:r9xu;animation-name:r9xu;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes r9xu{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes r9xu{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._1JTr{margin:0 auto;padding:0 0 40px;max-width:1000px}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "ContentPage_spin_r9x",
-  	"root": "ContentPage_root_1Kg",
-  	"container": "ContentPage_container_1JT"
+  	"spin": "r9xu",
+  	"root": "_1Kg7",
+  	"container": "_1JTr"
   };
 
 /***/ },
-/* 81 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3888,35 +3856,35 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ContactPage = __webpack_require__(82);
+  var _ContactPage = __webpack_require__(84);
   
   var _ContactPage2 = _interopRequireDefault(_ContactPage);
   
@@ -3976,12 +3944,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(ContactPage, _ContactPage2.default);
 
 /***/ },
-/* 82 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(83);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(85);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -3991,42 +3959,27 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ContactPage.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ContactPage.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 83 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: ContactPage_spin_foJ;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: ContactPage_spin_foJ;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: ContactPage_spin_foJ;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: ContactPage_spin_foJ;\n\n\t     -o-animation-name: ContactPage_spin_foJ;\n\n\t        animation-name: ContactPage_spin_foJ;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes ContactPage_spin_foJ {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes ContactPage_spin_foJ {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes ContactPage_spin_foJ {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.ContactPage_root_c4z {\n\n}\n\n.ContactPage_container_2pQ {\n  margin: 0 auto;\n  padding: 0 0 40px;\n  max-width: 1000px;\n}\n", "", {"version":3,"sources":["/./src/components/ContactPage/ContactPage.scss","/./src/components/variables.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;ACPH;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,6CAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,0CAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,yCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,6CAAqB;;MAArB,wCAAqB;;SAArB,qCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;AD9ED;;CAEC;;AAED;EACE,eAAe;EACf,kBAAkB;EAClB,kBAA8B;CAC/B","file":"ContactPage.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n@import '../variables.scss';\n\n.root {\n\n}\n\n.container {\n  margin: 0 auto;\n  padding: 0 0 40px;\n  max-width: $max-content-width;\n}\n","/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:foJf;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:foJf;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:foJf;animation-name:foJf;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes foJf{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes foJf{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._2pQ3{margin:0 auto;padding:0 0 40px;max-width:1000px}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "ContactPage_spin_foJ",
-  	"root": "ContactPage_root_c4z",
-  	"container": "ContactPage_container_2pQ"
+  	"spin": "foJf",
+  	"root": "c4zC",
+  	"container": "_2pQ3"
   };
 
 /***/ },
-/* 84 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4035,35 +3988,35 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _LoginPage = __webpack_require__(85);
+  var _LoginPage = __webpack_require__(87);
   
   var _LoginPage2 = _interopRequireDefault(_LoginPage);
   
@@ -4123,12 +4076,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(LoginPage, _LoginPage2.default);
 
 /***/ },
-/* 85 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(86);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(88);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -4138,42 +4091,27 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./LoginPage.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./LoginPage.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 86 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: LoginPage_spin_1yA;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: LoginPage_spin_1yA;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: LoginPage_spin_1yA;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: LoginPage_spin_1yA;\n\n\t     -o-animation-name: LoginPage_spin_1yA;\n\n\t        animation-name: LoginPage_spin_1yA;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes LoginPage_spin_1yA {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes LoginPage_spin_1yA {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes LoginPage_spin_1yA {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.LoginPage_root_5f7 {\n\n}\n\n.LoginPage_container_2c5 {\n  margin: 0 auto;\n  padding: 0 0 40px;\n  max-width: 1000px;\n}\n", "", {"version":3,"sources":["/./src/components/LoginPage/LoginPage.scss","/./src/components/variables.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;ACPH;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,2CAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,wCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,uCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,2CAAqB;;MAArB,sCAAqB;;SAArB,mCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;AD9ED;;CAEC;;AAED;EACE,eAAe;EACf,kBAAkB;EAClB,kBAA8B;CAC/B","file":"LoginPage.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n@import '../variables.scss';\n\n.root {\n\n}\n\n.container {\n  margin: 0 auto;\n  padding: 0 0 40px;\n  max-width: $max-content-width;\n}\n","/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_1yAQ;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_1yAQ;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_1yAQ;animation-name:_1yAQ;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _1yAQ{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _1yAQ{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._2c5c{margin:0 auto;padding:0 0 40px;max-width:1000px}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "LoginPage_spin_1yA",
-  	"root": "LoginPage_root_5f7",
-  	"container": "LoginPage_container_2c5"
+  	"spin": "_1yAQ",
+  	"root": "_5f7Y",
+  	"container": "_2c5c"
   };
 
 /***/ },
-/* 87 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4182,35 +4120,35 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _RegisterPage = __webpack_require__(88);
+  var _RegisterPage = __webpack_require__(90);
   
   var _RegisterPage2 = _interopRequireDefault(_RegisterPage);
   
@@ -4270,12 +4208,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(RegisterPage, _RegisterPage2.default);
 
 /***/ },
-/* 88 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(89);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(91);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -4285,42 +4223,27 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./RegisterPage.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./RegisterPage.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 89 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: RegisterPage_spin_36x;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: RegisterPage_spin_36x;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: RegisterPage_spin_36x;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: RegisterPage_spin_36x;\n\n\t     -o-animation-name: RegisterPage_spin_36x;\n\n\t        animation-name: RegisterPage_spin_36x;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes RegisterPage_spin_36x {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes RegisterPage_spin_36x {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes RegisterPage_spin_36x {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.RegisterPage_root_2Yr {\n\n}\n\n.RegisterPage_container_6L5 {\n  margin: 0 auto;\n  padding: 0 0 40px;\n  max-width: 1000px;\n}\n", "", {"version":3,"sources":["/./src/components/RegisterPage/RegisterPage.scss","/./src/components/variables.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;ACPH;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,8CAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,2CAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,0CAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,8CAAqB;;MAArB,yCAAqB;;SAArB,sCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;AD9ED;;CAEC;;AAED;EACE,eAAe;EACf,kBAAkB;EAClB,kBAA8B;CAC/B","file":"RegisterPage.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n@import '../variables.scss';\n\n.root {\n\n}\n\n.container {\n  margin: 0 auto;\n  padding: 0 0 40px;\n  max-width: $max-content-width;\n}\n","/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_36xs;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_36xs;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_36xs;animation-name:_36xs;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _36xs{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _36xs{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._6L5l{margin:0 auto;padding:0 0 40px;max-width:1000px}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "RegisterPage_spin_36x",
-  	"root": "RegisterPage_root_2Yr",
-  	"container": "RegisterPage_container_6L5"
+  	"spin": "_36xs",
+  	"root": "_2YrP",
+  	"container": "_6L5l"
   };
 
 /***/ },
-/* 90 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4329,35 +4252,35 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _NotFoundPage = __webpack_require__(91);
+  var _NotFoundPage = __webpack_require__(93);
   
   var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
   
@@ -4415,12 +4338,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(NotFoundPage, _NotFoundPage2.default);
 
 /***/ },
-/* 91 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(92);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(94);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -4430,38 +4353,23 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./NotFoundPage.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./NotFoundPage.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 92 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n* {\n  margin: 0;\n  line-height: 1.2;\n}\n\nhtml {\n  display: table;\n  width: 100%;\n  height: 100%;\n  color: #888;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nbody {\n  display: table-cell;\n  margin: 2em auto;\n  vertical-align: middle;\n}\n\nh1 {\n  color: #555;\n  font-weight: 400;\n  font-size: 2em;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\n@media only screen and (max-width: 280px) {\n\n  body, p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n  }\n\n}\n", "", {"version":3,"sources":["/./src/components/NotFoundPage/NotFoundPage.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;AAEH;EACE,UAAU;EACV,iBAAiB;CAClB;;AAED;EACE,eAAe;EACf,YAAY;EACZ,aAAa;EACb,YAAY;EACZ,mBAAmB;EACnB,wBAAwB;CACzB;;AAED;EACE,oBAAoB;EACpB,iBAAiB;EACjB,uBAAuB;CACxB;;AAED;EACE,YAAY;EACZ,iBAAiB;EACjB,eAAe;CAChB;;AAED;EACE,eAAe;EACf,aAAa;CACd;;AAED;;EAEE;IACE,WAAW;GACZ;;EAED;IACE,iBAAiB;IACjB,kBAAkB;GACnB;;CAEF","file":"NotFoundPage.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n* {\n  margin: 0;\n  line-height: 1.2;\n}\n\nhtml {\n  display: table;\n  width: 100%;\n  height: 100%;\n  color: #888;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nbody {\n  display: table-cell;\n  margin: 2em auto;\n  vertical-align: middle;\n}\n\nh1 {\n  color: #555;\n  font-weight: 400;\n  font-size: 2em;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\n@media only screen and (max-width: 280px) {\n\n  body, p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n  }\n\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "*{margin:0;line-height:1.2}html{display:table;width:100%;height:100%;color:#888;text-align:center;font-family:sans-serif}body{display:table-cell;margin:2em auto;vertical-align:middle}h1{color:#555;font-weight:400;font-size:2em}p{margin:0 auto;width:280px}@media only screen and (max-width:280px){body,p{width:95%}h1{font-size:1.5em;margin:0 0 .3em}}", ""]);
   
   // exports
 
 
 /***/ },
-/* 93 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4470,35 +4378,35 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ErrorPage = __webpack_require__(94);
+  var _ErrorPage = __webpack_require__(96);
   
   var _ErrorPage2 = _interopRequireDefault(_ErrorPage);
   
@@ -4555,12 +4463,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(ErrorPage, _ErrorPage2.default);
 
 /***/ },
-/* 94 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(95);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(97);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -4570,38 +4478,23 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ErrorPage.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ErrorPage.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 95 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n* {\n  margin: 0;\n  line-height: 1.2;\n}\n\nhtml {\n  display: table;\n  width: 100%;\n  height: 100%;\n  color: #888;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nbody {\n  display: table-cell;\n  margin: 2em auto;\n  vertical-align: middle;\n}\n\nh1 {\n  color: #555;\n  font-weight: 400;\n  font-size: 2em;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\n@media only screen and (max-width: 280px) {\n\n  body, p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n\n  }\n\n}\n", "", {"version":3,"sources":["/./src/components/ErrorPage/ErrorPage.scss"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;AAEH;EACE,UAAU;EACV,iBAAiB;CAClB;;AAED;EACE,eAAe;EACf,YAAY;EACZ,aAAa;EACb,YAAY;EACZ,mBAAmB;EACnB,wBAAwB;CACzB;;AAED;EACE,oBAAoB;EACpB,iBAAiB;EACjB,uBAAuB;CACxB;;AAED;EACE,YAAY;EACZ,iBAAiB;EACjB,eAAe;CAChB;;AAED;EACE,eAAe;EACf,aAAa;CACd;;AAED;;EAEE;IACE,WAAW;GACZ;;EAED;IACE,iBAAiB;IACjB,kBAAkB;;GAEnB;;CAEF","file":"ErrorPage.scss","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n* {\n  margin: 0;\n  line-height: 1.2;\n}\n\nhtml {\n  display: table;\n  width: 100%;\n  height: 100%;\n  color: #888;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nbody {\n  display: table-cell;\n  margin: 2em auto;\n  vertical-align: middle;\n}\n\nh1 {\n  color: #555;\n  font-weight: 400;\n  font-size: 2em;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\n@media only screen and (max-width: 280px) {\n\n  body, p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n\n  }\n\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "*{margin:0;line-height:1.2}html{display:table;width:100%;height:100%;color:#888;text-align:center;font-family:sans-serif}body{display:table-cell;margin:2em auto;vertical-align:middle}h1{color:#555;font-weight:400;font-size:2em}p{margin:0 auto;width:280px}@media only screen and (max-width:280px){body,p{width:95%}h1{font-size:1.5em;margin:0 0 .3em}}", ""]);
   
   // exports
 
 
 /***/ },
-/* 96 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4610,59 +4503,85 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ProfilePage = __webpack_require__(97);
+  var _ProfilePage = __webpack_require__(99);
   
   var _ProfilePage2 = _interopRequireDefault(_ProfilePage);
   
-  var _Splash = __webpack_require__(99);
+  var _Splash = __webpack_require__(101);
   
   var _Splash2 = _interopRequireDefault(_Splash);
   
-  var _Profile = __webpack_require__(102);
+  var _Profile = __webpack_require__(104);
   
   var _Profile2 = _interopRequireDefault(_Profile);
   
-  var _Projects = __webpack_require__(105);
+  var _Projects = __webpack_require__(107);
   
   var _Projects2 = _interopRequireDefault(_Projects);
   
-  var _Contact = __webpack_require__(111);
+  var _Contact = __webpack_require__(113);
   
   var _Contact2 = _interopRequireDefault(_Contact);
   
-  var _reactParallax = __webpack_require__(114);
+  var _reactParallax = __webpack_require__(116);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var title = 'Shain Lafazan';
+  
+  var myProjects = [{
+    "id": 101,
+    "projName": "Project 1",
+    "projThumbnail": "http://bit.ly/1NIoQcL",
+    "projDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. Donec cursus libero tortor, eget pretium elit aliquet ut.",
+    "testimonialAuthorImg": "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
+    "testimonialAuthor": "Author Name",
+    "testimonial": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  }, {
+    "id": 102,
+    "projName": "Project 2",
+    "projThumbnail": "http://bit.ly/1NIoQcL",
+    "projDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. Donec cursus libero tortor, eget pretium elit aliquet ut.",
+    "testimonialAuthorImg": "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
+    "testimonialAuthor": "Author Name",
+    "testimonial": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  }, {
+    "id": 103,
+    "projName": "Project 3",
+    "projThumbnail": "http://bit.ly/1NIoQcL",
+    "projDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. Donec cursus libero tortor, eget pretium elit aliquet ut.",
+    "testimonialAuthorImg": "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
+    "testimonialAuthor": "Author Name",
+    "testimonial": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  }];
   
   var ProfilePage = function (_Component) {
     (0, _inherits3.default)(ProfilePage, _Component);
@@ -4692,7 +4611,7 @@ module.exports =
               _react2.default.createElement(_Splash2.default, null)
             ),
             _react2.default.createElement(_Profile2.default, null),
-            _react2.default.createElement(_Projects2.default, null),
+            _react2.default.createElement(_Projects2.default, { data: myProjects, pollInterval: 2000 }),
             _react2.default.createElement(_Contact2.default, null)
           )
         );
@@ -4707,12 +4626,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(ProfilePage, _ProfilePage2.default);
 
 /***/ },
-/* 97 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(98);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(100);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -4722,42 +4641,27 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ProfilePage.scss", function() {
-          var newContent = require("!!./../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ProfilePage.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 98 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: ProfilePage_spin_90G;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: ProfilePage_spin_90G;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: ProfilePage_spin_90G;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: ProfilePage_spin_90G;\n\n\t     -o-animation-name: ProfilePage_spin_90G;\n\n\t        animation-name: ProfilePage_spin_90G;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes ProfilePage_spin_90G {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes ProfilePage_spin_90G {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes ProfilePage_spin_90G {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\nbody {\n\tbackground-color: #BCB7A5;\n}\n\n.ProfilePage_root_3NI {\n\twidth: 100%;\n}\n\n.ProfilePage_container_37d {\n  margin: 0 auto;\n  padding: 0;\n}\n", "", {"version":3,"sources":["/./src/components/variables.scss","/./src/components/ProfilePage/ProfilePage.scss"],"names":[],"mappings":"AAAA;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,6CAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,0CAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,yCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,6CAAqB;;MAArB,wCAAqB;;SAArB,qCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;ACtFD;CACC,0BAA0B;CAC1B;;AAED;CACC,YAAY;CACZ;;AAED;EACE,eAAe;EACf,WAAW;CACZ","file":"ProfilePage.scss","sourcesContent":["/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n","\n@import '../variables.scss';\n\nbody {\n\tbackground-color: #BCB7A5;\n}\n\n.root {\n\twidth: 100%;\n}\n\n.container {\n  margin: 0 auto;\n  padding: 0;\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_90GE;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_90GE;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_90GE;animation-name:_90GE;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _90GE{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _90GE{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}body{background-color:#bcb7a5}._3NIx{width:100%}._37db{margin:0 auto;padding:0}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "ProfilePage_spin_90G",
-  	"root": "ProfilePage_root_3NI",
-  	"container": "ProfilePage_container_37d"
+  	"spin": "_90GE",
+  	"root": "_3NIx",
+  	"container": "_37db"
   };
 
 /***/ },
-/* 99 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4766,41 +4670,41 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Splash = __webpack_require__(100);
+  var _Splash = __webpack_require__(102);
   
   var _Splash2 = _interopRequireDefault(_Splash);
   
-  var _reactMaterialize = __webpack_require__(73);
+  var _reactMaterialize = __webpack_require__(75);
   
-  var _SVGIcon = __webpack_require__(77);
+  var _SVGIcon = __webpack_require__(79);
   
   var _SVGIcon2 = _interopRequireDefault(_SVGIcon);
   
@@ -4892,12 +4796,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(Splash, _Splash2.default);
 
 /***/ },
-/* 100 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(101);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(103);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -4907,51 +4811,36 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Splash.scss", function() {
-          var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Splash.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 101 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: Splash_spin_13E;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: Splash_spin_13E;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: Splash_spin_13E;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: Splash_spin_13E;\n\n\t     -o-animation-name: Splash_spin_13E;\n\n\t        animation-name: Splash_spin_13E;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes Splash_spin_13E {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes Splash_spin_13E {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes Splash_spin_13E {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.Splash_root_3s8 {\n\twidth: 100%;\n}\n\n.Splash_container_2Gm {\n  position: relative;\n  margin: 0 auto;\n  padding: 1rem 0;\n  width: 100%;\n  height: 100vh;\n  -webkit-background-size: cover;\n          background-size: cover;\n  text-align: center;\n}\n\n.Splash_logoContainer_2A_ {\n  padding: 2rem;\n}\n\n.Splash_logo_3b5 {\n  color: #FFFFFF;\n}\n\n.Splash_lowerText_tjk {\n  text-align: center;\n  height: 65vh;\n  width: 75%;\n  position: absolute;\n  top: 35vh;\n  left: 12.5%\n}\n\n@media screen and (max-width: 768px) {\n\n\t.Splash_lowerText_tjk {\n\t\twidth: 100%;\n\t\tleft: 0;\n\t}\n  }\n\nh1.Splash_heading_3BG {\n  font-size: 4rem;\n  font-weight: 800;\n  margin: 0 0 3vh 0;\n  color: #FFFFFF\n\n}\n\n@media screen and (max-width: 768px) {\n\n\th1.Splash_heading_3BG {\n\t\tfont-size: 2rem;\n\t}\n  }\n\nh2.Splash_subheading_3Ee {\n\tfont-size: 2.5rem;\n  font-weight: 800;\n\tmargin: 2.5vh 0 2.5vh 0;\n  color: #FFFFFF\n}\n\n@media screen and (max-width: 768px) {\n\n\th2.Splash_subheading_3Ee {\n\t\tfont-size: 1.5rem;\n\t}\n  }\n\nh2.Splash_subheading2_1Cf {\n  font-size: 1.5rem;\n  font-weight: 800;\n  margin: 2.5vh 0 5vh 0;\n  color: #FFFFFF\n}\n\n@media screen and (max-width: 768px) {\n\n\th2.Splash_subheading2_1Cf {\n\t\tfont-size: 1.0rem;\n\t}\n  }\n\n.Splash_bottomTextContainer_1IH {\n  width: 100%;\n  text-align: center;\n  position: absolute;\n  bottom: 0;\n  padding: 3rem 0 2rem 0;\n}\n\n.Splash_bottomLink_2j- {\n  display: block;\n  text-align: center;\n  color: #FFFFFF;\n  font-size: 1.2rem;\n  font-weight: 400;\n  cursor: pointer\n}\n\n.Splash_bottomLink_2j-:hover {\n\tcolor: #26a69a;\n}\n\n.Splash_arrowIcon_2G0 {\n  margin-top: 1rem;\n  cursor: pointer;\n}\n", "", {"version":3,"sources":["/./src/components/variables.scss","/./src/components/ProfilePage/Splash/Splash.scss"],"names":[],"mappings":"AAAA;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,wCAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,qCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,oCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,wCAAqB;;MAArB,mCAAqB;;SAArB,gCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;ACtFD;CACC,YAAY;CACZ;;AAGD;EACE,mBAAmB;EACnB,eAAe;EACf,gBAAgB;EAChB,YAAY;EACZ,cAA0B;EAC1B,+BAAuB;UAAvB,uBAAuB;EACvB,mBAAmB;CACpB;;AAED;EACE,cAAc;CACf;;AACD;EACE,eAAsB;CACvB;;AAED;EACE,mBAAmB;EACnB,aAAa;EACb,WAAW;EACX,mBAAmB;EACnB,UAAU;EACV,WAAY;CAMb;;AAJC;;CAAA;EACE,YAAY;EACZ,QAAQ;EACT;GAAA;;AAGH;EACE,gBAAgB;EAChB,iBAAiB;EACjB,kBAAkB;EAClB,cAAsB;;CAKvB;;AAJC;;CAAA;EACE,gBAAgB;EACjB;GAAA;;AAIH;CACC,kBAAkB;EACjB,iBAAiB;CAClB,wBAAwB;EACvB,cAAsB;CAKvB;;AAHC;;CAAA;EACE,kBAAkB;EACnB;GAAA;;AAGH;EACE,kBAAkB;EAClB,iBAAiB;EACjB,sBAAsB;EACtB,cAAsB;CAKvB;;AAHC;;CAAA;EACE,kBAAkB;EACnB;GAAA;;AAGH;EACE,YAAY;EACZ,mBAAmB;EACnB,mBAAmB;EACnB,UAAU;EACV,uBAAuB;CACxB;;AAED;EACE,eAAe;EACf,mBAAmB;EACnB,eAAsB;EACtB,kBAAkB;EAClB,iBAAiB;EACjB,eAAgB;CAIjB;;AAHC;CACE,eAAqB;CACtB;;AAGH;EACE,iBAAiB;EACjB,gBAAgB;CACjB","file":"Splash.scss","sourcesContent":["/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n","\n@import '../../variables.scss';\n\n.root {\n\twidth: 100%;\n}\n\n$container-height: 100vh;\n.container {\n  position: relative;\n  margin: 0 auto;\n  padding: 1rem 0;\n  width: 100%;\n  height: $container-height;\n  background-size: cover;\n  text-align: center;\n}\n\n.logoContainer {\n  padding: 2rem;\n}\n.logo {\n  color: $primary-white;\n}\n\n.lowerText {\n  text-align: center;\n  height: 65vh;\n  width: 75%;\n  position: absolute;\n  top: 35vh;\n  left: 12.5%;\n\n  @media screen and (max-width: $screen-sm-min) {\n    width: 100%;\n    left: 0;\n  }\n}\n\nh1.heading {\n  font-size: 4rem;\n  font-weight: 800;\n  margin: 0 0 3vh 0;\n  color: $primary-white;\n  @media screen and (max-width: $screen-sm-min) {\n    font-size: 2rem;\n  }\n\n}\n\nh2.subheading {\n\tfont-size: 2.5rem;\n  font-weight: 800;\n\tmargin: 2.5vh 0 2.5vh 0;\n  color: $primary-white;\n\n  @media screen and (max-width: $screen-sm-min) {\n    font-size: 1.5rem;\n  }\n}\n\nh2.subheading2 {\n  font-size: 1.5rem;\n  font-weight: 800;\n  margin: 2.5vh 0 5vh 0;\n  color: $primary-white;\n\n  @media screen and (max-width: $screen-sm-min) {\n    font-size: 1.0rem;\n  }\n}\n\n.bottomTextContainer {\n  width: 100%;\n  text-align: center;\n  position: absolute;\n  bottom: 0;\n  padding: 3rem 0 2rem 0;\n}\n\n.bottomLink {\n  display: block;\n  text-align: center;\n  color: $primary-white;\n  font-size: 1.2rem;\n  font-weight: 400;\n  cursor: pointer;\n  &:hover {\n    color: $accent-color;\n  }\n}\n\n.arrowIcon {\n  margin-top: 1rem;\n  cursor: pointer;\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_13Eg;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_13Eg;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_13Eg;animation-name:_13Eg;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _13Eg{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _13Eg{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._2GmZ,._3s8Z{width:100%}._2GmZ{position:relative;margin:0 auto;padding:1rem 0;height:100vh;background-size:cover;text-align:center}._2A_g{padding:2rem}._3b5j{color:#fff}.tjky{text-align:center;height:65vh;width:75%;position:absolute;top:35vh;left:12.5%}@media screen and (max-width:768px){.tjky{width:100%;left:0}}h1._3BGR{font-size:4rem;font-weight:800;margin:0 0 3vh;color:#fff}@media screen and (max-width:768px){h1._3BGR{font-size:2rem}}h2._3Eeu{font-size:2.5rem;font-weight:800;margin:2.5vh 0;color:#fff}@media screen and (max-width:768px){h2._3Eeu{font-size:1.5rem}}h2._1Cfb{font-size:1.5rem;font-weight:800;margin:2.5vh 0 5vh;color:#fff}@media screen and (max-width:768px){h2._1Cfb{font-size:1rem}}._1IH7{width:100%;position:absolute;bottom:0;padding:3rem 0 2rem}._1IH7,._2j-R{text-align:center}._2j-R{display:block;color:#fff;font-size:1.2rem;font-weight:400;cursor:pointer}._2j-R:hover{color:#26a69a}._2G0z{margin-top:1rem;cursor:pointer}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "Splash_spin_13E",
-  	"root": "Splash_root_3s8",
-  	"container": "Splash_container_2Gm",
-  	"logoContainer": "Splash_logoContainer_2A_",
-  	"logo": "Splash_logo_3b5",
-  	"lowerText": "Splash_lowerText_tjk",
-  	"heading": "Splash_heading_3BG",
-  	"subheading": "Splash_subheading_3Ee",
-  	"subheading2": "Splash_subheading2_1Cf",
-  	"bottomTextContainer": "Splash_bottomTextContainer_1IH",
-  	"bottomLink": "Splash_bottomLink_2j-",
-  	"arrowIcon": "Splash_arrowIcon_2G0"
+  	"spin": "_13Eg",
+  	"root": "_3s8Z",
+  	"container": "_2GmZ",
+  	"logoContainer": "_2A_g",
+  	"logo": "_3b5j",
+  	"lowerText": "tjky",
+  	"heading": "_3BGR",
+  	"subheading": "_3Eeu",
+  	"subheading2": "_1Cfb",
+  	"bottomTextContainer": "_1IH7",
+  	"bottomLink": "_2j-R",
+  	"arrowIcon": "_2G0z"
   };
 
 /***/ },
-/* 102 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4960,39 +4849,39 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Profile = __webpack_require__(103);
+  var _Profile = __webpack_require__(105);
   
   var _Profile2 = _interopRequireDefault(_Profile);
   
-  var _reactMaterialize = __webpack_require__(73);
+  var _reactMaterialize = __webpack_require__(75);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -5061,12 +4950,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(Profile, _Profile2.default);
 
 /***/ },
-/* 103 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(104);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(106);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -5076,47 +4965,32 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Profile.scss", function() {
-          var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Profile.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 104 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: Profile_spin_130;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: Profile_spin_130;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: Profile_spin_130;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: Profile_spin_130;\n\n\t     -o-animation-name: Profile_spin_130;\n\n\t        animation-name: Profile_spin_130;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes Profile_spin_130 {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes Profile_spin_130 {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes Profile_spin_130 {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.Profile_root_2IJ {\n\twidth: 100%;\n  border-bottom: 1px solid #D9D9DE;\n  border-top: 1px solid #D9D9DE;\n  background-color: #FFFFFF;\n}\n\n.Profile_container_2y9 {\n  margin: 0 auto;\n  padding: 2rem 0;\n  width: 100%;\n  min-height: 400px;\n}\n\n.Profile_heading_36B {\n  margin: 0 0 1rem 0;\n}\n\n.Profile_subheading_2gb {\n  font-size: 1.5rem;\n\n  margin: 0 0 1rem 0\n}\n\n@media screen and (max-width: 992px) {\n\n\t.Profile_subheading_2gb {\n\t\ttext-align: center;\n\t\tfont-size: 1.5rem;\n\t}\n  }\n\n@media screen and (min-width: 480px) {\n\n\t.Profile_subheading_2gb {\n\t\tmargin: 0.5rem 0 1rem 0;\n\t}\n  }\n\n@media screen and (min-width: 768px) {\n\n\t.Profile_subheading_2gb {\n\t\tmargin: 1rem 0 1.5rem 0;\n\t}\n  }\n\n@media screen and (min-width: 992px) {\n\n\t.Profile_subheading_2gb {\n\t\tmargin: 1.5rem 0 2.0rem 0;\n\t}\n  }\n\n.Profile_profileImg_1w3 {\n border-radius: 50%;\n height: 300px;\n margin: 0 0 34px 0;\n}\n\n.Profile_photoContainer_zDM {\n  text-align: right\n}\n\n@media screen and (max-width: 992px) {\n\n\t.Profile_photoContainer_zDM {\n\t\ttext-align: center;\n\t}\n  }\n\n.Profile_profileTextContainer_2Lp {\n  text-align: center;\n}\n\n.Profile_profileTextContainer_2Lp p {\n\tmargin: 0 3rem;\n\ttext-align: justified\n}\n\n@media screen and (max-width: 992px) {\n\n\t.Profile_profileTextContainer_2Lp p {\n\t\tmargin: 0 0 0 0;/* text-align: center;*/\n\t}\n    }", "", {"version":3,"sources":["/./src/components/variables.scss","/./src/components/ProfilePage/Profile/Profile.scss"],"names":[],"mappings":"AAAA;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,yCAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,sCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,qCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,yCAAqB;;MAArB,oCAAqB;;SAArB,iCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;ACtFD;CACC,YAAY;EACX,iCAA+B;EAC/B,8BAA4B;EAC5B,0BAA0B;CAC3B;;AAED;EACE,eAAe;EACf,gBAAgB;EAChB,YAAY;EACZ,kBAAkB;CACnB;;AAED;EACE,mBAAmB;CACpB;;AACD;EACE,kBAAkB;;EAElB,kBAAmB;CAcpB;;AAbC;;CAAA;EACE,mBAAmB;EACnB,kBAAkB;EACnB;GAAA;;AACD;;CAAA;EACE,wBAAwB;EACzB;GAAA;;AACD;;CAAA;EACE,wBAAwB;EACzB;GAAA;;AACD;;CAAA;EACE,0BAA0B;EAC3B;GAAA;;AAGH;CACC,mBAAmB;CACnB,cAAc;CACd,mBAAmB;CACnB;;AAED;EACE,iBAAkB;CAInB;;AAHC;;CAAA;EACE,mBAAmB;EACpB;GAAA;;AAGH;EACE,mBAAmB;CASpB;;AARC;CACE,eAAe;CACf,qBAAsB;CAKvB;;AAJC;;CAAA;EACE,gBAAgB,wBACM;EACvB;KAAA","file":"Profile.scss","sourcesContent":["/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n","\n@import '../../variables.scss';\n\n.root {\n\twidth: 100%;\n  border-bottom: $primary-border;\n  border-top: $primary-border;\n  background-color: #FFFFFF;\n}\n\n.container {\n  margin: 0 auto;\n  padding: 2rem 0;\n  width: 100%;\n  min-height: 400px;\n}\n\n.heading {\n  margin: 0 0 1rem 0;\n}\n.subheading {\n  font-size: 1.5rem;\n\n  margin: 0 0 1rem 0; \n  @media screen and (max-width: $screen-md-min) {\n    text-align: center;\n    font-size: 1.5rem;\n  }\n  @media screen and (min-width: $screen-xs-min) {\n    margin: 0.5rem 0 1rem 0;\n  }\n  @media screen and (min-width: $screen-sm-min) {\n    margin: 1rem 0 1.5rem 0;\n  }\n  @media screen and (min-width: $screen-md-min) {\n    margin: 1.5rem 0 2.0rem 0;\n  }\n}\n\n.profileImg {\n border-radius: 50%;\n height: 300px;\n margin: 0 0 34px 0;\n}\n\n.photoContainer {\n  text-align: right;\n  @media screen and (max-width: $screen-md-min) {\n    text-align: center;\n  }\n}\n\n.profileTextContainer {\n  text-align: center;\n  p {\n    margin: 0 3rem;\n    text-align: justified;\n    @media screen and (max-width: $screen-md-min) {\n      margin: 0 0 0 0;\n      // text-align: center;\n    }\n  }\n}"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_130K;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_130K;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_130K;animation-name:_130K;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _130K{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _130K{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._2IJO{width:100%;border-bottom:1px solid #d9d9de;border-top:1px solid #d9d9de;background-color:#fff}._2y9o{margin:0 auto;padding:2rem 0;width:100%;min-height:400px}._2gbY,._36Bf{margin:0 0 1rem}._2gbY{font-size:1.5rem}@media screen and (max-width:992px){._2gbY{text-align:center;font-size:1.5rem}}@media screen and (min-width:480px){._2gbY{margin:.5rem 0 1rem}}@media screen and (min-width:768px){._2gbY{margin:1rem 0 1.5rem}}@media screen and (min-width:992px){._2gbY{margin:1.5rem 0 2rem}}._1w3f{border-radius:50%;height:300px;margin:0 0 34px}.zDMZ{text-align:right}@media screen and (max-width:992px){.zDMZ{text-align:center}}._2Lp4{text-align:center}._2Lp4 p{margin:0 3rem;text-align:justified}@media screen and (max-width:992px){._2Lp4 p{margin:0}}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "Profile_spin_130",
-  	"root": "Profile_root_2IJ",
-  	"container": "Profile_container_2y9",
-  	"heading": "Profile_heading_36B",
-  	"subheading": "Profile_subheading_2gb",
-  	"profileImg": "Profile_profileImg_1w3",
-  	"photoContainer": "Profile_photoContainer_zDM",
-  	"profileTextContainer": "Profile_profileTextContainer_2Lp"
+  	"spin": "_130K",
+  	"root": "_2IJO",
+  	"container": "_2y9o",
+  	"heading": "_36Bf",
+  	"subheading": "_2gbY",
+  	"profileImg": "_1w3f",
+  	"photoContainer": "zDMZ",
+  	"profileTextContainer": "_2Lp4"
   };
 
 /***/ },
-/* 105 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5125,41 +4999,41 @@ module.exports =
   	value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Projects = __webpack_require__(106);
+  var _Projects = __webpack_require__(108);
   
   var _Projects2 = _interopRequireDefault(_Projects);
   
-  var _reactMaterialize = __webpack_require__(73);
+  var _reactMaterialize = __webpack_require__(75);
   
-  var _ProjectTile = __webpack_require__(108);
+  var _ProjectTile = __webpack_require__(110);
   
   var _ProjectTile2 = _interopRequireDefault(_ProjectTile);
   
@@ -5199,7 +5073,11 @@ module.exports =
   
   	function Projects() {
   		(0, _classCallCheck3.default)(this, Projects);
-  		return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Projects).apply(this, arguments));
+  
+  		var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Projects).call(this));
+  
+  		_this.state = { data: [] };
+  		return _this;
   	}
   
   	(0, _createClass3.default)(Projects, [{
@@ -5229,12 +5107,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(Projects, _Projects2.default);
 
 /***/ },
-/* 106 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(107);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(109);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -5244,43 +5122,28 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Projects.scss", function() {
-          var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Projects.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 107 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: Projects_spin_3kE;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: Projects_spin_3kE;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: Projects_spin_3kE;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: Projects_spin_3kE;\n\n\t     -o-animation-name: Projects_spin_3kE;\n\n\t        animation-name: Projects_spin_3kE;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes Projects_spin_3kE {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes Projects_spin_3kE {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes Projects_spin_3kE {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.Projects_root_3Tx {\n\twidth: 100%;\n  border-bottom: 1px solid #D9D9DE;\n}\n\n.Projects_container_128 {\n  margin: 0 auto;\n  padding: 2rem 0;\n  max-width: 100%;\n  background-color: #e4e1ce;\n}\n\n.Projects_heading_1ZV {\n\tmargin-top: 0;\n}", "", {"version":3,"sources":["/./src/components/variables.scss","/./src/components/ProfilePage/Projects/Projects.scss"],"names":[],"mappings":"AAAA;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,0CAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,uCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,sCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,0CAAqB;;MAArB,qCAAqB;;SAArB,kCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;ACtFD;CACC,YAAY;EACX,iCAA+B;CAChC;;AAED;EACE,eAAe;EACf,gBAAgB;EAChB,gBAAgB;EAChB,0BAA0B;CAC3B;;AAED;CACC,cAAc;CACd","file":"Projects.scss","sourcesContent":["/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n","\n@import '../../variables.scss';\n\n.root {\n\twidth: 100%;\n  border-bottom: $primary-border;\n}\n\n.container {\n  margin: 0 auto;\n  padding: 2rem 0;\n  max-width: 100%;\n  background-color: #e4e1ce;\n}\n\n.heading {\n\tmargin-top: 0;\n}"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_3kE6;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_3kE6;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_3kE6;animation-name:_3kE6;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _3kE6{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _3kE6{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._3Tx6{width:100%;border-bottom:1px solid #d9d9de}._128B{margin:0 auto;padding:2rem 0;max-width:100%;background-color:#e4e1ce}._1ZV4{margin-top:0}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "Projects_spin_3kE",
-  	"root": "Projects_root_3Tx",
-  	"container": "Projects_container_128",
-  	"heading": "Projects_heading_1ZV"
+  	"spin": "_3kE6",
+  	"root": "_3Tx6",
+  	"container": "_128B",
+  	"heading": "_1ZV4"
   };
 
 /***/ },
-/* 108 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5289,39 +5152,39 @@ module.exports =
   	value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ProjectTile = __webpack_require__(109);
+  var _ProjectTile = __webpack_require__(111);
   
   var _ProjectTile2 = _interopRequireDefault(_ProjectTile);
   
-  var _reactMaterialize = __webpack_require__(73);
+  var _reactMaterialize = __webpack_require__(75);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -5376,12 +5239,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(ProjectTile, _ProjectTile2.default);
 
 /***/ },
-/* 109 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(110);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(112);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -5391,49 +5254,34 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ProjectTile.scss", function() {
-          var newContent = require("!!./../../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./ProjectTile.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 110 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: ProjectTile_spin_1lF;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: ProjectTile_spin_1lF;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: ProjectTile_spin_1lF;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: ProjectTile_spin_1lF;\n\n\t     -o-animation-name: ProjectTile_spin_1lF;\n\n\t        animation-name: ProjectTile_spin_1lF;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes ProjectTile_spin_1lF {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes ProjectTile_spin_1lF {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes ProjectTile_spin_1lF {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.ProjectTile_container_1Qv {\n\ttext-align: center;\n\tmargin: 0 0 2rem 0;\n}\n\n.ProjectTile_projectImage_3en {\n\twidth: 80%;\n\tmax-height: 200px;\n\tdisplay: block;\n\tmargin: 0 auto;\n}\n\n.ProjectTile_projectDescription_2dz {\n\tmin-height: 66px;\n\tvertical-align: middle;\n\tmargin-bottom: 0;\n}\n\n.ProjectTile_referenceImg_3jI {\n\tmax-width: 75px;\n\tmax-height: 75px;\n\tborder-radius: 50%;\n\tdisplay: inline-block;\n}\n\n.ProjectTile_referenceQuote_3QU {\n\tdisplay: inline-block;\n\tfont-size: 0.8rem;\n\twidth: 65%;\n\tmargin: 0 0 0 0;\n}\n\n.ProjectTile_referenceName_1nR {\n\tdisplay: block;\n\ttext-align: center;\n\twidth: 65%;\n\tmargin: -22px 0 0 0;\n\tfloat: right\n\n}\n\n@media screen and (max-width: 768px) {\n\n\t.ProjectTile_referenceName_1nR {\n\t\tmargin: 0;\n\t}\n\t}\n\n.ProjectTile_projectRow_2W5 {\n}\n\n.ProjectTile_projectTitle_2DJ {\n\tfont-size: 1.25rem;\n\tfont-weight: 600;\n}\n\n.ProjectTile_topRow_3nn {\n\n}", "", {"version":3,"sources":["/./src/components/variables.scss","/./src/components/ProfilePage/Projects/ProjectTile/ProjectTile.scss"],"names":[],"mappings":"AAAA;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,6CAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,0CAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,yCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,6CAAqB;;MAArB,wCAAqB;;SAArB,qCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;ACtFD;CACC,mBAAmB;CACnB,mBAAmB;CACnB;;AAED;CACC,WAAW;CACX,kBAAkB;CAClB,eAAe;CACf,eAAe;CACf;;AAED;CACC,iBAAiB;CACjB,uBAAuB;CACvB,iBAAiB;CACjB;;AAED;CACC,gBAAgB;CAChB,iBAAiB;CACjB,mBAAmB;CACnB,sBAAsB;CACtB;;AAED;CACC,sBAAsB;CACtB,kBAAkB;CAClB,WAAW;CACX,gBAAgB;CAChB;;AACD;CACC,eAAe;CACf,mBAAmB;CACnB,WAAW;CACX,oBAAoB;CACpB,YAAa;;CAMb;;AAJA;;CAAA;EACC,UAAU;EACV;EAAA;;AAIF;CACC;;AAGD;CACC,mBAAmB;CACnB,iBAAiB;CACjB;;AAGD;;CAEC","file":"ProjectTile.scss","sourcesContent":["/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n","@import '../../../variables.scss';\n\n\n.container {\n\ttext-align: center;\n\tmargin: 0 0 2rem 0;\n}\n\n.projectImage {\n\twidth: 80%;\n\tmax-height: 200px;\n\tdisplay: block;\n\tmargin: 0 auto;\n}\n\n.projectDescription {\n\tmin-height: 66px;\n\tvertical-align: middle;\n\tmargin-bottom: 0;\n}\n\n.referenceImg {\n\tmax-width: 75px;\n\tmax-height: 75px;\n\tborder-radius: 50%;\n\tdisplay: inline-block;\n}\n\n.referenceQuote {\n\tdisplay: inline-block;\n\tfont-size: 0.8rem;\n\twidth: 65%;\n\tmargin: 0 0 0 0;\n}\n.referenceName {\n\tdisplay: block;\n\ttext-align: center;\n\twidth: 65%;\n\tmargin: -22px 0 0 0;\n\tfloat: right;\n\n\t@media screen and (max-width: $screen-sm-min) {\n\t\tmargin: 0;\n\t}\n\n}\n\n.projectRow {\n}\n\n\n.projectTitle {\n\tfont-size: 1.25rem;\n\tfont-weight: 600;\n}\n\n\n.topRow {\n\n}"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:_1lFR;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:_1lFR;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:_1lFR;animation-name:_1lFR;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes _1lFR{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes _1lFR{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._1QvK{text-align:center;margin:0 0 2rem}._3en3{width:80%;max-height:200px;display:block;margin:0 auto}._2dzV{min-height:66px;vertical-align:middle;margin-bottom:0}._3jIq{max-width:75px;max-height:75px;border-radius:50%}._3jIq,._3QUc{display:inline-block}._3QUc{font-size:.8rem;width:65%;margin:0}._1nRc{display:block;text-align:center;width:65%;margin:-22px 0 0;float:right}@media screen and (max-width:768px){._1nRc{margin:0}}._2DJz{font-size:1.25rem;font-weight:600}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "ProjectTile_spin_1lF",
-  	"container": "ProjectTile_container_1Qv",
-  	"projectImage": "ProjectTile_projectImage_3en",
-  	"projectDescription": "ProjectTile_projectDescription_2dz",
-  	"referenceImg": "ProjectTile_referenceImg_3jI",
-  	"referenceQuote": "ProjectTile_referenceQuote_3QU",
-  	"referenceName": "ProjectTile_referenceName_1nR",
-  	"projectRow": "ProjectTile_projectRow_2W5",
-  	"projectTitle": "ProjectTile_projectTitle_2DJ",
-  	"topRow": "ProjectTile_topRow_3nn"
+  	"spin": "_1lFR",
+  	"container": "_1QvK",
+  	"projectImage": "_3en3",
+  	"projectDescription": "_2dzV",
+  	"referenceImg": "_3jIq",
+  	"referenceQuote": "_3QUc",
+  	"referenceName": "_1nRc",
+  	"projectRow": "_2W5a",
+  	"projectTitle": "_2DJz",
+  	"topRow": "_3nnU"
   };
 
 /***/ },
-/* 111 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5442,39 +5290,39 @@ module.exports =
   		value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(57);
+  var _withStyles = __webpack_require__(59);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Contact = __webpack_require__(112);
+  var _Contact = __webpack_require__(114);
   
   var _Contact2 = _interopRequireDefault(_Contact);
   
-  var _reactMaterialize = __webpack_require__(73);
+  var _reactMaterialize = __webpack_require__(75);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -5579,12 +5427,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(Contact, _Contact2.default);
 
 /***/ },
-/* 112 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(113);
-      var insertCss = __webpack_require__(51);
+      var content = __webpack_require__(115);
+      var insertCss = __webpack_require__(53);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -5594,51 +5442,36 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = insertCss.bind(null, content);
     
-      var removeCss = function() {};
-  
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      if (false) {
-        module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Contact.scss", function() {
-          var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap&modules&localIdentName=[name]_[local]_[hash:base64:3]!./../../../../node_modules/postcss-loader/index.js?parser=postcss-scss!./Contact.scss");
-          if (typeof newContent === 'string') {
-            newContent = [[module.id, content, '']];
-          }
-          removeCss = insertCss(newContent, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 113 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(50)();
+  exports = module.exports = __webpack_require__(52)();
   // imports
   
   
   // module
-  exports.push([module.id, "/*\n * Colors\n * ========================================================================== */\n\n/* #222 */\n\n/* #404040 */\n\n/* #555 */\n\n/* #777 */\n\n/* #eee */\n\n/*\n * Typography\n * ========================================================================== */\n\n/*\n * Layout\n * ========================================================================== */\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n/* Extra small screen / phone */\n\n/* Small screen / tablet */\n\n/* Medium screen / desktop */\n\n/* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\nmixin icon-spin() {\n\t-webkit-animation-name: Contact_spin_K8z;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: Contact_spin_K8z;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: Contact_spin_K8z;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\t-webkit-animation-name: Contact_spin_K8z;\n\n\t     -o-animation-name: Contact_spin_K8z;\n\n\t        animation-name: Contact_spin_K8z;\n\t-webkit-animation-duration: 4000ms;\n\t     -o-animation-duration: 4000ms;\n\t        animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t     -o-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t     -o-animation-timing-function: linear;\n\t        animation-timing-function: linear;\n}\n\n@-webkit-keyframes Contact_spin_K8z {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n\n@-o-keyframes Contact_spin_K8z {\n  from {\n      -o-transform:rotate(0deg);\n         transform:rotate(0deg);\n  }\n  to {\n      -o-transform:rotate(360deg);\n         transform:rotate(360deg);\n  }\n}\n\n@keyframes Contact_spin_K8z {\n  from {\n      -webkit-transform:rotate(0deg);\n           -o-transform:rotate(0deg);\n              transform:rotate(0deg);\n  }\n  to {\n      -webkit-transform:rotate(360deg);\n           -o-transform:rotate(360deg);\n              transform:rotate(360deg);\n  }\n}\n\n.Contact_root_1h4 {\n\twidth: 100%;\n  border-bottom: 1px solid #D9D9DE;\n  border-top: 1px solid #D9D9DE;\n  background-color: #5E696D;\n}\n\n.Contact_container_3Cb {\n  margin: 0 auto;\n  padding: 21vh 0 21vh 0;\n  width: 100%;\n  text-align: center;\n}\n\n.Contact_heading_zkR {\n\tfont-size: 3.5rem;\n\tcolor: #FFFFFF;\n\tfont-weight: 600;\n\tmargin: 2rem 0 2rem 0\n}\n\n@media screen and (max-width: 768px) {\n\n\t.Contact_heading_zkR {\n\t\tfont-size: 2.5rem;\n\t}  \n  }\n\n.Contact_tagline_XXH {\n\tfont-size: 2.5rem;\n\tcolor: #FFFFFF;\n\tfont-weight: 600;\n\tmargin: 2rem 0\n}\n\n@media screen and (max-width: 768px) {\n\n\t.Contact_tagline_XXH {\n\t\tfont-size: 1.75rem;\n\t}\n  }\n\n#Contact_textarea1_2CJ {\n\theight: 100px !important\n\n}\n\n#Contact_textarea1_2CJ::-webkit-input-placeholder {/* WebKit browsers */\n\tcolor: #999;\n}\n\n#Contact_textarea1_2CJ:-moz-placeholder {/* Mozilla Firefox 4 to 18 */\n\tcolor: #999;\n}\n\n#Contact_textarea1_2CJ::-moz-placeholder {/* Mozilla Firefox 19+ */\n\tcolor: #999;\n}\n\n#Contact_textarea1_2CJ:-ms-input-placeholder {/* Internet Explorer 10+ */\n\tcolor: #999;\n}\n", "", {"version":3,"sources":["/./src/components/variables.scss","/./src/components/ProfilePage/Contact/Contact.scss"],"names":[],"mappings":"AAAA;;gFAEgF;;AAGxB,UAAU;;AACV,aAAa;;AACb,UAAU;;AACV,UAAU;;AACV,UAAU;;AAclE;;gFAEgF;;AAIhF;;gFAEgF;;AAIhF;;gFAEgF;;AAEhD,gCAAgC;;AAChC,2BAA2B;;AAC3B,6BAA6B;;AAC7B,iCAAiC;;AAEjE;;gFAEgF;;AAKhF;CACC,yCAA6B;CAC7B,mCAAmC;CACnC,4CAA4C;CAC5C,0CAA0C;CAC1C,sCAA0B;CAC1B,gCAAgC;CAChC,yCAAyC;CACzC,uCAAuC;CACvC,qCAAyB;CACzB,+BAA+B;CAC/B,wCAAwC;CACxC,sCAAsC;;CAEtC,yCAAqB;;MAArB,oCAAqB;;SAArB,iCAAqB;CACrB,mCAA2B;MAA3B,8BAA2B;SAA3B,2BAA2B;CAC3B,4CAAoC;MAApC,uCAAoC;SAApC,oCAAoC;CACpC,0CAAkC;MAAlC,qCAAkC;SAAlC,kCAAkC;CAClC;;AASD;EACE,OAAO,gCAAgC,EAAE;EACzC,KAAK,kCAAkC,EAAE;CAC1C;;AACD;EACE;MACI,0BAAuB;SAAvB,uBAAuB;GAC1B;EACD;MACI,4BAAyB;SAAzB,yBAAyB;GAC5B;CACF;;AAPD;EACE;MACI,+BAAuB;WAAvB,0BAAuB;cAAvB,uBAAuB;GAC1B;EACD;MACI,iCAAyB;WAAzB,4BAAyB;cAAzB,yBAAyB;GAC5B;CACF;;ACtFD;CACC,YAAY;EACX,iCAA+B;EAC/B,8BAA4B;EAC5B,0BAA0B;CAC3B;;AAED;EACE,eAAe;EACf,uBAAuB;EACvB,YAAY;EACZ,mBAAmB;CACpB;;AAED;CACC,kBAAkB;CAClB,eAAsB;CACtB,iBAAiB;CACjB,qBAAsB;CAKtB;;AAHA;;CAAA;EACE,kBAAkB;EAClB;GAAA;;AAGH;CACC,kBAAkB;CAClB,eAAsB;CACtB,iBAAiB;CACjB,cAAe;CAKf;;AAHA;;CAAA;EACE,mBAAmB;EACnB;GAAA;;AAGH;CACC,wBAAyB;;CAezB;;AAbA,mDAA+B,qBAAqB;CACjD,YAAe;CACjB;;AACD,yCAAqB,6BAA6B;CAC9C,YAAe;CAClB;;AACD,0CAAsB,yBAAyB;CAC3C,YAAe;CAClB;;AACD,8CAA0B,2BAA2B;CACjD,YAAe;CAClB","file":"Contact.scss","sourcesContent":["/*\n * Colors\n * ========================================================================== */\n\n$white-base:            hsl(255, 255, 255);\n$gray-darker:           color(black lightness(+13.5%)); /* #222 */\n$gray-dark:             color(black lightness(+25%));   /* #404040 */\n$gray:                  color(black lightness(+33.5%)); /* #555 */\n$gray-light:            color(black lightness(+46.7%)); /* #777 */\n$gray-lighter:          color(black lightness(+93.5%)); /* #eee */\n\n$primary-color: #333333;\n$primary-white: #FFFFFF;\n$primary-border: 1px solid #D9D9DE;\n$primary-font-color: #111111;\n$primary-link-color: #111111;\n$primary-link-hover-color: #111111;\n$primary-nav-font-color: rgba(255, 255, 255, .5);\n\n$accent-color: #26a69a;\n$accent-hover: #2BBBAD;\n\n\n/*\n * Typography\n * ========================================================================== */\n\n$font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;\n\n/*\n * Layout\n * ========================================================================== */\n\n$max-content-width:     1000px;\n\n/*\n * Media queries breakpoints\n * ========================================================================== */\n\n$screen-xs-min:         480px;  /* Extra small screen / phone */\n$screen-sm-min:         768px;  /* Small screen / tablet */\n$screen-md-min:         992px;  /* Medium screen / desktop */\n$screen-lg-min:         1200px; /* Large screen / wide desktop */\n\n/*\n * Animations\n * ========================================================================== */\n\n$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;\n\n\nmixin icon-spin() {\n\t-webkit-animation-name: spin;\n\t-webkit-animation-duration: 4000ms;\n\t-webkit-animation-iteration-count: infinite;\n\t-webkit-animation-timing-function: linear;\n\t-moz-animation-name: spin;\n\t-moz-animation-duration: 4000ms;\n\t-moz-animation-iteration-count: infinite;\n\t-moz-animation-timing-function: linear;\n\t-ms-animation-name: spin;\n\t-ms-animation-duration: 4000ms;\n\t-ms-animation-iteration-count: infinite;\n\t-ms-animation-timing-function: linear;\n\n\tanimation-name: spin;\n\tanimation-duration: 4000ms;\n\tanimation-iteration-count: infinite;\n\tanimation-timing-function: linear;\n}\n@-ms-keyframes spin {\n  from { -ms-transform: rotate(0deg); }\n  to { -ms-transform: rotate(360deg); }\n}\n@-moz-keyframes spin {\n  from { -moz-transform: rotate(0deg); }\n  to { -moz-transform: rotate(360deg); }\n}\n@-webkit-keyframes spin {\n  from { -webkit-transform: rotate(0deg); }\n  to { -webkit-transform: rotate(360deg); }\n}\n@keyframes spin {\n  from {\n      transform:rotate(0deg);\n  }\n  to {\n      transform:rotate(360deg);\n  }\n}\n","\n@import '../../variables.scss';\n\n.root {\n\twidth: 100%;\n  border-bottom: $primary-border;\n  border-top: $primary-border;\n  background-color: #5E696D;\n}\n\n.container {\n  margin: 0 auto;\n  padding: 21vh 0 21vh 0;\n  width: 100%;\n  text-align: center;\n}\n\n.heading {\n\tfont-size: 3.5rem;\n\tcolor: $primary-white;\n\tfont-weight: 600;\n\tmargin: 2rem 0 2rem 0;\n\n\t@media screen and (max-width: $screen-sm-min) {\n  \tfont-size: 2.5rem;  \n  }\n}\n\n.tagline {\n\tfont-size: 2.5rem;\n\tcolor: $primary-white;\n\tfont-weight: 600;\n\tmargin: 2rem 0;\n\t\n\t@media screen and (max-width: $screen-sm-min) {\n  \tfont-size: 1.75rem;\n  }\n}\n\n#textarea1 {\n\theight: 100px !important;\n\n\t&::-webkit-input-placeholder { /* WebKit browsers */\n    color:    #999;\n\t}\n\t&:-moz-placeholder { /* Mozilla Firefox 4 to 18 */\n\t    color:    #999;\n\t}\n\t&::-moz-placeholder { /* Mozilla Firefox 19+ */\n\t    color:    #999;\n\t}\n\t&:-ms-input-placeholder { /* Internet Explorer 10+ */\n\t    color:    #999;\n\t}\n\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "mixin icon-spin(){-moz-animation-name:K8zL;-moz-animation-duration:4s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-ms-animation-name:K8zL;-ms-animation-duration:4s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;-webkit-animation-name:K8zL;animation-name:K8zL;-webkit-animation-duration:4s;animation-duration:4s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes K8zL{0%{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(1turn)}}@keyframes K8zL{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}._1h4W{width:100%;border-bottom:1px solid #d9d9de;border-top:1px solid #d9d9de;background-color:#5e696d}._3Cbo{margin:0 auto;padding:21vh 0;width:100%;text-align:center}.zkR0{font-size:3.5rem;color:#fff;font-weight:600;margin:2rem 0}@media screen and (max-width:768px){.zkR0{font-size:2.5rem}}.XXHD{font-size:2.5rem;color:#fff;font-weight:600;margin:2rem 0}@media screen and (max-width:768px){.XXHD{font-size:1.75rem}}#_2CJo{height:100px!important}#_2CJo::-webkit-input-placeholder{color:#999}#_2CJo:-moz-placeholder,#_2CJo::-moz-placeholder{color:#999}#_2CJo:-ms-input-placeholder{color:#999}", ""]);
   
   // exports
   exports.locals = {
-  	"spin": "Contact_spin_K8z",
-  	"root": "Contact_root_1h4",
-  	"container": "Contact_container_3Cb",
-  	"heading": "Contact_heading_zkR",
-  	"tagline": "Contact_tagline_XXH",
-  	"textarea1": "Contact_textarea1_2CJ"
+  	"spin": "K8zL",
+  	"root": "_1h4W",
+  	"container": "_3Cbo",
+  	"heading": "zkR0",
+  	"tagline": "XXHD",
+  	"textarea1": "_2CJo"
   };
 
 /***/ },
-/* 114 */
+/* 116 */
 /***/ function(module, exports) {
 
   module.exports = require("react-parallax");
 
 /***/ },
-/* 115 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5647,31 +5480,31 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(42);
+  var _getPrototypeOf = __webpack_require__(44);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(43);
+  var _classCallCheck2 = __webpack_require__(45);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(44);
+  var _createClass2 = __webpack_require__(46);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(45);
+  var _possibleConstructorReturn2 = __webpack_require__(47);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(46);
+  var _inherits2 = __webpack_require__(48);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(6);
+  var _react = __webpack_require__(8);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _config = __webpack_require__(40);
+  var _config = __webpack_require__(42);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -5750,13 +5583,13 @@ module.exports =
   exports.default = Html;
 
 /***/ },
-/* 116 */
+/* 118 */
 /***/ function(module, exports) {
 
   module.exports = require("./assets");
 
 /***/ },
-/* 117 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5773,27 +5606,27 @@ module.exports =
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _assign = __webpack_require__(54);
+  var _assign = __webpack_require__(56);
   
   var _assign2 = _interopRequireDefault(_assign);
   
-  var _fs = __webpack_require__(118);
+  var _fs = __webpack_require__(4);
   
   var _fs2 = _interopRequireDefault(_fs);
   
-  var _path = __webpack_require__(4);
+  var _path = __webpack_require__(5);
   
-  var _express = __webpack_require__(5);
+  var _express = __webpack_require__(6);
   
-  var _bluebird = __webpack_require__(119);
+  var _bluebird = __webpack_require__(120);
   
   var _bluebird2 = _interopRequireDefault(_bluebird);
   
-  var _jade = __webpack_require__(120);
+  var _jade = __webpack_require__(121);
   
   var _jade2 = _interopRequireDefault(_jade);
   
-  var _frontMatter = __webpack_require__(121);
+  var _frontMatter = __webpack_require__(122);
   
   var _frontMatter2 = _interopRequireDefault(_frontMatter);
   
@@ -5908,25 +5741,19 @@ module.exports =
   exports.default = router;
 
 /***/ },
-/* 118 */
-/***/ function(module, exports) {
-
-  module.exports = require("fs");
-
-/***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports) {
 
   module.exports = require("bluebird");
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports) {
 
   module.exports = require("jade");
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports) {
 
   module.exports = require("front-matter");
