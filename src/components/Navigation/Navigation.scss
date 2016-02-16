@@ -7,23 +7,34 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+ @import '../variables.scss';
+
 $nav-link-color: #00A0FF;
 $nav-link-hover-color: #FFF;
 $nav-link-active-color: orange;
 $nav-link-visited-color: pink;
 $nav-link-font-weight: 600;
 
+
+// color: #26a69a;
+//   :hover {
+//     color: #2BBBAD;
+//     @include icon-spin;
+//   }
+
 .root {
 }
 
 .link {
   display: inline-block;
+  cursor: pointer;
   padding: 3px 8px;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: $nav-link-font-weight;
   margin: 1px 0 0 0;
-  color: #989898;
+  // color: #989898;
+  color: $accent-color;
 }
 
 .link {
@@ -52,4 +63,5 @@ $nav-link-font-weight: 600;
 
 .spacer {
   color: rgba(255, 255, 255, .3);
+  // color: $accent-color;
 }

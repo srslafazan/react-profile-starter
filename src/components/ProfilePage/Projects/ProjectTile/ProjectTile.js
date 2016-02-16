@@ -7,24 +7,22 @@ import {Button, Row, Col} from 'react-materialize';
 
 class ProjectTile extends Component {
 	render() {
-		var projectNodes = this.props.data.map((projData) => {
-			return (
-				<Col name={projData.projName} key={projData.id} s={12} m={4} l={4}>
-					<img className={s.projectThumb} src={projData.projThumbnail} />
-					<h1>{projData.projName}</h1>
-					<p>{projData.projDescription}</p>
-	    			<Button>Check it out!</Button>
-	    			<Row>
-	    				<Col s={3} m={3} l={3}>
-			    			<img className={s.testmonialImg} src={projData.testimonialAuthorImg} />
-		    			</Col>
-		    			<Col s={9} m={9} l={9}>
-			    			<p className={s.testimonialText}>{projData.testimonial}</p>
-			    			<p>{projData.testimonialAuthor}</p>
-		    			</Col>
-	    			</Row>
-				</Col>
-			);
+		return (
+
+
+    		<Col s={12} m={4} l={4} className={s.container}>
+    			
+						<Row>
+		    			<h3 className={s.projectTitle}>{this.props.project.name}</h3>
+		    			<p className={s.projectDescription}>{this.props.project.description}</p>
+							<img className={s.projectImage} src={this.props.project.imageUrl} />	
+						</Row>
+					
+    			<img className={s.referenceImg} src={this.props.project.reference.imageUrl} />
+    			<p className={s.referenceQuote}>{this.props.project.reference.quote}</p>
+    			<p className={s.referenceName}>-{this.props.project.reference.name}</p>
+
+    		</Col>
 
 		});
 		return (
@@ -34,5 +32,6 @@ class ProjectTile extends Component {
 		)
 	}
 }
+    			// <Button>Check it out!</Button>
 
 export default withStyles(ProjectTile, s);
