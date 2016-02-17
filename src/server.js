@@ -16,6 +16,9 @@ import Router from './routes';
 import Html from './components/Html';
 import assets from './assets';
 import { port } from './config';
+import Mailer from 'nodemailer';
+import bodyParser from 'body-parser';
+
 
 const server = global.server = express();
 
@@ -23,11 +26,35 @@ const server = global.server = express();
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
 server.use(express.static(path.join(__dirname, 'public')));
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({extended: true}));
 
 //
 // Register API middleware
 // -----------------------------------------------------------------------------
 server.use('/api/content', require('./api/content').default);
+
+//
+// Get Requests
+// -----------------------------------------------------------------------------
+server.post('/mail', async (req, res, next) => {
+  var transporter = Mailer.createTransport('smtps://user@gmail.com:pass@smtp.gmail.com');
+  var mailOptions = {
+    from: req.body.email, // sender address
+    to: 'receiver@gmail.com', // list of receivers
+    subject: 'Message from a Portfolio viewer', // Subject line
+    text: req.body.info, // plaintext body
+    html: req.body.info, // html body
+  };
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+          return console.log(error);
+      }
+      console.log('Message sent: ' + info.response);
+  });
+});
+
 
 //
 // Register server-side rendering middleware

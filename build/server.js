@@ -88,6 +88,14 @@ module.exports =
   
   var _config = __webpack_require__(40);
   
+  var _nodemailer = __webpack_require__(117);
+  
+  var _nodemailer2 = _interopRequireDefault(_nodemailer);
+  
+  var _bodyParser = __webpack_require__(118);
+  
+  var _bodyParser2 = _interopRequireDefault(_bodyParser);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var server = global.server = (0, _express2.default)();
@@ -105,27 +113,69 @@ module.exports =
    */
   
   server.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
+  server.use(_bodyParser2.default.json());
+  server.use(_bodyParser2.default.urlencoded({ extended: true }));
   
   //
   // Register API middleware
   // -----------------------------------------------------------------------------
-  server.use('/api/content', __webpack_require__(117).default);
+  server.use('/api/content', __webpack_require__(119).default);
+  
+  //
+  // Get Requests
+  // -----------------------------------------------------------------------------
+  server.post('/mail', function () {
+    var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(req, res, next) {
+      var transporter, mailOptions;
+      return _regenerator2.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              transporter = _nodemailer2.default.createTransport('smtps://user@gmail.com:pass@smtp.gmail.com');
+              mailOptions = {
+                from: req.body.email, // sender address
+                to: 'receiver@gmail.com', // list of receivers
+                subject: 'Message from a Portfolio viewer', // Subject line
+                text: req.body.info, // plaintext body
+                html: req.body.info };
+              // send mail with defined transport object
+  
+              // html body
+              transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                  return console.log(error);
+                }
+                console.log('Message sent: ' + info.response);
+              });
+  
+            case 3:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, undefined);
+    })),
+        _this = undefined;
+    return function (_x, _x2, _x3) {
+      return ref.apply(_this, arguments);
+    };
+  }());
   
   //
   // Register server-side rendering middleware
   // -----------------------------------------------------------------------------
   server.get('*', function () {
-    var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(req, res, next) {
-      return _regenerator2.default.wrap(function _callee2$(_context2) {
+    var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(req, res, next) {
+      return _regenerator2.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _context2.prev = 0;
-              return _context2.delegateYield(_regenerator2.default.mark(function _callee() {
+              _context3.prev = 0;
+              return _context3.delegateYield(_regenerator2.default.mark(function _callee2() {
                 var statusCode, data, css, context, html;
-                return _regenerator2.default.wrap(function _callee$(_context) {
+                return _regenerator2.default.wrap(function _callee2$(_context2) {
                   while (1) {
-                    switch (_context.prev = _context.next) {
+                    switch (_context2.prev = _context2.next) {
                       case 0:
                         statusCode = 200;
                         data = { title: '', description: '', css: '', body: '', entry: _assets2.default.main.js };
@@ -144,7 +194,7 @@ module.exports =
                             return statusCode = 404;
                           }
                         };
-                        _context.next = 6;
+                        _context2.next = 6;
                         return _routes2.default.dispatch({ path: req.path, query: req.query, context: context }, function (state, component) {
                           data.body = _server2.default.renderToString(component);
                           data.css = css.join('');
@@ -157,31 +207,31 @@ module.exports =
   
                       case 8:
                       case 'end':
-                        return _context.stop();
+                        return _context2.stop();
                     }
                   }
-                }, _callee, undefined);
+                }, _callee2, undefined);
               })(), 't0', 2);
   
             case 2:
-              _context2.next = 7;
+              _context3.next = 7;
               break;
   
             case 4:
-              _context2.prev = 4;
-              _context2.t1 = _context2['catch'](0);
+              _context3.prev = 4;
+              _context3.t1 = _context3['catch'](0);
   
-              next(_context2.t1);
+              next(_context3.t1);
   
             case 7:
             case 'end':
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2, undefined, [[0, 4]]);
+      }, _callee3, undefined, [[0, 4]]);
     })),
         _this = undefined;
-    return function (_x, _x2, _x3) {
+    return function (_x4, _x5, _x6) {
       return ref.apply(_this, arguments);
     };
   }());
@@ -5439,7 +5489,7 @@ module.exports =
   'use strict';
   
   Object.defineProperty(exports, "__esModule", {
-  		value: true
+  	value: true
   });
   
   var _getPrototypeOf = __webpack_require__(42);
@@ -5479,101 +5529,115 @@ module.exports =
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var Contact = function (_Component) {
-  		(0, _inherits3.default)(Contact, _Component);
+  	(0, _inherits3.default)(Contact, _Component);
   
-  		function Contact() {
-  				(0, _classCallCheck3.default)(this, Contact);
-  				return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Contact).apply(this, arguments));
+  	function Contact() {
+  		(0, _classCallCheck3.default)(this, Contact);
+  		return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Contact).apply(this, arguments));
+  	}
+  
+  	(0, _createClass3.default)(Contact, [{
+  		key: 'submit',
+  		value: function submit(e) {
+  			e.preventDefault();
+  
+  			var formInfo = {
+  				name: $('#mailerName').val(),
+  				email: $('#mailerEmail').val(),
+  				phone: $('#mailerPhone').val(),
+  				site: $('#mailerWebsite').val(),
+  				info: $('#Contact_textarea1_2CJ').val()
+  			};
+  
+  			console.log('sending formInfo', formInfo);
+  
+  			$.post('/mail', formInfo, function (data) {
+  				console.log('sent! with response', data);
+  			});
   		}
-  
-  		(0, _createClass3.default)(Contact, [{
-  				key: 'render',
-  				value: function render() {
-  						return _react2.default.createElement(
-  								'div',
-  								{ className: _Contact2.default.root, id: 'contact' },
+  	}, {
+  		key: 'render',
+  		value: function render() {
+  			return _react2.default.createElement(
+  				'div',
+  				{ className: _Contact2.default.root, id: 'contact' },
+  				_react2.default.createElement(
+  					'div',
+  					{ className: _Contact2.default.container },
+  					_react2.default.createElement(
+  						'h1',
+  						{ className: _Contact2.default.heading },
+  						'Want to work together?'
+  					),
+  					_react2.default.createElement(
+  						'h2',
+  						{ className: _Contact2.default.tagline },
+  						'I build your dreams in code.'
+  					),
+  					_react2.default.createElement(
+  						_reactMaterialize.Modal,
+  						{
+  							header: 'Tell me all about it!',
+  							trigger: _react2.default.createElement(
+  								_reactMaterialize.Button,
+  								{ waves: 'light' },
+  								'Get Started'
+  							) },
+  						_react2.default.createElement(
+  							'p',
+  							{ className: _Contact2.default.explanation },
+  							'What are you looking for and how can I help? I build websites and mobile apps, front-to-back.'
+  						),
+  						_react2.default.createElement(
+  							_reactMaterialize.Row,
+  							null,
+  							_react2.default.createElement(
+  								_reactMaterialize.Input,
+  								{ s: 6, id: 'mailerName', label: 'Name' },
   								_react2.default.createElement(
-  										'div',
-  										{ className: _Contact2.default.container },
-  										_react2.default.createElement(
-  												'h1',
-  												{ className: _Contact2.default.heading },
-  												'Want to work together?'
-  										),
-  										_react2.default.createElement(
-  												'h2',
-  												{ className: _Contact2.default.tagline },
-  												'I build your dreams in code.'
-  										),
-  										_react2.default.createElement(
-  												_reactMaterialize.Modal,
-  												{
-  														header: 'Tell me all about it!',
-  														trigger: _react2.default.createElement(
-  																_reactMaterialize.Button,
-  																{ waves: 'light' },
-  																'Get Started'
-  														) },
-  												_react2.default.createElement(
-  														'p',
-  														{ className: _Contact2.default.explanation },
-  														'What are you looking for and how can I help? I build websites and mobile apps, front-to-back.'
-  												),
-  												_react2.default.createElement(
-  														_reactMaterialize.Row,
-  														null,
-  														_react2.default.createElement(
-  																_reactMaterialize.Input,
-  																{ s: 6, label: 'Name' },
-  																_react2.default.createElement(
-  																		_reactMaterialize.Icon,
-  																		null,
-  																		'account_circle'
-  																)
-  														),
-  														_react2.default.createElement(
-  																_reactMaterialize.Input,
-  																{ s: 6, label: 'Email Address' },
-  																_react2.default.createElement(
-  																		_reactMaterialize.Icon,
-  																		null,
-  																		'email'
-  																)
-  														),
-  														_react2.default.createElement(
-  																_reactMaterialize.Input,
-  																{ s: 6, label: 'Phone number' },
-  																_react2.default.createElement(
-  																		_reactMaterialize.Icon,
-  																		null,
-  																		'phone'
-  																)
-  														),
-  														_react2.default.createElement(
-  																_reactMaterialize.Input,
-  																{ s: 6, label: 'Website' },
-  																_react2.default.createElement(
-  																		_reactMaterialize.Icon,
-  																		null,
-  																		'website'
-  																)
-  														),
-  														_react2.default.createElement(
-  																'label',
-  																null,
-  																'Textarea'
-  														),
-  														_react2.default.createElement('textarea', { id: _Contact2.default.textarea1, className: 'materialize-textarea', length: '120',
-  																placeholder: 'Tell me about your project... \r 1) What is it? \r 2) How can I help? \r 3) What is your timeline? \r 4) What is your budget?'
-  														}),
-  														_react2.default.createElement(_reactMaterialize.Input, { type: 'submit', className: 'btn', value: 'SUBMIT YOUR PROJECT' })
-  												)
-  										)
+  									_reactMaterialize.Icon,
+  									null,
+  									'account_circle'
   								)
-  						);
-  				}
-  		}]);
-  		return Contact;
+  							),
+  							_react2.default.createElement(
+  								_reactMaterialize.Input,
+  								{ s: 6, id: 'mailerEmail', label: 'Email Address' },
+  								_react2.default.createElement(
+  									_reactMaterialize.Icon,
+  									null,
+  									'email'
+  								)
+  							),
+  							_react2.default.createElement(
+  								_reactMaterialize.Input,
+  								{ s: 6, id: 'mailerPhone', label: 'Phone number' },
+  								_react2.default.createElement(
+  									_reactMaterialize.Icon,
+  									null,
+  									'phone'
+  								)
+  							),
+  							_react2.default.createElement(
+  								_reactMaterialize.Input,
+  								{ s: 6, id: 'mailerWebsite', label: 'Website' },
+  								_react2.default.createElement(
+  									_reactMaterialize.Icon,
+  									null,
+  									'website'
+  								)
+  							),
+  							_react2.default.createElement('textarea', { id: _Contact2.default.textarea1, className: 'materialize-textarea', length: '120',
+  								placeholder: 'Tell me about your project... \r 1) What is it? \r 2) How can I help? \r 3) What is your timeline? \r 4) What is your budget?'
+  							}),
+  							_react2.default.createElement(_reactMaterialize.Input, { onClick: this.submit, type: 'submit', className: 'btn', value: 'SUBMIT YOUR PROJECT' })
+  						)
+  					)
+  				)
+  			);
+  		}
+  	}]);
+  	return Contact;
   }(_react.Component);
   
   exports.default = (0, _withStyles2.default)(Contact, _Contact2.default);
@@ -5757,6 +5821,18 @@ module.exports =
 
 /***/ },
 /* 117 */
+/***/ function(module, exports) {
+
+  module.exports = require("nodemailer");
+
+/***/ },
+/* 118 */
+/***/ function(module, exports) {
+
+  module.exports = require("body-parser");
+
+/***/ },
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5777,7 +5853,7 @@ module.exports =
   
   var _assign2 = _interopRequireDefault(_assign);
   
-  var _fs = __webpack_require__(118);
+  var _fs = __webpack_require__(120);
   
   var _fs2 = _interopRequireDefault(_fs);
   
@@ -5785,15 +5861,15 @@ module.exports =
   
   var _express = __webpack_require__(5);
   
-  var _bluebird = __webpack_require__(119);
+  var _bluebird = __webpack_require__(121);
   
   var _bluebird2 = _interopRequireDefault(_bluebird);
   
-  var _jade = __webpack_require__(120);
+  var _jade = __webpack_require__(122);
   
   var _jade2 = _interopRequireDefault(_jade);
   
-  var _frontMatter = __webpack_require__(121);
+  var _frontMatter = __webpack_require__(123);
   
   var _frontMatter2 = _interopRequireDefault(_frontMatter);
   
@@ -5908,25 +5984,25 @@ module.exports =
   exports.default = router;
 
 /***/ },
-/* 118 */
+/* 120 */
 /***/ function(module, exports) {
 
   module.exports = require("fs");
 
 /***/ },
-/* 119 */
+/* 121 */
 /***/ function(module, exports) {
 
   module.exports = require("bluebird");
 
 /***/ },
-/* 120 */
+/* 122 */
 /***/ function(module, exports) {
 
   module.exports = require("jade");
 
 /***/ },
-/* 121 */
+/* 123 */
 /***/ function(module, exports) {
 
   module.exports = require("front-matter");
