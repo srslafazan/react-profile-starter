@@ -22,6 +22,13 @@ class Contact extends Component {
 		$.post('/mail', formInfo, function (data) {
 			console.log('sent! with response', data);
 		});
+
+		$('#mailerName').val("");
+		$('#mailerEmail').val("");
+		$('#mailerPhone').val("");
+		$('#mailerWebsite').val("");
+		$('#mailerRow').children('textarea').val("");
+
 	}
 
   render() {
@@ -55,7 +62,7 @@ class Contact extends Component {
 							>
 							</textarea>
 
-					   	<Input onClick={this.submit} type='submit' className='btn' value='SUBMIT YOUR PROJECT'></Input>
+					   	<Input onClick={this.submit} type='submit' className='btn modal-action modal-close' value='SUBMIT YOUR PROJECT'></Input>
 
 						</Row>
 
