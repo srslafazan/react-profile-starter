@@ -16,25 +16,18 @@ class Profile extends Component {
             </Col>
             <Col s={12} m={6} l={8} className={s.profileTextContainer}>
               <h2 className={s.subheading}>I {'{'}code{'}'} therefore I am</h2>
-              <p>
-                How do we build beautiful applications that people love to use?
-
+              <p className={s.p1}>
+                <span className={s.emph}>How do we build beautiful applications that people love to use? </span>
                 I write full stack web and mobile applications in Silicon Valley, 
-                and every day I work to find the best answer to that question.
-
-                I taught iOS, Ruby on Rails, MEAN stack courses and more for Coding Dojo Silicon Valley.
+                and every day I look for the best answer to that question.
               </p>
-              <br/>
-              <p>
-                Currently, I lead development on a web application for Forte, built in Rails, 
-                and lead engineering on a React / Node MVP for Spot Knocker.
-
-                I'm a huge fan of music, hiking, and snow skiing. 
-
-                Also, I'm a huge coffee enthusiast!
-
+              <p className={s.p2}>
+                I recently lead engineering for <span className={s.emphi}>Spot Knocker</span> and web development for the non-profit <span className={s.emphi}>Forte Academy</span>, and I'm taking on new customers.
+                I'm a fan of music, hiking, and snow skiing. 
+              </p>
+              <p className={s.p3}>
+                I'm also a huge coffee enthusiast!
                 There's nothing I can't learn or build. :)
-
               </p>
             </Col>
           </Row>

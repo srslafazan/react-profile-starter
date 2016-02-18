@@ -4,3 +4,5 @@
 ncp-debug.log
 npm-debug.log
 /build
+build
+build/*

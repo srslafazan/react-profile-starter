@@ -38,7 +38,7 @@ $container-height: 100vh;
 }
 
 h1.heading {
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 800;
   margin: 0 0 3vh 0;
   color: $primary-white;
@@ -62,7 +62,7 @@ h2.subheading {
 h2.subheading2 {
   font-size: 1.5rem;
   font-weight: 800;
-  margin: 2.5vh 0 5vh 0;
+  margin: 2.5vh 0 7vh 0;
   color: $primary-white;
 
   @media screen and (max-width: $screen-sm-min) {

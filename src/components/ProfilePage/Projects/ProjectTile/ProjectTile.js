@@ -15,10 +15,16 @@ class ProjectTile extends Component {
 		    			<p className={s.projectDescription}>{this.props.project.description}</p>
 							<img className={s.projectImage} src={this.props.project.imageUrl} />	
 						</Row>
-					
-    			<img className={s.referenceImg} src={this.props.project.reference.imageUrl} />
-    			<p className={s.referenceQuote}>{this.props.project.reference.quote}</p>
-    			<p className={s.referenceName}>-{this.props.project.reference.name}</p>
+					<Col s={12} m={5} l={5} >
+	    			<img className={s.referenceImg} src={this.props.project.reference.imageUrl} />
+	    		</Col>
+	    		<Col s={12} m={7} l={7} >
+	    			<p className={s.referenceQuote}>{this.props.project.reference.quote}</p>
+	    			<p className={s.referenceName}>&mdash;{this.props.project.reference.name}</p>
+	    			<p className={s.referenceTitle}>{this.props.project.reference.title}</p>
+	    		</Col>
+
+
 
     		</Col>
 
