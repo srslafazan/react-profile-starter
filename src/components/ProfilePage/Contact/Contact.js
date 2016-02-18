@@ -14,7 +14,7 @@ class Contact extends Component {
 			email: $('#mailerEmail').val(),
 			phone: $('#mailerPhone').val(),
 			site: $('#mailerWebsite').val(),
-			info: $('#Contact_textarea1_2CJ').val(),
+			info: $('#mailerRow').children('textarea').val(),
 		}
 
 		console.log('sending formInfo', formInfo);
@@ -40,7 +40,7 @@ class Contact extends Component {
 					  
 					  
 					  <p className={s.explanation}>What are you looking for and how can I help? I build websites and mobile apps, front-to-back.</p>
-					  <Row>
+					  <Row id='mailerRow'>
 					    <Input s={6} id='mailerName' label="Name"><Icon>account_circle</Icon></Input>
 					    <Input s={6} id='mailerEmail' label="Email Address"><Icon>email</Icon></Input>
 					    <Input s={6} id='mailerPhone' label="Phone number"><Icon>phone</Icon></Input>

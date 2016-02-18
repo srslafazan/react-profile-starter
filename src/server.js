@@ -38,13 +38,27 @@ server.use('/api/content', require('./api/content').default);
 // Get Requests
 // -----------------------------------------------------------------------------
 server.post('/mail', async (req, res, next) => {
-  var transporter = Mailer.createTransport('smtps://user@gmail.com:pass@smtp.gmail.com');
+  var transporter = Mailer.createTransport({
+    service: 'Mailgun',
+    auth: {
+      user: process.env.MAILER_USER,
+      pass: process.env.MAILER_PASS
+    }
+  });
   var mailOptions = {
     from: req.body.email, // sender address
-    to: 'receiver@gmail.com', // list of receivers
+    to: 'srslafazan@gmail.com', // list of receivers
     subject: 'Message from a Portfolio viewer', // Subject line
-    text: req.body.info, // plaintext body
-    html: req.body.info, // html body
+    text: req.body.info + ' , ' +
+      req.body.name + 
+      req.body.email + ' , ' + 
+      req.body.phone + ' , ' + 
+      req.body.site + ' , ', // plaintext body
+    html: '<p>' + req.body.info + '</p>' + 
+      req.body.name + '<br>' + 
+      req.body.email + '<br>' + 
+      req.body.phone + '<br>' + 
+      req.body.site + '<br>', // html body
   };
   // send mail with defined transport object
   transporter.sendMail(mailOptions, function(error, info){

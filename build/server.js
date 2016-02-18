@@ -131,13 +131,19 @@ module.exports =
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              transporter = _nodemailer2.default.createTransport('smtps://user@gmail.com:pass@smtp.gmail.com');
+              transporter = _nodemailer2.default.createTransport({
+                service: 'Mailgun',
+                auth: {
+                  // user: process.env.MAILER_USER
+                  // pass: process.env.MAILER_PASS
+                }
+              });
               mailOptions = {
                 from: req.body.email, // sender address
-                to: 'receiver@gmail.com', // list of receivers
+                to: 'srslafazan@gmail.com', // list of receivers
                 subject: 'Message from a Portfolio viewer', // Subject line
-                text: req.body.info, // plaintext body
-                html: req.body.info };
+                text: req.body.info + ' , ' + req.body.name + req.body.email + ' , ' + req.body.phone + ' , ' + req.body.site + ' , ', // plaintext body
+                html: '<p>' + req.body.info + '</p>' + req.body.name + '<br>' + req.body.email + '<br>' + req.body.phone + '<br>' + req.body.site + '<br>' };
               // send mail with defined transport object
   
               // html body
@@ -5546,7 +5552,7 @@ module.exports =
   				email: $('#mailerEmail').val(),
   				phone: $('#mailerPhone').val(),
   				site: $('#mailerWebsite').val(),
-  				info: $('#Contact_textarea1_2CJ').val()
+  				info: $('#mailerRow').children('textarea').val()
   			};
   
   			console.log('sending formInfo', formInfo);
@@ -5590,7 +5596,7 @@ module.exports =
   						),
   						_react2.default.createElement(
   							_reactMaterialize.Row,
-  							null,
+  							{ id: 'mailerRow' },
   							_react2.default.createElement(
   								_reactMaterialize.Input,
   								{ s: 6, id: 'mailerName', label: 'Name' },
