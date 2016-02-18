@@ -18,6 +18,9 @@ import Router from './routes';
 import Html from './components/Html';
 import assets from './assets';
 import { port } from './config';
+import Mailer from 'nodemailer';
+import bodyParser from 'body-parser';
+
 
 const server = global.server = express();
 
@@ -27,6 +30,8 @@ const server = global.server = express();
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
 server.use(express.static(path.join(__dirname, 'public')));
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({extended: true}));
 
 //
 // Register API middleware
@@ -51,6 +56,42 @@ server.use('/myProjects', function(req, res) {
   });
 });
 // /End json pseudo-database
+
+//
+// Get Requests
+// -----------------------------------------------------------------------------
+server.post('/mail', async (req, res, next) => {
+  var transporter = Mailer.createTransport({
+    service: 'Mailgun',
+    auth: {
+      user: process.env.MAILER_USER,
+      pass: process.env.MAILER_PASS
+    }
+  });
+  var mailOptions = {
+    from: req.body.email, // sender address
+    to: 'srslafazan@gmail.com', // list of receivers
+    subject: 'Message from a Portfolio viewer', // Subject line
+    text: req.body.info + ' , ' +
+      req.body.name + 
+      req.body.email + ' , ' + 
+      req.body.phone + ' , ' + 
+      req.body.site + ' , ', // plaintext body
+    html: '<p>' + req.body.info + '</p>' + 
+      req.body.name + '<br>' + 
+      req.body.email + '<br>' + 
+      req.body.phone + '<br>' + 
+      req.body.site + '<br>', // html body
+  };
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+          return console.log(error);
+      }
+      console.log('Message sent: ' + info.response);
+  });
+});
+
 
 //
 // Register server-side rendering middleware

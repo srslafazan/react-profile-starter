@@ -6,6 +6,24 @@ import {Button, Modal, Row, Input, Icon} from 'react-materialize';
 
 class Contact extends Component {
 
+	submit(e) {
+		e.preventDefault();
+		
+		var formInfo = {
+			name: $('#mailerName').val(),
+			email: $('#mailerEmail').val(),
+			phone: $('#mailerPhone').val(),
+			site: $('#mailerWebsite').val(),
+			info: $('#mailerRow').children('textarea').val(),
+		}
+
+		console.log('sending formInfo', formInfo);
+
+		$.post('/mail', formInfo, function (data) {
+			console.log('sent! with response', data);
+		});
+	}
+
   render() {
     return (
       <div className={s.root} id='contact'>
@@ -22,13 +40,12 @@ class Contact extends Component {
 					  
 					  
 					  <p className={s.explanation}>What are you looking for and how can I help? I build websites and mobile apps, front-to-back.</p>
-					  <Row>
-					    <Input s={6} label="Name"><Icon>account_circle</Icon></Input>
-					    <Input s={6} label="Email Address"><Icon>email</Icon></Input>
-					    <Input s={6} label="Phone number"><Icon>phone</Icon></Input>
-					    <Input s={6} label="Website"><Icon>website</Icon></Input>
+					  <Row id='mailerRow'>
+					    <Input s={6} id='mailerName' label="Name"><Icon>account_circle</Icon></Input>
+					    <Input s={6} id='mailerEmail' label="Email Address"><Icon>email</Icon></Input>
+					    <Input s={6} id='mailerPhone' label="Phone number"><Icon>phone</Icon></Input>
+					    <Input s={6} id='mailerWebsite' label="Website"><Icon>website</Icon></Input>
 					    
-					    <label>Textarea</label>
 					    <textarea id={s.textarea1} className='materialize-textarea' length="120"
 					    	placeholder='Tell me about your project... &#13;&#10;
 					    		1) What is it? &#13;&#10;
@@ -38,7 +55,7 @@ class Contact extends Component {
 							>
 							</textarea>
 
-					   	<Input type='submit' className='btn' value='SUBMIT YOUR PROJECT'></Input>
+					   	<Input onClick={this.submit} type='submit' className='btn' value='SUBMIT YOUR PROJECT'></Input>
 
 						</Row>
 
