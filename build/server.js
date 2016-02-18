@@ -134,8 +134,8 @@ module.exports =
               transporter = _nodemailer2.default.createTransport({
                 service: 'Mailgun',
                 auth: {
-                  // user: process.env.MAILER_USER
-                  // pass: process.env.MAILER_PASS
+                  user: process.env.MAILER_USER,
+                  pass: process.env.MAILER_PASS
                 }
               });
               mailOptions = {
@@ -5560,6 +5560,12 @@ module.exports =
   			$.post('/mail', formInfo, function (data) {
   				console.log('sent! with response', data);
   			});
+  
+  			$('#mailerName').val("");
+  			$('#mailerEmail').val("");
+  			$('#mailerPhone').val("");
+  			$('#mailerWebsite').val("");
+  			$('#mailerRow').children('textarea').val("");
   		}
   	}, {
   		key: 'render',
@@ -5636,7 +5642,7 @@ module.exports =
   							_react2.default.createElement('textarea', { id: _Contact2.default.textarea1, className: 'materialize-textarea', length: '120',
   								placeholder: 'Tell me about your project... \r 1) What is it? \r 2) How can I help? \r 3) What is your timeline? \r 4) What is your budget?'
   							}),
-  							_react2.default.createElement(_reactMaterialize.Input, { onClick: this.submit, type: 'submit', className: 'btn', value: 'SUBMIT YOUR PROJECT' })
+  							_react2.default.createElement(_reactMaterialize.Input, { onClick: this.submit, type: 'submit', className: 'btn modal-action modal-close', value: 'SUBMIT YOUR PROJECT' })
   						)
   					)
   				)
