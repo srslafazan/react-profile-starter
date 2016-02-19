@@ -52,11 +52,22 @@
 .profileTextContainer {
   text-align: center;
   p {
-    margin: 0 3rem;
-    text-align: justified;
+    margin: 1rem 3rem;
     @media screen and (max-width: $screen-md-min) {
-      margin: 0 0 0 0;
-      // text-align: center;
+      // margin: 0;
     }
   }
+}
+
+.p1, .p2, .p3, .emph, .emphi {
+  text-align: left;
+}
+
+.emph {
+  font-weight: 600;
+}
+
+.emphi {
+  font-style: italic;
+  font-weight: 300;
 }

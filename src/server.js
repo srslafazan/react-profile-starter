@@ -11,7 +11,6 @@ import 'babel-polyfill';
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
-import bodyParser from 'body-parser';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
@@ -64,8 +63,8 @@ server.post('/mail', async (req, res, next) => {
   var transporter = Mailer.createTransport({
     service: 'Mailgun',
     auth: {
-      user: process.env.MAILER_USER,
-      pass: process.env.MAILER_PASS
+      user: 'postmaster@sandbox98d8af632e554413b976bed237d13ab8.mailgun.org',
+      pass: '2da4d38ca65ab4385daa91b07e4a6e2c',
     }
   });
   var mailOptions = {

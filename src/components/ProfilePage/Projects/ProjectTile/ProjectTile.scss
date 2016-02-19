@@ -19,29 +19,33 @@
 }
 
 .referenceImg {
-	max-width: 75px;
-	max-height: 75px;
+	max-width: 70px;
+	max-height: 70px;
 	border-radius: 50%;
 	display: inline-block;
 }
 
 .referenceQuote {
-	display: inline-block;
+	// display: inline-block;
 	font-size: 0.8rem;
-	width: 65%;
-	margin: 0 0 0 0;
+	// width: 65%;
+	// margin: 0 0 0 0;
 }
 .referenceName {
-	display: block;
+	// display: block;
 	text-align: center;
-	width: 65%;
-	margin: -22px 0 0 0;
-	float: right;
+	// width: 65%;
+	// margin: -22px 0 0 0;
+	// float: right;
+	// margin: 0;
 
-	@media screen and (max-width: $screen-sm-min) {
-		margin: 0;
-	}
+	// @media screen and (max-width: $screen-sm-min) {
+	// 	margin: 0;
+	// }
 
+}
+.referenceTitle {
+	text-align: center
 }
 
 .projectRow {

@@ -19,9 +19,6 @@ class Splash extends Component {
     return (
       <div className={s.root} id='splash'>
         <div className={s.container}>
-          <div className={s.logoContainer}>
-            <Icon className={s.logo} large>code</Icon>
-          </div>
           <div className={s.lowerText}>
             <h1 className={s.heading}>Shain Lafazan</h1>
             <h2 className={s.subheading}>Software Engineer</h2>
@@ -40,5 +37,8 @@ class Splash extends Component {
   }
 
 }
+          // <div className={s.logoContainer}>
+          //   <Icon className={s.logo} large>code</Icon>
+          // </div>
 
 export default withStyles(Splash, s);
