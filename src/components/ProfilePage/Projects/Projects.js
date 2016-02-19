@@ -13,8 +13,8 @@ var projects = [
 		reference: {
 			name: "JV Estolas",
 			title: "Software Engineer @ Spot Knocker",
-			quote: "\"Shain is a champion of the free world, justice, code, and coffee.\"",
-			imageUrl: "https://media.licdn.com/media/p/8/005/043/312/181bf88.jpg",
+			quote: "\"Shain is a champion of the free world, justice, coffee, and code.\"",
+			imageUrl: "jv.jpg",
 		}
 	},
 	{
@@ -25,7 +25,7 @@ var projects = [
 			name: "Daniel Kim",
 			title: "CEO @ Forte",
 			quote: "\"Shain helped us take Forte from an idea to a reality.\"",
-			imageUrl: "https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/8/000/2b4/0cc/10cd96c.jpg",
+			imageUrl: "daniel_kim.jpg",
 		}
 	},
 	{
@@ -36,7 +36,7 @@ var projects = [
 			name: "Skyler Gonsalves",
 			title: "Technical Project Manager",
 			quote: "\"Shain built scalable features and brought deep technical knowledge to the team.\"",
-			imageUrl: "https://media.licdn.com/media/p/8/005/091/3a2/3bdd59b.jpg",
+			imageUrl: "skyler_gonsalves.jpg",
 		}
 	},
 
