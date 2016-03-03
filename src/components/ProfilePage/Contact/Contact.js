@@ -40,7 +40,7 @@ class Contact extends Component {
         	<h2 className={s.tagline}>I build your dreams in code.</h2>
 
 				  <Modal
-					  header='Tell me all about it!'
+					  header='Tell me about it!'
 					  trigger={
 					    <Button waves='light'>Get Started</Button>
 					}>
@@ -48,10 +48,10 @@ class Contact extends Component {
 					  
 					  <p className={s.explanation}>What are you looking for and how can I help? I build websites and mobile apps, front-to-back.</p>
 					  <Row id='mailerRow'>
-					    <Input s={6} id='mailerName' label="Name"><Icon>account_circle</Icon></Input>
-					    <Input s={6} id='mailerEmail' label="Email Address"><Icon>email</Icon></Input>
-					    <Input s={6} id='mailerPhone' label="Phone number"><Icon>phone</Icon></Input>
-					    <Input s={6} id='mailerWebsite' label="Website"><Icon>website</Icon></Input>
+					    <Input s={12} m={6} id='mailerName' label="Name"><Icon>account_circle</Icon></Input>
+					    <Input s={12} m={6} id='mailerEmail' label="Email Address"><Icon>email</Icon></Input>
+					    <Input s={12} m={6} id='mailerPhone' label="Phone number"><Icon>phone</Icon></Input>
+					    <Input s={12} m={6} id='mailerWebsite' label="Website"><Icon>website</Icon></Input>
 					    
 					    <textarea id={s.textarea1} className='materialize-textarea' length="120"
 					    	placeholder='Tell me about your project... &#13;&#10;
