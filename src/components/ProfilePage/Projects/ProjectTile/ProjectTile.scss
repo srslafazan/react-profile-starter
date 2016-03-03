@@ -9,6 +9,7 @@
 .projectImage {
 	width: 80%;
 	max-height: 200px;
+	max-width: 365px;
 	display: block;
 	margin: 0 auto;
 }
@@ -27,22 +28,10 @@
 }
 
 .referenceQuote {
-	// display: inline-block;
 	font-size: 0.8rem;
-	// width: 65%;
-	// margin: 0 0 0 0;
 }
 .referenceName {
-	// display: block;
 	text-align: center;
-	// width: 65%;
-	// margin: -22px 0 0 0;
-	// float: right;
-	// margin: 0;
-
-	// @media screen and (max-width: $screen-sm-min) {
-	// 	margin: 0;
-	// }
 
 }
 .referenceTitle {
@@ -52,12 +41,10 @@
 .projectRow {
 }
 
-
 .projectTitle {
 	font-size: 1.25rem;
 	font-weight: 600;
 }
-
 
 .topRow {
 

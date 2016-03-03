@@ -26,7 +26,7 @@ class ProfilePage extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <Parallax strength={300} bgImage={"bg-blur.jpg"} className={s.parallax}>
+          <Parallax strength={300} bgImage={"bg-blur-dark.jpg"} className={s.parallax}>
             <Splash></Splash>          
           </Parallax>
           <Profile></Profile>

@@ -12,7 +12,7 @@ var projects = [
 		imageUrl: "spotknockerProject.png",
 		reference: {
 			name: "JV Estolas",
-			title: "Software Engineer @ Spot Knocker",
+			title: "Engineer @ Spot Knocker",
 			quote: "\"Shain is a champion of the free world, justice, coffee, and code.\"",
 			imageUrl: "jv.jpg",
 		}

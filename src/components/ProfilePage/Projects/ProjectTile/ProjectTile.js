@@ -8,17 +8,17 @@ class ProjectTile extends Component {
 		return (
 
 
-    		<Col s={12} m={4} l={4} className={s.container}>
+    		<Col s={12} m={12} l={4} className={s.container}>
     			
 						<Row>
 		    			<h3 className={s.projectTitle}>{this.props.project.name}</h3>
 		    			<p className={s.projectDescription}>{this.props.project.description}</p>
 							<img className={s.projectImage} src={this.props.project.imageUrl} />	
 						</Row>
-					<Col s={12} m={5} l={5} >
+					<Col s={12} m={12} l={5} >
 	    			<img className={s.referenceImg} src={this.props.project.reference.imageUrl} />
 	    		</Col>
-	    		<Col s={12} m={7} l={7} >
+	    		<Col s={12} m={12} l={7} >
 	    			<p className={s.referenceQuote}>{this.props.project.reference.quote}</p>
 	    			<p className={s.referenceName}>&mdash;{this.props.project.reference.name}</p>
 	    			<p className={s.referenceTitle}>{this.props.project.reference.title}</p>
