@@ -98,7 +98,7 @@ server.post('/mail', async (req, res, next) => {
 server.get('*', async (req, res, next) => {
   try {
     let statusCode = 200;
-    const data = { title: '', description: '', css: '', body: '', entry: assets.main.js };
+    const data = { title: 'Shain Lafazan', description: 'Shain Lafazan builds apps.', css: '', body: '', entry: assets.main.js };
     const css = [];
     const context = {
       insertCss: styles => css.push(styles._getCss()),
