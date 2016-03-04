@@ -18,6 +18,8 @@
 	min-height: 66px;
 	vertical-align: middle;
 	margin-bottom: 0;
+	// color: $accent-color;
+	// font-weight: 600;
 }
 
 .referenceImg {
@@ -29,6 +31,8 @@
 
 .referenceQuote {
 	font-size: 0.8rem;
+	color: $accent-color;
+	font-weight: 600;
 }
 .referenceName {
 	text-align: center;
@@ -42,7 +46,7 @@
 }
 
 .projectTitle {
-	font-size: 1.25rem;
+	font-size: 1.5rem;
 	font-weight: 600;
 }
 

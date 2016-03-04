@@ -5,15 +5,12 @@ import React, { Component } from 'react';
 var SVGIcon = React.createClass({
 
   handleClick: function(e){
-    console.log('hey, clicked!', e);
     this.setState({active: true});
   },
   handleMouseEnter: function(e){
-    console.log("hey entering", e);
     this.setState({hover: true});
   },
   handleMouseLeave: function(e){
-    console.log("hey leaving", e);
     this.setState({hover: false});
   },
 

@@ -64,7 +64,6 @@ h2.subheading2 {
   font-weight: 800;
   margin: 2.5vh 0 7vh 0;
   color: $primary-white;
-
   @media screen and (max-width: $screen-sm-min) {
     font-size: 1.0rem;
   }
@@ -79,7 +78,7 @@ h2.subheading2 {
 }
 
 .bottomLink {
-  display: block;
+  display: none;
   text-align: center;
   color: $primary-white;
   font-size: 1.2rem;

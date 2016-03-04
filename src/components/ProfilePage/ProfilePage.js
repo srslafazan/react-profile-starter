@@ -6,7 +6,6 @@ import Splash from './Splash';
 import Profile from './Profile';
 import Projects from './Projects';
 import Contact from './Contact';
-
 import {Parallax, Background} from 'react-parallax';
 
 
@@ -32,7 +31,6 @@ class ProfilePage extends Component {
           <Profile></Profile>
           <Projects></Projects>
           <Contact></Contact>
-
         </div>
       </div>
     );

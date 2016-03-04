@@ -15,7 +15,7 @@ class Profile extends Component {
               <img className={s.profileImg} src="shain-downtown.jpg" alt='Shain Lafazan profile photo'/>
             </Col>
             <Col s={12} m={6} l={8} className={s.profileTextContainer}>
-              <h2 className={s.subheading}>I {'{'}code{'}'} therefore I am</h2>
+              <h2 className={s.subheading}>I <span className={s.code}>{'{'}code{'}'}</span> therefore I am</h2>
               <p className={s.p1}>
                 <span className={s.emph}>How do we build beautiful applications that people love to use? </span>
                 I write full stack web and mobile applications in Silicon Valley, 

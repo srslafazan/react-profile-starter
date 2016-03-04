@@ -37,8 +37,5 @@ class Splash extends Component {
   }
 
 }
-          // <div className={s.logoContainer}>
-          //   <Icon className={s.logo} large>code</Icon>
-          // </div>
 
 export default withStyles(Splash, s);
