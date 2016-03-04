@@ -70,4 +70,11 @@
 .emphi {
   font-style: italic;
   font-weight: 300;
+  &:hover {
+    color: $accent-color;
+  }
+}
+
+.code {
+  color: $accent-color;
 }

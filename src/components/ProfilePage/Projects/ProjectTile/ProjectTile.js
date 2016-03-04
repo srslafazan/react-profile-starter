@@ -7,14 +7,12 @@ class ProjectTile extends Component {
 	render() {
 		return (
 
-
     		<Col s={12} m={12} l={4} className={s.container}>
-    			
-						<Row>
-		    			<h3 className={s.projectTitle}>{this.props.project.name}</h3>
-		    			<p className={s.projectDescription}>{this.props.project.description}</p>
-							<img className={s.projectImage} src={this.props.project.imageUrl} />	
-						</Row>
+					<Row>
+	    			<h3 className={s.projectTitle}>{this.props.project.name}</h3>
+	    			<p className={s.projectDescription}>{this.props.project.description}</p>
+						<img className={s.projectImage} src={this.props.project.imageUrl} />	
+					</Row>
 					<Col s={12} m={12} l={5} >
 	    			<img className={s.referenceImg} src={this.props.project.reference.imageUrl} />
 	    		</Col>
@@ -24,13 +22,10 @@ class ProjectTile extends Component {
 	    			<p className={s.referenceTitle}>{this.props.project.reference.title}</p>
 	    		</Col>
 
-
-
     		</Col>
 
 		)
 	}
 }
-    			// <Button>Check it out!</Button>
 
 export default withStyles(ProjectTile, s);

@@ -12,7 +12,7 @@ var projects = [
 		imageUrl: "spotknockerProject.png",
 		reference: {
 			name: "JV Estolas",
-			title: "Engineer @ Spot Knocker",
+			title: "Engineer, Spot Knocker",
 			quote: "\"Shain is a champion of the free world, justice, coffee, and code.\"",
 			imageUrl: "jv.jpg",
 		}
@@ -22,10 +22,10 @@ var projects = [
 		description: "Sharing music performance with underprivileged youths.",
 		imageUrl: "forteProject.png",
 		reference: {
-			name: "Daniel Kim",
-			title: "CEO @ Forte",
-			quote: "\"Shain helped us take Forte from an idea to a reality.\"",
-			imageUrl: "daniel_kim.jpg",
+			name: "Hareesh Puliyedath",
+			title: "Engineer, Vlocity",
+			quote: "\"Shain is a the kind of person you would always want in your team.\"",
+			imageUrl: "hareesh_puliyedath.jpg",
 		}
 	},
 	{
@@ -34,9 +34,9 @@ var projects = [
 		imageUrl: "capuchinProject.png",
 		reference: {
 			name: "Skyler Gonsalves",
-			title: "Technical Project Manager",
-			quote: "\"Shain built scalable features and brought deep technical knowledge to the team.\"",
-			imageUrl: "skyler_gonsalves.jpg",
+			title: "Engineer, Moody",
+			quote: "\"Shain's ability to efficiently pick up new technologies allows him to tackle any challenge.\"",
+			imageUrl: "brian_schmidt.jpg",
 		}
 	},
 
@@ -51,16 +51,12 @@ class Projects extends Component {
   render() {
     return (	
 	<div className={s.container} id='projects'>
-
-		<h1 className={s.heading}>Recent Projects</h1>	        	
-	
-
+		<h1 className={s.heading}>Recent Projects</h1>	        		
 		<Row>
 				<ProjectTile project={projects[0]}></ProjectTile>
 		    <ProjectTile project={projects[1]}></ProjectTile>
 		    <ProjectTile project={projects[2]}></ProjectTile>	
 		</Row>	
-
 	</div>
     );
   }

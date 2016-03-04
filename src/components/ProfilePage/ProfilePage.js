@@ -61,7 +61,6 @@ class ProfilePage extends Component {
           <Profile />
           <Projects data={myProjects} pollInterval={2000} />
           <Contact />
-
         </div>
       </div>
     );
