@@ -43,15 +43,15 @@ class Html extends Component {
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <title>{this.props.title}</title>
-        <meta name="description" content={this.props.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={this.props.description} />
+        <meta name="keywords" content='shain lafazan app developer software engineer web website mobile ios android portfolio profile application silicon valley' />
+        <meta name="author" content='Shain Lafazan' />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-
-       <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-       <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" />
-       <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" />
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
 
         <style id="css" dangerouslySetInnerHTML={{ __html: this.props.css }} />
       </head>
