@@ -10,33 +10,39 @@ var projects = [
 		name: "Spot Knocker",
 		description: "Peer-to-peer advertising that's rocking the ad world.",
 		imageUrl: "spotknockerProject.png",
+		imageAlt: "Spot Knocker",
 		reference: {
 			name: "JV Estolas",
 			title: "Engineer, Spot Knocker",
 			quote: "\"Shain is a champion of the free world, justice, coffee, and code.\"",
 			imageUrl: "jv.jpg",
+			imageAlt: "Joseph Victor Estolas",
 		}
 	},
 	{
 		name: "Forte",
 		description: "Sharing music performance with underprivileged youths.",
 		imageUrl: "forteProject.png",
+		imageAlt: "Forte Academy",
 		reference: {
 			name: "Hareesh Puliyedath",
 			title: "Engineer, Vlocity",
 			quote: "\"Shain is a the kind of person you would always want in your team.\"",
 			imageUrl: "hareesh_puliyedath.jpg",
+			imageAlt: "Hareesh Puliyedath",
 		}
 	},
 	{
 		name: "Capuchin",
 		description: "Split the bill with ease, like it was always meant to be.",
 		imageUrl: "capuchinProject.png",
+		imageAlt: "Capuchin iOS app",
 		reference: {
 			name: "Skyler Gonsalves",
 			title: "Engineer, Moody",
 			quote: "\"Shain's ability to efficiently pick up new technologies allows him to tackle any challenge.\"",
 			imageUrl: "brian_schmidt.jpg",
+			imageAlt: "Brian Schmidt",
 		}
 	},
 

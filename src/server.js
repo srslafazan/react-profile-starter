@@ -96,9 +96,13 @@ server.post('/mail', async (req, res, next) => {
 // Register server-side rendering middleware
 // -----------------------------------------------------------------------------
 server.get('*', async (req, res, next) => {
+
+  const description = 'Shain Lafazan is a Software Engineer, Full Stack Web and Mobile Developer in Silicon Valley.';
+  const title = 'Shain Lafazan | Profile';
+  
   try {
     let statusCode = 200;
-    const data = { title: 'Shain Lafazan', description: 'Shain Lafazan builds apps.', css: '', body: '', entry: assets.main.js };
+    const data = { title: title, description: description, css: '', body: '', entry: assets.main.js };
     const css = [];
     const context = {
       insertCss: styles => css.push(styles._getCss()),

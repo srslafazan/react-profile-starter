@@ -11,36 +11,6 @@ import {Parallax, Background} from 'react-parallax';
 
 const title = 'Shain Lafazan';
 
-  var myProjects =  [
-  {
-    "id": 101,
-    "projName": "Project 1",
-    "projThumbnail": "http://bit.ly/1NIoQcL",
-    "projDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. Donec cursus libero tortor, eget pretium elit aliquet ut.",
-    "testimonialAuthorImg": "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
-    "testimonialAuthor": "Author Name",
-    "testimonial": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-  },
-  {
-    "id": 102,
-    "projName": "Project 2",
-    "projThumbnail": "http://bit.ly/1NIoQcL",
-    "projDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. Donec cursus libero tortor, eget pretium elit aliquet ut.",
-    "testimonialAuthorImg": "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
-    "testimonialAuthor": "Author Name",
-    "testimonial": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-  },
-  {
-    "id": 103,
-    "projName": "Project 3",
-    "projThumbnail": "http://bit.ly/1NIoQcL",
-    "projDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin sagittis augue, ac pharetra enim convallis ac. Donec cursus libero tortor, eget pretium elit aliquet ut.",
-    "testimonialAuthorImg": "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg",
-    "testimonialAuthor": "Author Name",
-    "testimonial": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-  }
-];
-
 class ProfilePage extends Component {
 
   static contextTypes = {
@@ -55,11 +25,11 @@ class ProfilePage extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <Parallax strength={300} bgImage={"bg-blur-dark.jpg"} className={s.parallax}>
+          <Parallax strength={300} bgImage={"bg-blur-dark.jpg"} className={s.parallax} alt='typewriter background'>
             <Splash></Splash>          
           </Parallax>
           <Profile />
-          <Projects data={myProjects} pollInterval={2000} />
+          <Projects />
           <Contact />
         </div>
       </div>

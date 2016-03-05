@@ -52,8 +52,10 @@ class Html extends Component {
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" />
         <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
-
         <style id="css" dangerouslySetInnerHTML={{ __html: this.props.css }} />
+        
+        <meta name="google-site-verification" content="IdWIRDw4xphA-QInOfH6qp7UA5sRjRQm9f1I11B4yoo" />
+
       </head>
       <body>
         <div id="app" dangerouslySetInnerHTML={{ __html: this.props.body }} />
