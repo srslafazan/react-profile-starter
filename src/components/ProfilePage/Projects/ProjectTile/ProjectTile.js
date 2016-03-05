@@ -11,10 +11,10 @@ class ProjectTile extends Component {
 					<Row>
 	    			<h3 className={s.projectTitle}>{this.props.project.name}</h3>
 	    			<p className={s.projectDescription}>{this.props.project.description}</p>
-						<img className={s.projectImage} src={this.props.project.imageUrl alt={this.props.project.imageAlt} />	
+						<img className={s.projectImage} src={this.props.project.imageUrl} alt={this.props.project.imageAlt} />	
 					</Row>
 					<Col s={12} m={12} l={5} >
-	    			<img className={s.referenceImg} src={this.props.project.reference.imageUrl alt={this.props.project.reference.imageAlt} />
+	    			<img className={s.referenceImg} src={this.props.project.reference.imageUrl} alt={this.props.project.reference.imageAlt} />
 	    		</Col>
 	    		<Col s={12} m={12} l={7} >
 	    			<p className={s.referenceQuote}>{this.props.project.reference.quote}</p>
