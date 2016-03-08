@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Styles = exports.UniqueId = exports.KeyLine = exports.KeyCode = exports.Events = exports.Dom = exports.CssEvent = exports.ColorManipulator = undefined;
+exports.Styles = exports.UniqueId = exports.KeyLine = exports.Events = exports.Dom = exports.CssEvent = exports.ColorManipulator = undefined;
 
 var _colorManipulator = require('./color-manipulator');
 
@@ -20,10 +20,6 @@ var _dom2 = _interopRequireDefault(_dom);
 var _events = require('./events');
 
 var _events2 = _interopRequireDefault(_events);
-
-var _keyCode = require('./key-code');
-
-var _keyCode2 = _interopRequireDefault(_keyCode);
 
 var _keyLine = require('./key-line');
 
@@ -43,7 +39,6 @@ exports.ColorManipulator = _colorManipulator2.default;
 exports.CssEvent = _cssEvent2.default;
 exports.Dom = _dom2.default;
 exports.Events = _events2.default;
-exports.KeyCode = _keyCode2.default;
 exports.KeyLine = _keyLine2.default;
 exports.UniqueId = _uniqueId2.default;
 exports.Styles = _styles2.default;
@@ -52,7 +47,6 @@ exports.default = {
   CssEvent: _cssEvent2.default,
   Dom: _dom2.default,
   Events: _events2.default,
-  KeyCode: _keyCode2.default,
   KeyLine: _keyLine2.default,
   UniqueId: _uniqueId2.default,
   Styles: _styles2.default

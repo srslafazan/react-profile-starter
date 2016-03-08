@@ -1,10 +1,14 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _simpleAssign = require('simple-assign');
+
+var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
 
 var _react = require('react');
 
@@ -13,10 +17,6 @@ var _react2 = _interopRequireDefault(_react);
 var _paper = require('../paper');
 
 var _paper2 = _interopRequireDefault(_paper);
-
-var _stylePropable = require('../mixins/style-propable');
-
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
 var _cardExpandable = require('./card-expandable');
 
@@ -28,6 +28,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 var Card = _react2.default.createClass({
   displayName: 'Card',
+
 
   propTypes: {
     /**
@@ -46,6 +47,13 @@ var Card = _react2.default.createClass({
     expandable: _react2.default.PropTypes.bool,
 
     /**
+     * Whether this card is expanded.
+     * If `true` or `false` the component is controlled.
+     * if `null` the component is uncontrolled.
+     */
+    expanded: _react2.default.PropTypes.bool,
+
+    /**
      * Whether this card is initially expanded.
      */
     initiallyExpanded: _react2.default.PropTypes.bool,
@@ -56,9 +64,9 @@ var Card = _react2.default.createClass({
     onExpandChange: _react2.default.PropTypes.func,
 
     /**
-     * Whether this card component include a button to expand the card. CardTitle,
-     * CardHeader and CardActions implement showExpandableButton. Any child component
-     * of Card can implements showExpandableButton or forwards the property to a child
+     * Whether this card component include a button to expand the card. `CardTitle`,
+     * `CardHeader` and `CardActions` implement `showExpandableButton`. Any child component
+     * of `Card` can implements `showExpandableButton` or forwards the property to a child
      * component supporting it.
      */
     showExpandableButton: _react2.default.PropTypes.bool,
@@ -69,10 +77,9 @@ var Card = _react2.default.createClass({
     style: _react2.default.PropTypes.object
   },
 
-  mixins: [_stylePropable2.default],
-
   getDefaultProps: function getDefaultProps() {
     return {
+      expanded: null,
       expandable: false,
       initiallyExpanded: false,
       actAsExpander: false
@@ -80,19 +87,27 @@ var Card = _react2.default.createClass({
   },
   getInitialState: function getInitialState() {
     return {
-      expanded: this.props.initiallyExpanded ? true : false
+      expanded: this.props.expanded === null ? this.props.initiallyExpanded === true : this.props.expanded
     };
+  },
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+    //update the state when the component is controlled.
+    if (nextProps.expanded !== null) this.setState({ expanded: nextProps.expanded });
   },
   _onExpandable: function _onExpandable(event) {
     event.preventDefault();
-    var newExpandedState = !(this.state.expanded === true);
-    this.setState({ expanded: newExpandedState });
+    var newExpandedState = !this.state.expanded;
+    //no automatic state update when the composant is controlled
+    if (this.props.expanded === null) {
+      this.setState({ expanded: newExpandedState });
+    }
     if (this.props.onExpandChange) this.props.onExpandChange(newExpandedState);
   },
   render: function render() {
     var _this = this;
 
     var lastElement = undefined;
+    var expanded = this.state.expanded;
     var newChildren = _react2.default.Children.map(this.props.children, function (currentChild) {
       var doClone = false;
       var newChild = undefined;
@@ -101,15 +116,15 @@ var Card = _react2.default.createClass({
       if (!currentChild || !currentChild.props) {
         return null;
       }
-      if (_this.state.expanded === false && currentChild.props.expandable === true) return;
+      if (expanded === false && currentChild.props.expandable === true) return;
       if (currentChild.props.actAsExpander === true) {
         doClone = true;
         newProps.onTouchTap = _this._onExpandable;
-        newProps.style = _this.mergeStyles({ cursor: 'pointer' }, currentChild.props.style);
+        newProps.style = (0, _simpleAssign2.default)({ cursor: 'pointer' }, currentChild.props.style);
       }
       if (currentChild.props.showExpandableButton === true) {
         doClone = true;
-        newChild = _react2.default.createElement(_cardExpandable2.default, { expanded: _this.state.expanded, onExpanding: _this._onExpandable });
+        newChild = _react2.default.createElement(_cardExpandable2.default, { expanded: expanded, onExpanding: _this._onExpandable });
       }
       if (doClone) {
         element = _react2.default.cloneElement(currentChild, newProps, currentChild.props.children, newChild);
@@ -125,8 +140,7 @@ var Card = _react2.default.createClass({
 
     var other = _objectWithoutProperties(_props, ['style']);
 
-    var mergedStyles = this.mergeStyles({
-      overflow: 'hidden',
+    var mergedStyles = (0, _simpleAssign2.default)({
       zIndex: 1
     }, style);
 

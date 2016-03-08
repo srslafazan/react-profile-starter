@@ -36,9 +36,7 @@ exports.default = {
     return (0, _reactAddonsCreateFragment2.default)(newFragments);
   },
   extend: function extend(children, extendedProps, extendedChildren) {
-
     return _react2.default.isValidElement(children) ? _react2.default.Children.map(children, function (child) {
-
       var newProps = typeof extendedProps === 'function' ? extendedProps(child) : extendedProps;
 
       var newChildren = typeof extendedChildren === 'function' ? extendedChildren(child) : extendedChildren ? extendedChildren : child.props.children;

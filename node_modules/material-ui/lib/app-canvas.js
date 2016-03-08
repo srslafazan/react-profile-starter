@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _stylePropable = require('./mixins/style-propable');
-
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
 var _getMuiTheme = require('./styles/getMuiTheme');
 
 var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
@@ -21,6 +17,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var AppCanvas = _react2.default.createClass({
   displayName: 'AppCanvas',
 
+
   propTypes: {
     children: _react2.default.PropTypes.node
   },
@@ -29,12 +26,9 @@ var AppCanvas = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
   },
-
-  mixins: [_stylePropable2.default],
 
   getInitialState: function getInitialState() {
     return {
@@ -46,19 +40,23 @@ var AppCanvas = _react2.default.createClass({
       muiTheme: this.state.muiTheme
     };
   },
-
-  //to update theme inside state whenever a new theme is passed down
-  //from the parent / owner using context
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
   },
   render: function render() {
     var _this = this;
 
+    var _state$muiTheme = this.state.muiTheme;
+    var baseTheme = _state$muiTheme.baseTheme;
+    var prepareStyles = _state$muiTheme.prepareStyles;
+
+
     var styles = {
       height: '100%',
-      backgroundColor: this.state.muiTheme.rawTheme.palette.canvasColor,
+      color: baseTheme.palette.textColor,
+      backgroundColor: baseTheme.palette.canvasColor,
       direction: 'ltr'
     };
 
@@ -82,7 +80,7 @@ var AppCanvas = _react2.default.createClass({
 
     return _react2.default.createElement(
       'div',
-      { style: this.prepareStyles(styles) },
+      { style: prepareStyles(styles) },
       newChildren
     );
   }

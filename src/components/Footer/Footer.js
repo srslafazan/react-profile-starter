@@ -13,6 +13,11 @@ import s from './Footer.scss';
 import Link from '../Link';
 import SVGIcon from '../SVGIcon';
 
+import { Button, Icon } from 'react-materialize';
+import mui from 'material-ui';
+import AlarmIcon from 'react-material-icons/icons/action/alarm';
+
+
 class Footer extends Component {
 
   render() {
@@ -21,14 +26,15 @@ class Footer extends Component {
         <div className={s.container}>
 
         <div className={s.iconBar}>
-          <a href='https://www.facebook.com/slafazan' className={s.footerIcon}>
-            <SVGIcon size="2.5rem" icon="post-facebook" />            
+          
+          <a href='https://www.facebook.com/slafazan' className={s.footerIconLink} >
+            <img src='facebookLogo.png' alt='Facebook logo' className={s.footerIcon} />
           </a>
-          <a href='https://www.linkedin.com/in/shainlafazan' className={s.footerIcon}>
-            <SVGIcon size="2.5rem" icon="post-linkedin" />
+          <a href='https://www.linkedin.com/in/shainlafazan' className={s.footerIconLink} >
+            <img src='linkedInLogo.png' alt='LinkedIn logo' className={s.footerIcon} id={s.linkedInIcon}/>
           </a>
-          <a href='https://github.com/srslafazan' className={s.footerIcon}>
-            <SVGIcon size="2.5rem" icon="post-github" />
+          <a href='https://github.com/srslafazan' className={s.footerIconLink} id={s.gitHubIconLink} >
+            <img src='gitHubLogo.png' alt='GitHub logo' className={s.footerIcon} id={s.gitHubIcon}/>
           </a>
         </div>
 
@@ -43,8 +49,5 @@ class Footer extends Component {
   }
 
 }
-
-          // <Link className={s.link} to="/">Home</Link>
-// <Link className={s.link} to="/not-found">Not Found</Link>
 
 export default withStyles(Footer, s);

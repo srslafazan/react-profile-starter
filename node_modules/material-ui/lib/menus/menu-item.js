@@ -1,10 +1,14 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _simpleAssign = require('simple-assign');
+
+var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
 
 var _react = require('react');
 
@@ -17,14 +21,6 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 var _reactAddonsPureRenderMixin = require('react-addons-pure-render-mixin');
 
 var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
-
-var _stylePropable = require('../mixins/style-propable');
-
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-var _colors = require('../styles/colors');
-
-var _colors2 = _interopRequireDefault(_colors);
 
 var _popover = require('../popover/popover');
 
@@ -56,6 +52,7 @@ var nestedMenuStyle = {
 
 var MenuItem = _react2.default.createClass({
   displayName: 'MenuItem',
+
 
   propTypes: {
     /**
@@ -135,12 +132,11 @@ var MenuItem = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
   },
 
-  mixins: [_reactAddonsPureRenderMixin2.default, _stylePropable2.default],
+  mixins: [_reactAddonsPureRenderMixin2.default],
 
   getDefaultProps: function getDefaultProps() {
     return {
@@ -165,12 +161,10 @@ var MenuItem = _react2.default.createClass({
   componentDidMount: function componentDidMount() {
     this._applyFocusState();
   },
-
-  //to update theme inside state whenever a new theme is passed down
-  //from the parent / owner using context
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
 
     if (this.state.open && nextProps.focusState === 'none') {
       this._onRequestClose();
@@ -241,6 +235,11 @@ var MenuItem = _react2.default.createClass({
 
     var other = _objectWithoutProperties(_props, ['checked', 'children', 'desktop', 'disabled', 'focusState', 'innerDivStyle', 'insetChildren', 'leftIcon', 'menuItems', 'rightIcon', 'secondaryText', 'style', 'value']);
 
+    var _state$muiTheme = this.state.muiTheme;
+    var prepareStyles = _state$muiTheme.prepareStyles;
+    var menuItem = _state$muiTheme.menuItem;
+
+
     var disabledColor = this.state.muiTheme.rawTheme.palette.disabledColor;
     var textColor = this.state.muiTheme.rawTheme.palette.textColor;
     var leftIndent = desktop ? 64 : 72;
@@ -275,24 +274,24 @@ var MenuItem = _react2.default.createClass({
         margin: 0,
         right: 24,
         top: 4,
-        fill: _colors2.default.grey600
+        fill: menuItem.rightIconDesktopFill
       }
     };
 
-    var mergedRootStyles = this.mergeStyles(styles.root, style);
-    var mergedInnerDivStyles = this.mergeStyles(styles.innerDivStyle, innerDivStyle);
+    var mergedRootStyles = (0, _simpleAssign2.default)(styles.root, style);
+    var mergedInnerDivStyles = (0, _simpleAssign2.default)(styles.innerDivStyle, innerDivStyle);
 
     //Left Icon
     var leftIconElement = leftIcon ? leftIcon : checked ? _react2.default.createElement(_check2.default, null) : null;
     if (leftIconElement && desktop) {
-      var mergedLeftIconStyles = this.mergeStyles(styles.leftIconDesktop, leftIconElement.props.style);
+      var mergedLeftIconStyles = (0, _simpleAssign2.default)(styles.leftIconDesktop, leftIconElement.props.style);
       leftIconElement = _react2.default.cloneElement(leftIconElement, { style: mergedLeftIconStyles });
     }
 
     //Right Icon
     var rightIconElement = undefined;
     if (rightIcon) {
-      var mergedRightIconStyles = desktop ? this.mergeStyles(styles.rightIconDesktop, rightIcon.props.style) : rightIcon.props.style;
+      var mergedRightIconStyles = desktop ? (0, _simpleAssign2.default)(styles.rightIconDesktop, rightIcon.props.style) : rightIcon.props.style;
       rightIconElement = _react2.default.cloneElement(rightIcon, { style: mergedRightIconStyles });
     }
 
@@ -300,11 +299,11 @@ var MenuItem = _react2.default.createClass({
     var secondaryTextElement = undefined;
     if (secondaryText) {
       var secondaryTextIsAnElement = _react2.default.isValidElement(secondaryText);
-      var mergedSecondaryTextStyles = secondaryTextIsAnElement ? this.mergeStyles(styles.secondaryText, secondaryText.props.style) : null;
+      var mergedSecondaryTextStyles = secondaryTextIsAnElement ? (0, _simpleAssign2.default)(styles.secondaryText, secondaryText.props.style) : null;
 
       secondaryTextElement = secondaryTextIsAnElement ? _react2.default.cloneElement(secondaryText, { style: mergedSecondaryTextStyles }) : _react2.default.createElement(
         'div',
-        { style: this.prepareStyles(styles.secondaryText) },
+        { style: prepareStyles(styles.secondaryText) },
         secondaryText
       );
     }

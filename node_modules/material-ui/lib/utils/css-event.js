@@ -22,6 +22,7 @@ exports.default = {
     }
   },
 
+
   //Returns the correct event name to use
   transitionEndEventName: function transitionEndEventName() {
     return this._testSupportedProps({

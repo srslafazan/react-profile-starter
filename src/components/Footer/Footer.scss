@@ -58,7 +58,7 @@
 .iconBar {
   margin-bottom: 1rem;
 }
-.footerIcon {
+.footerIconLink {
   margin: 0 0.5rem;
   display: inline-block;
   cursor: pointer;
@@ -68,4 +68,13 @@
     @include icon-spin;
   }
 }
-
+.footerIcon {
+  height: 33px;
+  width: 33px;
+}
+#linkedInIcon {
+  width: 37px;
+}
+#gitHubIconLink {
+  margin-left: 2px;
+}

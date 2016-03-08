@@ -1,30 +1,22 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _contextPure = require('../mixins/context-pure');
+var _reactEventListener = require('react-event-listener');
 
-var _contextPure2 = _interopRequireDefault(_contextPure);
+var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
 
-var _stylePropable = require('../mixins/style-propable');
+var _keycode = require('keycode');
 
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-var _windowListenable = require('../mixins/window-listenable');
-
-var _windowListenable2 = _interopRequireDefault(_windowListenable);
-
-var _keyCode = require('../utils/key-code');
-
-var _keyCode2 = _interopRequireDefault(_keyCode);
+var _keycode2 = _interopRequireDefault(_keycode);
 
 var _calendar = require('./calendar');
 
@@ -57,6 +49,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 var DatePickerDialog = _react2.default.createClass({
   displayName: 'DatePickerDialog',
 
+
   propTypes: {
     DateTimeFormat: _react2.default.PropTypes.func,
     autoOk: _react2.default.PropTypes.bool,
@@ -84,22 +77,8 @@ var DatePickerDialog = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
-  },
-
-  mixins: [_stylePropable2.default, _windowListenable2.default, _contextPure2.default],
-
-  statics: {
-    getRelevantContextKeys: function getRelevantContextKeys(muiTheme) {
-      return {
-        calendarTextColor: muiTheme.datePicker.calendarTextColor
-      };
-    },
-    getChildrenClasses: function getChildrenClasses() {
-      return [_calendar2.default, _dialog2.default];
-    }
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -125,18 +104,11 @@ var DatePickerDialog = _react2.default.createClass({
       muiTheme: this.state.muiTheme
     };
   },
-
-  //to update theme inside state whenever a new theme is passed down
-  //from the parent / owner using context
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
   },
-
-  windowListeners: {
-    keyup: '_handleWindowKeyUp'
-  },
-
   show: function show() {
     if (this.props.onShow && !this.state.open) this.props.onShow();
     this.setState({
@@ -149,7 +121,7 @@ var DatePickerDialog = _react2.default.createClass({
       open: false
     });
   },
-  _onDayTouchTap: function _onDayTouchTap() {
+  handleTouchTapDay: function handleTouchTapDay() {
     if (this.props.autoOk) {
       setTimeout(this._handleOKTouchTap, 300);
     }
@@ -164,10 +136,10 @@ var DatePickerDialog = _react2.default.createClass({
 
     this.dismiss();
   },
-  _handleWindowKeyUp: function _handleWindowKeyUp(e) {
+  _handleWindowKeyUp: function _handleWindowKeyUp(event) {
     if (this.state.open) {
-      switch (e.keyCode) {
-        case _keyCode2.default.ENTER:
+      switch ((0, _keycode2.default)(event)) {
+        case 'enter':
           this._handleOKTouchTap();
           break;
       }
@@ -186,9 +158,8 @@ var DatePickerDialog = _react2.default.createClass({
 
     var other = _objectWithoutProperties(_props, ['DateTimeFormat', 'locale', 'wordings', 'initialDate', 'onAccept', 'style', 'container', 'firstDayOfWeek']);
 
-    var _constructor$getRelev = this.constructor.getRelevantContextKeys(this.state.muiTheme);
+    var calendarTextColor = this.state.muiTheme.datePicker.calendarTextColor;
 
-    var calendarTextColor = _constructor$getRelev.calendarTextColor;
 
     var styles = {
       root: {
@@ -242,12 +213,16 @@ var DatePickerDialog = _react2.default.createClass({
         open: this.state.open,
         onRequestClose: this.dismiss
       }),
+      _react2.default.createElement(_reactEventListener2.default, {
+        elementName: 'window',
+        onKeyUp: this._handleWindowKeyUp
+      }),
       _react2.default.createElement(_calendar2.default, {
         DateTimeFormat: DateTimeFormat,
         firstDayOfWeek: firstDayOfWeek,
         locale: locale,
         ref: 'calendar',
-        onDayTouchTap: this._onDayTouchTap,
+        onDayTouchTap: this.handleTouchTapDay,
         initialDate: this.props.initialDate,
         open: this.state.open,
         minDate: this.props.minDate,

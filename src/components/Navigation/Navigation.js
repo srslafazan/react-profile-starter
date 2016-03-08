@@ -13,6 +13,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Navigation.scss';
 import Link from '../Link';
 import Button from 'react-materialize';
+import { STDEase } from '../constants';
 
 class Navigation extends Component {
 
@@ -23,7 +24,7 @@ class Navigation extends Component {
   scrollToSection(e) {
     let sectionName = e.target.getAttribute('data-scrollocation')
     let n = $('#' + sectionName)
-    $('html, body').animate({ scrollTop: n.offset().top }, 800, 'easeInExpo');
+    $('html, body').animate({ scrollTop: n.offset().top }, 1200, STDEase.InOut);
   }
 
   render() {

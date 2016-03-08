@@ -1,10 +1,14 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _simpleAssign = require('simple-assign');
+
+var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
 
 var _react = require('react');
 
@@ -14,14 +18,6 @@ var _reactAddonsPureRenderMixin = require('react-addons-pure-render-mixin');
 
 var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-var _stylePropable = require('./mixins/style-propable');
-
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-var _colors = require('./styles/colors');
-
-var _colors2 = _interopRequireDefault(_colors);
-
 var _children = require('./utils/children');
 
 var _children2 = _interopRequireDefault(_children);
@@ -30,9 +26,9 @@ var _events = require('./utils/events');
 
 var _events2 = _interopRequireDefault(_events);
 
-var _keyCode = require('./utils/key-code');
+var _keycode = require('keycode');
 
-var _keyCode2 = _interopRequireDefault(_keyCode);
+var _keycode2 = _interopRequireDefault(_keycode);
 
 var _focusRipple = require('./ripples/focus-ripple');
 
@@ -67,8 +63,8 @@ function injectStyle() {
 
 function listenForTabPresses() {
   if (!listening) {
-    _events2.default.on(window, 'keydown', function (e) {
-      tabPressed = e.keyCode === _keyCode2.default.TAB;
+    _events2.default.on(window, 'keydown', function (event) {
+      tabPressed = (0, _keycode2.default)(event) === 'tab';
     });
     listening = true;
   }
@@ -76,6 +72,7 @@ function listenForTabPresses() {
 
 var EnhancedButton = _react2.default.createClass({
   displayName: 'EnhancedButton',
+
 
   propTypes: {
     centerRipple: _react2.default.PropTypes.bool,
@@ -110,12 +107,11 @@ var EnhancedButton = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
   },
 
-  mixins: [_reactAddonsPureRenderMixin2.default, _stylePropable2.default],
+  mixins: [_reactAddonsPureRenderMixin2.default],
 
   getDefaultProps: function getDefaultProps() {
     return {
@@ -146,8 +142,9 @@ var EnhancedButton = _react2.default.createClass({
     listenForTabPresses();
   },
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
 
     if ((nextProps.disabled || nextProps.disableKeyboardFocus) && this.state.isKeyboardFocused) {
       this.setState({ isKeyboardFocused: false });
@@ -156,19 +153,22 @@ var EnhancedButton = _react2.default.createClass({
       }
     }
   },
+  componentWillUnmount: function componentWillUnmount() {
+    clearTimeout(this._focusTimeout);
+  },
   isKeyboardFocused: function isKeyboardFocused() {
     return this.state.isKeyboardFocused;
   },
-  removeKeyboardFocus: function removeKeyboardFocus(e) {
+  removeKeyboardFocus: function removeKeyboardFocus(event) {
     if (this.state.isKeyboardFocused) {
       this.setState({ isKeyboardFocused: false });
-      this.props.onKeyboardFocus(e, false);
+      this.props.onKeyboardFocus(event, false);
     }
   },
-  setKeyboardFocus: function setKeyboardFocus(e) {
+  setKeyboardFocus: function setKeyboardFocus(event) {
     if (!this.state.isKeyboardFocused) {
       this.setState({ isKeyboardFocused: true });
-      this.props.onKeyboardFocus(e, true);
+      this.props.onKeyboardFocus(event, true);
     }
   },
   _cancelFocusTimeout: function _cancelFocusTimeout() {
@@ -218,28 +218,28 @@ var EnhancedButton = _react2.default.createClass({
       children: touchRipple ? undefined : children
     });
   },
-  _handleKeyDown: function _handleKeyDown(e) {
+  _handleKeyDown: function _handleKeyDown(event) {
     if (!this.props.disabled && !this.props.disableKeyboardFocus) {
-      if (e.keyCode === _keyCode2.default.ENTER && this.state.isKeyboardFocused) {
-        this._handleTouchTap(e);
+      if ((0, _keycode2.default)(event) === 'enter' && this.state.isKeyboardFocused) {
+        this._handleTouchTap(event);
       }
     }
-    this.props.onKeyDown(e);
+    this.props.onKeyDown(event);
   },
-  _handleKeyUp: function _handleKeyUp(e) {
+  _handleKeyUp: function _handleKeyUp(event) {
     if (!this.props.disabled && !this.props.disableKeyboardFocus) {
-      if (e.keyCode === _keyCode2.default.SPACE && this.state.isKeyboardFocused) {
-        this._handleTouchTap(e);
+      if ((0, _keycode2.default)(event) === 'space' && this.state.isKeyboardFocused) {
+        this._handleTouchTap(event);
       }
     }
-    this.props.onKeyUp(e);
+    this.props.onKeyUp(event);
   },
-  _handleBlur: function _handleBlur(e) {
+  _handleBlur: function _handleBlur(event) {
     this._cancelFocusTimeout();
-    this.removeKeyboardFocus(e);
-    this.props.onBlur(e);
+    this.removeKeyboardFocus(event);
+    this.props.onBlur(event);
   },
-  _handleFocus: function _handleFocus(e) {
+  _handleFocus: function _handleFocus(event) {
     var _this = this;
 
     if (!this.props.disabled && !this.props.disableKeyboardFocus) {
@@ -248,19 +248,19 @@ var EnhancedButton = _react2.default.createClass({
       //or touch focus
       this._focusTimeout = setTimeout(function () {
         if (tabPressed) {
-          _this.setKeyboardFocus(e);
+          _this.setKeyboardFocus(event);
         }
       }, 150);
 
-      this.props.onFocus(e);
+      this.props.onFocus(event);
     }
   },
-  _handleTouchTap: function _handleTouchTap(e) {
+  _handleTouchTap: function _handleTouchTap(event) {
     this._cancelFocusTimeout();
     if (!this.props.disabled) {
       tabPressed = false;
-      this.removeKeyboardFocus(e);
-      this.props.onTouchTap(e);
+      this.removeKeyboardFocus(event);
+      this.props.onTouchTap(event);
     }
   },
   render: function render() {
@@ -288,15 +288,19 @@ var EnhancedButton = _react2.default.createClass({
 
     var other = _objectWithoutProperties(_props2, ['centerRipple', 'children', 'containerElement', 'disabled', 'disableFocusRipple', 'disableKeyboardFocus', 'disableTouchRipple', 'focusRippleColor', 'focusRippleOpacity', 'linkButton', 'touchRippleColor', 'touchRippleOpacity', 'onBlur', 'onFocus', 'onKeyUp', 'onKeyDown', 'onTouchTap', 'style', 'tabIndex', 'type']);
 
-    var mergedStyles = this.mergeStyles({
+    var _state$muiTheme = this.state.muiTheme;
+    var prepareStyles = _state$muiTheme.prepareStyles;
+    var enhancedButton = _state$muiTheme.enhancedButton;
+
+
+    var mergedStyles = (0, _simpleAssign2.default)({
       border: 10,
       background: 'none',
       boxSizing: 'border-box',
       display: 'inline-block',
       font: 'inherit',
       fontFamily: this.state.muiTheme.rawTheme.fontFamily,
-      tapHighlightColor: _colors2.default.transparent,
-      appearance: linkButton ? null : 'button',
+      WebkitTapHighlightColor: enhancedButton.tapHighlightColor, // Remove mobile color flashing (deprecated)
       cursor: disabled ? 'default' : 'pointer',
       textDecoration: 'none',
       outline: 'none',
@@ -321,7 +325,7 @@ var EnhancedButton = _react2.default.createClass({
     }
 
     var buttonProps = _extends({}, other, {
-      style: this.prepareStyles(mergedStyles),
+      style: prepareStyles(mergedStyles),
       disabled: disabled,
       onBlur: this._handleBlur,
       onFocus: this._handleFocus,

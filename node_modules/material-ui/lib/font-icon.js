@@ -1,18 +1,18 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _simpleAssign = require('simple-assign');
+
+var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _stylePropable = require('./mixins/style-propable');
-
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
 var _transitions = require('./styles/transitions');
 
@@ -26,8 +26,30 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
+function getStyles(props, state) {
+  var color = props.color;
+  var hoverColor = props.hoverColor;
+  var baseTheme = state.muiTheme.baseTheme;
+
+
+  var offColor = color || baseTheme.palette.textColor;
+  var onColor = hoverColor || offColor;
+
+  return {
+    root: {
+      color: state.hovered ? onColor : offColor,
+      position: 'relative',
+      fontSize: baseTheme.spacing.iconSize,
+      display: 'inline-block',
+      userSelect: 'none',
+      transition: _transitions2.default.easeOut()
+    }
+  };
+}
+
 var FontIcon = _react2.default.createClass({
   displayName: 'FontIcon',
+
 
   propTypes: {
     /**
@@ -61,12 +83,9 @@ var FontIcon = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
   },
-
-  mixins: [_stylePropable2.default],
 
   getDefaultProps: function getDefaultProps() {
     return {
@@ -85,55 +104,42 @@ var FontIcon = _react2.default.createClass({
       muiTheme: this.state.muiTheme
     };
   },
-
-  //to update theme inside state whenever a new theme is passed down
-  //from the parent / owner using context
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
   },
-  _handleMouseLeave: function _handleMouseLeave(e) {
+  _handleMouseLeave: function _handleMouseLeave(event) {
     // hover is needed only when a hoverColor is defined
     if (this.props.hoverColor !== undefined) this.setState({ hovered: false });
     if (this.props.onMouseLeave) {
-      this.props.onMouseLeave(e);
+      this.props.onMouseLeave(event);
     }
   },
-  _handleMouseEnter: function _handleMouseEnter(e) {
+  _handleMouseEnter: function _handleMouseEnter(event) {
     // hover is needed only when a hoverColor is defined
     if (this.props.hoverColor !== undefined) this.setState({ hovered: true });
     if (this.props.onMouseEnter) {
-      this.props.onMouseEnter(e);
+      this.props.onMouseEnter(event);
     }
   },
   render: function render() {
     var _props = this.props;
-    var color = _props.color;
-    var hoverColor = _props.hoverColor;
     var onMouseLeave = _props.onMouseLeave;
     var onMouseEnter = _props.onMouseEnter;
     var style = _props.style;
 
-    var other = _objectWithoutProperties(_props, ['color', 'hoverColor', 'onMouseLeave', 'onMouseEnter', 'style']);
+    var other = _objectWithoutProperties(_props, ['onMouseLeave', 'onMouseEnter', 'style']);
 
-    var spacing = this.state.muiTheme.rawTheme.spacing;
-    var offColor = color ? color : style && style.color ? style.color : this.state.muiTheme.rawTheme.palette.textColor;
-    var onColor = hoverColor ? hoverColor : offColor;
+    var prepareStyles = this.state.muiTheme.prepareStyles;
 
-    var mergedStyles = this.mergeStyles({
-      position: 'relative',
-      fontSize: spacing.iconSize,
-      display: 'inline-block',
-      userSelect: 'none',
-      transition: _transitions2.default.easeOut()
-    }, style, {
-      color: this.state.hovered ? onColor : offColor
-    });
+
+    var styles = getStyles(this.props, this.state);
 
     return _react2.default.createElement('span', _extends({}, other, {
       onMouseLeave: this._handleMouseLeave,
       onMouseEnter: this._handleMouseEnter,
-      style: this.prepareStyles(mergedStyles)
+      style: prepareStyles((0, _simpleAssign2.default)(styles.root, style))
     }));
   }
 });

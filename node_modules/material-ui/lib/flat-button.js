@@ -1,18 +1,18 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _simpleAssign = require('simple-assign');
+
+var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _contextPure = require('./mixins/context-pure');
-
-var _contextPure2 = _interopRequireDefault(_contextPure);
 
 var _transitions = require('./styles/transitions');
 
@@ -25,12 +25,6 @@ var _children2 = _interopRequireDefault(_children);
 var _colorManipulator = require('./utils/color-manipulator');
 
 var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
-
-var _styles = require('./utils/styles');
-
-var _typography = require('./styles/typography');
-
-var _typography2 = _interopRequireDefault(_typography);
 
 var _enhancedButton = require('./enhanced-button');
 
@@ -50,12 +44,13 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 function validateLabel(props, propName, componentName) {
   if (!props.children && !props.label) {
-    return new Error('Required prop label or children was not ' + 'specified in ' + componentName + '.');
+    return new Error('Required prop label or children was not specified in ' + componentName + '.');
   }
 }
 
 var FlatButton = _react2.default.createClass({
   displayName: 'FlatButton',
+
 
   propTypes: {
     /**
@@ -161,33 +156,8 @@ var FlatButton = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
-  },
-
-  mixins: [_contextPure2.default],
-
-  statics: {
-    getRelevantContextKeys: function getRelevantContextKeys(muiTheme) {
-      var buttonTheme = muiTheme.button;
-      var flatButtonTheme = muiTheme.flatButton;
-
-      return {
-        buttonColor: flatButtonTheme.color,
-        buttonFilterColor: flatButtonTheme.buttonFilterColor,
-        buttonHeight: buttonTheme.height,
-        buttonMinWidth: buttonTheme.minWidth,
-        disabledTextColor: flatButtonTheme.disabledTextColor,
-        primaryTextColor: flatButtonTheme.primaryTextColor,
-        secondaryTextColor: flatButtonTheme.secondaryTextColor,
-        textColor: flatButtonTheme.textColor,
-        textTransform: flatButtonTheme.textTransform ? flatButtonTheme.textTransform : buttonTheme.textTransform ? buttonTheme.textTransform : 'uppercase'
-      };
-    },
-    getChildrenClasses: function getChildrenClasses() {
-      return [_enhancedButton2.default, _flatButtonLabel2.default];
-    }
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -216,29 +186,27 @@ var FlatButton = _react2.default.createClass({
       muiTheme: this.state.muiTheme
     };
   },
-
-  //to update theme inside state whenever a new theme is passed down
-  //from the parent / owner using context
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
   },
-  _handleKeyboardFocus: function _handleKeyboardFocus(e, isKeyboardFocused) {
+  _handleKeyboardFocus: function _handleKeyboardFocus(event, isKeyboardFocused) {
     this.setState({ isKeyboardFocused: isKeyboardFocused });
-    this.props.onKeyboardFocus(e, isKeyboardFocused);
+    this.props.onKeyboardFocus(event, isKeyboardFocused);
   },
-  _handleMouseEnter: function _handleMouseEnter(e) {
+  _handleMouseEnter: function _handleMouseEnter(event) {
     //Cancel hover styles for touch devices
     if (!this.state.touch) this.setState({ hovered: true });
-    this.props.onMouseEnter(e);
+    this.props.onMouseEnter(event);
   },
-  _handleMouseLeave: function _handleMouseLeave(e) {
+  _handleMouseLeave: function _handleMouseLeave(event) {
     this.setState({ hovered: false });
-    this.props.onMouseLeave(e);
+    this.props.onMouseLeave(event);
   },
-  _handleTouchStart: function _handleTouchStart(e) {
+  _handleTouchStart: function _handleTouchStart(event) {
     this.setState({ touch: true });
-    this.props.onTouchStart(e);
+    this.props.onTouchStart(event);
   },
   render: function render() {
     var _props = this.props;
@@ -257,17 +225,22 @@ var FlatButton = _react2.default.createClass({
 
     var other = _objectWithoutProperties(_props, ['children', 'disabled', 'hoverColor', 'backgroundColor', 'icon', 'label', 'labelStyle', 'labelPosition', 'primary', 'rippleColor', 'secondary', 'style']);
 
-    var _constructor$getRelev = this.constructor.getRelevantContextKeys(this.state.muiTheme);
-
-    var buttonColor = _constructor$getRelev.buttonColor;
-    var buttonHeight = _constructor$getRelev.buttonHeight;
-    var buttonMinWidth = _constructor$getRelev.buttonMinWidth;
-    var disabledTextColor = _constructor$getRelev.disabledTextColor;
-    var buttonFilterColor = _constructor$getRelev.buttonFilterColor;
-    var primaryTextColor = _constructor$getRelev.primaryTextColor;
-    var secondaryTextColor = _constructor$getRelev.secondaryTextColor;
-    var textColor = _constructor$getRelev.textColor;
-    var textTransform = _constructor$getRelev.textTransform;
+    var _state$muiTheme = this.state.muiTheme;
+    var _state$muiTheme$butto = _state$muiTheme.button;
+    var buttonHeight = _state$muiTheme$butto.height;
+    var buttonMinWidth = _state$muiTheme$butto.minWidth;
+    var buttonTextTransform = _state$muiTheme$butto.textTransform;
+    var _state$muiTheme$flatB = _state$muiTheme.flatButton;
+    var buttonFilterColor = _state$muiTheme$flatB.buttonFilterColor;
+    var buttonColor = _state$muiTheme$flatB.color;
+    var disabledTextColor = _state$muiTheme$flatB.disabledTextColor;
+    var fontSize = _state$muiTheme$flatB.fontSize;
+    var fontWeight = _state$muiTheme$flatB.fontWeight;
+    var primaryTextColor = _state$muiTheme$flatB.primaryTextColor;
+    var secondaryTextColor = _state$muiTheme$flatB.secondaryTextColor;
+    var textColor = _state$muiTheme$flatB.textColor;
+    var _state$muiTheme$flatB2 = _state$muiTheme$flatB.textTransform;
+    var textTransform = _state$muiTheme$flatB2 === undefined ? buttonTextTransform || 'uppercase' : _state$muiTheme$flatB2;
 
     var defaultTextColor = disabled ? disabledTextColor : primary ? primaryTextColor : secondary ? secondaryTextColor : textColor;
 
@@ -278,13 +251,13 @@ var FlatButton = _react2.default.createClass({
     var buttonBackgroundColor = backgroundColor || buttonColor;
     var hovered = (this.state.hovered || this.state.isKeyboardFocused) && !disabled;
 
-    var mergedRootStyles = (0, _styles.mergeStyles)({
+    var mergedRootStyles = (0, _simpleAssign2.default)({}, {
       color: defaultTextColor,
       transition: _transitions2.default.easeOut(),
-      fontSize: _typography2.default.fontStyleButtonFontSize,
+      fontSize: fontSize,
       letterSpacing: 0,
       textTransform: textTransform,
-      fontWeight: _typography2.default.fontWeightMedium,
+      fontWeight: fontWeight,
       borderRadius: 2,
       userSelect: 'none',
       position: 'relative',
@@ -316,7 +289,7 @@ var FlatButton = _react2.default.createClass({
       }
     }
 
-    var labelElement = label ? _react2.default.createElement(_flatButtonLabel2.default, { label: label, style: (0, _styles.mergeStyles)(labelStyleIcon, labelStyle) }) : undefined;
+    var labelElement = label ? _react2.default.createElement(_flatButtonLabel2.default, { label: label, style: (0, _simpleAssign2.default)({}, labelStyleIcon, labelStyle) }) : undefined;
 
     // Place label before or after children.
     var childrenFragment = labelPosition === 'before' ? {

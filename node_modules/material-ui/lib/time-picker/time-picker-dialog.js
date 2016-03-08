@@ -1,26 +1,22 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _stylePropable = require('../mixins/style-propable');
+var _reactEventListener = require('react-event-listener');
 
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
+var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
 
-var _windowListenable = require('../mixins/window-listenable');
+var _keycode = require('keycode');
 
-var _windowListenable2 = _interopRequireDefault(_windowListenable);
-
-var _keyCode = require('../utils/key-code');
-
-var _keyCode2 = _interopRequireDefault(_keyCode);
+var _keycode2 = _interopRequireDefault(_keycode);
 
 var _clock = require('./clock');
 
@@ -45,6 +41,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 var TimePickerDialog = _react2.default.createClass({
   displayName: 'TimePickerDialog',
 
+
   propTypes: {
     autoOk: _react2.default.PropTypes.bool,
     format: _react2.default.PropTypes.oneOf(['ampm', '24hr']),
@@ -58,12 +55,9 @@ var TimePickerDialog = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
   },
-
-  mixins: [_stylePropable2.default, _windowListenable2.default],
 
   getInitialState: function getInitialState() {
     return {
@@ -76,18 +70,11 @@ var TimePickerDialog = _react2.default.createClass({
       muiTheme: this.state.muiTheme
     };
   },
-
-  //to update theme inside state whenever a new theme is passed down
-  //from the parent / owner using context
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
   },
-
-  windowListeners: {
-    keyup: '_handleWindowKeyUp'
-  },
-
   getTheme: function getTheme() {
     return this.state.muiTheme.timePicker;
   },
@@ -111,8 +98,8 @@ var TimePickerDialog = _react2.default.createClass({
   },
   _handleWindowKeyUp: function _handleWindowKeyUp(event) {
     if (this.state.open) {
-      switch (event.keyCode) {
-        case _keyCode2.default.ENTER:
+      switch ((0, _keycode2.default)(event)) {
+        case 'enter':
           this._handleOKTouchTap();
           break;
       }
@@ -158,7 +145,7 @@ var TimePickerDialog = _react2.default.createClass({
       _dialog2.default,
       _extends({}, other, {
         ref: 'dialogWindow',
-        style: this.mergeStyles(styles.root),
+        style: styles.root,
         bodyStyle: styles.body,
         actions: actions,
         contentStyle: styles.dialogContent,
@@ -166,6 +153,7 @@ var TimePickerDialog = _react2.default.createClass({
         open: this.state.open,
         onRequestClose: this.dismiss
       }),
+      _react2.default.createElement(_reactEventListener2.default, { elementName: 'window', onKeyUp: this._handleWindowKeyUp }),
       _react2.default.createElement(_clock2.default, {
         ref: 'clock',
         format: format,

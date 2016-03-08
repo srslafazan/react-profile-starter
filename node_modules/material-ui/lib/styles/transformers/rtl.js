@@ -61,7 +61,7 @@ function rtl(muiTheme) {
               value = value.replace(matches[0], matches[1] + -parseFloat(matches[4]));
             }
             if (matches = value.match(reSkew)) {
-              value = value.replace(matches[0], matches[1] + -parseFloat(matches[4]) + matches[5] + matches[6] ? ',' + -parseFloat(matches[7]) + matches[8] : '');
+              value = value.replace(matches[0], matches[1] + -parseFloat(matches[4]) + matches[5] + matches[6] ? ', ' + (-parseFloat(matches[7]) + matches[8]) : '');
             }
             break;
 

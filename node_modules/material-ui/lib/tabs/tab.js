@@ -1,18 +1,14 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _stylePropable = require('../mixins/style-propable');
-
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
 var _getMuiTheme = require('../styles/getMuiTheme');
 
@@ -26,8 +22,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
+function getStyles(props, state) {
+  var tabs = state.muiTheme.tabs;
+
+
+  return {
+    root: {
+      padding: '0px 12px',
+      height: props.label && props.icon ? 72 : 48,
+      color: props.selected ? tabs.selectedTextColor : tabs.textColor,
+      fontWeight: 500,
+      fontSize: 14,
+      width: props.width,
+      textTransform: 'uppercase'
+    }
+  };
+}
+
 var Tab = _react2.default.createClass({
   displayName: 'Tab',
+
 
   propTypes: {
     /**
@@ -85,12 +99,9 @@ var Tab = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
   },
-
-  mixins: [_stylePropable2.default],
 
   getInitialState: function getInitialState() {
     return {
@@ -102,12 +113,10 @@ var Tab = _react2.default.createClass({
       muiTheme: this.state.muiTheme
     };
   },
-
-  //to update theme inside state whenever a new theme is passed down
-  //from the parent / owner using context
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
   },
   _handleTouchTap: function _handleTouchTap(event) {
     if (this.props.onTouchTap) {
@@ -127,17 +136,7 @@ var Tab = _react2.default.createClass({
 
     var other = _objectWithoutProperties(_props, ['label', 'onActive', 'onTouchTap', 'selected', 'style', 'value', 'width', 'icon']);
 
-    var textColor = selected ? this.state.muiTheme.tabs.selectedTextColor : this.state.muiTheme.tabs.textColor;
-
-    var styles = this.mergeStyles({
-      padding: '0px 12px',
-      height: label && icon ? 72 : 48,
-      color: textColor,
-      fontWeight: 500,
-      fontSize: 14,
-      width: width,
-      textTransform: 'uppercase'
-    }, style);
+    var styles = getStyles(this.props, this.state);
 
     var iconElement = undefined;
     if (icon && _react2.default.isValidElement(icon)) {
@@ -146,12 +145,12 @@ var Tab = _react2.default.createClass({
           fontSize: 24,
           marginBottom: label ? 5 : 0,
           display: label ? 'block' : 'inline-block',
-          color: textColor
+          color: styles.root.color
         }
       };
       // If it's svg icon set color via props
       if (icon.type.displayName !== 'FontIcon') {
-        params.color = textColor;
+        params.color = styles.root.color;
       }
       iconElement = _react2.default.cloneElement(icon, params);
     }
@@ -162,7 +161,7 @@ var Tab = _react2.default.createClass({
     return _react2.default.createElement(
       _enhancedButton2.default,
       _extends({}, other, {
-        style: styles,
+        style: styles.root,
         focusRippleColor: rippleColor,
         touchRippleColor: rippleColor,
         focusRippleOpacity: rippleOpacity,

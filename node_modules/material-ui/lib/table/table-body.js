@@ -1,12 +1,16 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var _simpleAssign = require('simple-assign');
+
+var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
 
 var _react = require('react');
 
@@ -20,13 +24,9 @@ var _tableRowColumn = require('./table-row-column');
 
 var _tableRowColumn2 = _interopRequireDefault(_tableRowColumn);
 
-var _clickAwayable = require('../mixins/click-awayable');
+var _ClickAwayListener = require('../ClickAwayListener');
 
-var _clickAwayable2 = _interopRequireDefault(_clickAwayable);
-
-var _stylePropable = require('../mixins/style-propable');
-
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
+var _ClickAwayListener2 = _interopRequireDefault(_ClickAwayListener);
 
 var _getMuiTheme = require('../styles/getMuiTheme');
 
@@ -40,6 +40,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 var TableBody = _react2.default.createClass({
   displayName: 'TableBody',
+
 
   propTypes: {
     /**
@@ -152,12 +153,9 @@ var TableBody = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
   },
-
-  mixins: [_clickAwayable2.default, _stylePropable2.default],
 
   getDefaultProps: function getDefaultProps() {
     return {
@@ -181,14 +179,10 @@ var TableBody = _react2.default.createClass({
       muiTheme: this.state.muiTheme
     };
   },
-
-  //to update theme inside state whenever a new theme is passed down
-  //from the parent / owner using context
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
-
-    var newState = {};
+    var newState = {
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    };
 
     if (this.props.allRowsSelected && !nextProps.allRowsSelected) {
       newState.selectedRows = this.state.selectedRows.length > 0 ? [this.state.selectedRows[this.state.selectedRows.length - 1]] : [];
@@ -317,19 +311,19 @@ var TableBody = _react2.default.createClass({
 
     return false;
   },
-  _onRowClick: function _onRowClick(e, rowNumber) {
-    e.stopPropagation();
+  _onRowClick: function _onRowClick(event, rowNumber) {
+    event.stopPropagation();
 
     if (this.props.selectable) {
       // Prevent text selection while selecting rows.
       window.getSelection().removeAllRanges();
-      this._processRowSelection(e, rowNumber);
+      this._processRowSelection(event, rowNumber);
     }
   },
-  _processRowSelection: function _processRowSelection(e, rowNumber) {
+  _processRowSelection: function _processRowSelection(event, rowNumber) {
     var selectedRows = this.state.selectedRows;
 
-    if (e.shiftKey && this.props.multiSelectable && selectedRows.length) {
+    if (event.shiftKey && this.props.multiSelectable && selectedRows.length) {
       var lastIndex = selectedRows.length - 1;
       var lastSelection = selectedRows[lastIndex];
 
@@ -338,7 +332,7 @@ var TableBody = _react2.default.createClass({
       } else {
         selectedRows.splice(lastIndex, 1, { start: lastSelection, end: rowNumber });
       }
-    } else if ((e.ctrlKey && !e.metaKey || e.metaKey && !e.ctrlKey) && this.props.multiSelectable) {
+    } else if ((event.ctrlKey && !event.metaKey || event.metaKey && !event.ctrlKey) && this.props.multiSelectable) {
       var idx = selectedRows.indexOf(rowNumber);
       if (idx < 0) {
         var foundRange = false;
@@ -427,22 +421,22 @@ var TableBody = _react2.default.createClass({
 
     return rows.sort();
   },
-  _onCellClick: function _onCellClick(e, rowNumber, columnNumber) {
-    e.stopPropagation();
-    if (this.props.onCellClick) this.props.onCellClick(rowNumber, this._getColumnId(columnNumber));
+  _onCellClick: function _onCellClick(event, rowNumber, columnNumber) {
+    event.stopPropagation();
+    if (this.props.onCellClick) this.props.onCellClick(rowNumber, this._getColumnId(columnNumber), event);
   },
-  _onCellHover: function _onCellHover(e, rowNumber, columnNumber) {
-    if (this.props.onCellHover) this.props.onCellHover(rowNumber, this._getColumnId(columnNumber));
-    this._onRowHover(e, rowNumber);
+  _onCellHover: function _onCellHover(event, rowNumber, columnNumber) {
+    if (this.props.onCellHover) this.props.onCellHover(rowNumber, this._getColumnId(columnNumber), event);
+    this._onRowHover(event, rowNumber);
   },
-  _onCellHoverExit: function _onCellHoverExit(e, rowNumber, columnNumber) {
-    if (this.props.onCellHoverExit) this.props.onCellHoverExit(rowNumber, this._getColumnId(columnNumber));
-    this._onRowHoverExit(e, rowNumber);
+  _onCellHoverExit: function _onCellHoverExit(event, rowNumber, columnNumber) {
+    if (this.props.onCellHoverExit) this.props.onCellHoverExit(rowNumber, this._getColumnId(columnNumber), event);
+    this._onRowHoverExit(event, rowNumber);
   },
-  _onRowHover: function _onRowHover(e, rowNumber) {
+  _onRowHover: function _onRowHover(event, rowNumber) {
     if (this.props.onRowHover) this.props.onRowHover(rowNumber);
   },
-  _onRowHoverExit: function _onRowHoverExit(e, rowNumber) {
+  _onRowHoverExit: function _onRowHoverExit(event, rowNumber) {
     if (this.props.onRowHoverExit) this.props.onRowHoverExit(rowNumber);
   },
   _getColumnId: function _getColumnId(columnNumber) {
@@ -458,12 +452,19 @@ var TableBody = _react2.default.createClass({
 
     var other = _objectWithoutProperties(_props, ['className', 'style']);
 
+    var prepareStyles = this.state.muiTheme.prepareStyles;
+
+
     var rows = this._createRows();
 
     return _react2.default.createElement(
-      'tbody',
-      { className: className, style: this.prepareStyles(style) },
-      rows
+      _ClickAwayListener2.default,
+      { onClickAway: this.componentClickAway },
+      _react2.default.createElement(
+        'tbody',
+        { className: className, style: prepareStyles((0, _simpleAssign2.default)({}, style)) },
+        rows
+      )
     );
   }
 });

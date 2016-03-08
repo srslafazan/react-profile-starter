@@ -1,18 +1,18 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _simpleAssign = require('simple-assign');
+
+var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _stylePropable = require('../mixins/style-propable');
-
-var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
 var _transitions = require('../styles/transitions');
 
@@ -30,8 +30,53 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
+function getStyles(props, state) {
+  var datePicker = state.muiTheme.datePicker;
+
+
+  var styles = {
+    root: {
+      backgroundColor: datePicker.selectColor,
+      borderTopLeftRadius: 2,
+      borderTopRightRadius: 2,
+      color: datePicker.textColor,
+      height: 60,
+      padding: 20
+    },
+    monthDay: {
+      display: 'inline-block',
+      fontSize: 36,
+      fontWeight: '400',
+      lineHeight: '36px',
+      height: props.mode === 'landscape' ? 76 : 38,
+      opacity: state.selectedYear ? 0.7 : 1.0,
+      transition: _transitions2.default.easeOut(),
+      width: '100%'
+    },
+    monthDayTitle: {
+      cursor: !state.selectedYear ? 'default' : 'pointer'
+    },
+    year: {
+      margin: 0,
+      fontSize: 16,
+      fontWeight: '400',
+      lineHeight: '16px',
+      height: 16,
+      opacity: state.selectedYear ? 1.0 : 0.7,
+      transition: _transitions2.default.easeOut(),
+      marginBottom: 10
+    },
+    yearTitle: {
+      cursor: state.selectedYear && !props.disableYearSelection ? 'pointer' : 'default'
+    }
+  };
+
+  return styles;
+}
+
 var DateDisplay = _react2.default.createClass({
   displayName: 'DateDisplay',
+
 
   propTypes: {
     DateTimeFormat: _react2.default.PropTypes.func.isRequired,
@@ -54,12 +99,9 @@ var DateDisplay = _react2.default.createClass({
     muiTheme: _react2.default.PropTypes.object
   },
 
-  //for passing default theme context to children
   childContextTypes: {
     muiTheme: _react2.default.PropTypes.object
   },
-
-  mixins: [_stylePropable2.default],
 
   getDefaultProps: function getDefaultProps() {
     return {
@@ -81,13 +123,12 @@ var DateDisplay = _react2.default.createClass({
     };
   },
   componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-    this.setState({ muiTheme: newMuiTheme });
-
-    var direction = undefined;
+    this.setState({
+      muiTheme: nextContext.muiTheme || this.state.muiTheme
+    });
 
     if (nextProps.selectedDate !== this.props.selectedDate) {
-      direction = nextProps.selectedDate > this.props.selectedDate ? 'up' : 'down';
+      var direction = nextProps.selectedDate > this.props.selectedDate ? 'up' : 'down';
       this.setState({
         transitionDirection: direction
       });
@@ -96,60 +137,6 @@ var DateDisplay = _react2.default.createClass({
     if (nextProps.monthDaySelected !== undefined) {
       this.setState({ selectedYear: !nextProps.monthDaySelected });
     }
-  },
-  getTheme: function getTheme() {
-    return this.state.muiTheme.datePicker;
-  },
-  getStyles: function getStyles() {
-    var theme = this.getTheme();
-    var isLandscape = this.props.mode === 'landscape';
-
-    var styles = {
-      root: {
-        backgroundColor: theme.selectColor,
-        borderTopLeftRadius: 2,
-        borderTopRightRadius: 2,
-        color: theme.textColor,
-        height: 60,
-        padding: 20
-      },
-
-      monthDay: {
-        root: {
-          display: 'inline-block',
-          fontSize: 36,
-          fontWeight: '400',
-          lineHeight: '36px',
-          height: isLandscape ? 76 : 38,
-          opacity: this.state.selectedYear ? 0.7 : 1.0,
-          transition: _transitions2.default.easeOut(),
-          width: '100%'
-        },
-
-        title: {
-          cursor: !this.state.selectedYear ? 'default' : 'pointer'
-        }
-      },
-
-      year: {
-        root: {
-          margin: 0,
-          fontSize: 16,
-          fontWeight: '400',
-          lineHeight: '16px',
-          height: 16,
-          opacity: this.state.selectedYear ? 1.0 : 0.7,
-          transition: _transitions2.default.easeOut(),
-          marginBottom: 10
-        },
-
-        title: {
-          cursor: this.state.selectedYear && !this.props.disableYearSelection ? 'pointer' : 'default'
-        }
-      }
-    };
-
-    return styles;
   },
   _handleMonthDayClick: function _handleMonthDayClick() {
     if (this.props.handleMonthDayClick && this.state.selectedYear) {
@@ -176,8 +163,11 @@ var DateDisplay = _react2.default.createClass({
 
     var other = _objectWithoutProperties(_props, ['DateTimeFormat', 'locale', 'selectedDate', 'style']);
 
+    var prepareStyles = this.state.muiTheme.prepareStyles;
+
+
     var year = this.props.selectedDate.getFullYear();
-    var styles = this.getStyles();
+    var styles = getStyles(this.props, this.state);
 
     var dateTimeFormatted = new DateTimeFormat(locale, {
       month: 'short',
@@ -187,30 +177,30 @@ var DateDisplay = _react2.default.createClass({
 
     return _react2.default.createElement(
       'div',
-      _extends({}, other, { style: this.prepareStyles(styles.root, this.props.style) }),
+      _extends({}, other, { style: prepareStyles((0, _simpleAssign2.default)(styles.root, style)) }),
       _react2.default.createElement(
         _slideIn2.default,
         {
-          style: styles.year.root,
+          style: styles.year,
           direction: this.state.transitionDirection
         },
         _react2.default.createElement(
           'div',
-          { key: year, style: styles.year.title, onTouchTap: this._handleYearClick },
+          { key: year, style: styles.yearTitle, onTouchTap: this._handleYearClick },
           year
         )
       ),
       _react2.default.createElement(
         _slideIn2.default,
         {
-          style: styles.monthDay.root,
+          style: styles.monthDay,
           direction: this.state.transitionDirection
         },
         _react2.default.createElement(
           'div',
           {
             key: dateTimeFormatted,
-            style: styles.monthDay.title,
+            style: styles.monthDayTitle,
             onTouchTap: this._handleMonthDayClick
           },
           dateTimeFormatted
