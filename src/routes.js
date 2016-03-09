@@ -23,15 +23,12 @@ import BlogPage from './components/BlogPage';
 const router = new Router(on => {
   on('*', async (state, next) => {
     const component = await next();
-    return component && <App context={state.context}>{component}</App>;
+    return component && <App context={state.context} path={state.path}>{component}</App>;
   });
 
   on('/',           async () => <ProfilePage />);
   on('/profile',    async () => <ProfilePage />);
   on('/blog',       async () => <BlogPage />);
-  on('/contact',    async () => <ContactPage />);
-  on('/login',      async () => <LoginPage />);
-  on('/register',   async () => <RegisterPage />);  
 
   on('*', async (state) => {
     const response = await fetch(`/api/content?path=${state.path}`);

@@ -7,15 +7,52 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
- @import '../variables.scss';
+@import '../variables.scss';
 
-$nav-link-color: #00A0FF;
-$nav-link-hover-color: #FFF;
+$nav-link-color: $accent-color;
+$nav-link-hover-color: #2BBBAD;
 $nav-link-active-color: orange;
 $nav-link-visited-color: pink;
 $nav-link-font-weight: 600;
 
+
 .root {
+  @include no-select;
+  position: fixed;
+  margin: 0;
+  top: 10px;
+  right: 10px;
+  box-shadow: 0px 0px 15px #888888;
+  // box-shadow: 0 2px 5px 0 #888888,0 2px 10px 0 #888888;
+  opacity: 50%;
+  width: 137px;
+  @media screen and (max-width: $screen-sm-min) {
+    width: 54px;
+  }
+}
+.container {
+  padding: 0.5rem;
+  text-align: center;
+  @media screen and (max-width: $screen-sm-min) {
+    display: none;
+  } 
+}
+.menuBarsContainer {
+  padding: 8px 10px 3px 11px;
+}
+.menuBars {
+  color: $nav-link-color;
+  cursor: pointer;
+  &:hover {
+    color: $nav-link-hover-color;
+  }
+  @media screen and (min-width: $screen-sm-min) {
+    display: none;
+  }
+}
+.mobileMenu {
+  display: none;
+  text-align: center;
 }
 
 .link, .scrollLink {
@@ -32,7 +69,6 @@ $nav-link-font-weight: 600;
   }
 
   &:active {
-    color: orange !important;
   }
 
 }
@@ -66,8 +102,7 @@ $nav-link-font-weight: 600;
 }
 
 .spacer {
-  color: rgba(255, 255, 255, .3);
-  // color: $accent-color;
+  color: gray;
 }
 
 

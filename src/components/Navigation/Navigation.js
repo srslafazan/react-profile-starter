@@ -12,28 +12,22 @@ import cx from 'classnames';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Navigation.scss';
 import Link from '../Link';
-import { Button, Row } from 'react-materialize';
+import { Button, Row, Icon } from 'react-materialize';
 import { STDEase } from '../constants';
+import Router from 'react-routing/src/Router';
+import PageKeeper from './PageKeeper';
 
-var pages = [
-  {
-    name: 'profile',
-    location: '/profile',
-    sections: [
-      'about me',
-    ]
-  },  
-  // {
-  //   name: 'blog',
-  //   location: '/blog',
-  //   sections: [
-  //     'about me',
-  //   ]
-  // },
-];
-
+var pk = new PageKeeper();
 
 class Navigation extends Component {
+
+  constructor(){
+    super()
+    this.state = {
+      menuOpen: false,
+      mediaSize: 'desktop',
+    }
+  }
 
   static propTypes = {
     className: PropTypes.string,
@@ -44,28 +38,89 @@ class Navigation extends Component {
     let n = $('#' + sectionName)
     $('html, body').animate({ scrollTop: n.offset().top }, 1200, STDEase.InOut);
   }
+  toggleMobileMenu(e) {
+    if(this.state.menuOpen){
+      $('#mobileMenu').fadeOut();
+      this.setState({ menuOpen: false });
+    } else {
+      $('#mobileMenu').fadeIn();
+      this.setState({ menuOpen: true });
+    }
+  }
+  handleResize() {
+    if($(window).width() >= 768){
+      $('#mobileMenu').hide();
+    }
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+    this.setState({ currentPageTitle: document.title });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  mixins() { 
+    return [ Router.State ];
+  } 
 
   render() {
-    var pageList = pages.map(function(page){
+    var desktopPageList = pk.pages.map(function(page, index){
+      if( index < pk.pages.length - 1 ) {
+        return (
+          <div style={{display: 'inline',}} key={index}>
+            <Link className={s.link} to={page.path} >{page.name}</Link>
+            <span className={s.spacer}> | </span>
+          </div>
+        );
+      } else {
+        return (
+          <div style={{display: 'inline',}} key={index}>
+            <Link className={s.link} to={page.path} >{page.name}</Link>
+          </div>
+        );
+      }
+    });
+    var mobilePageList = pk.pages.map(function(page, index){
       return (
-        <div style={{display: 'inline',}}>
-          <Link className={s.link} to={page.location} >{page.name}</Link>
+        <div key={index}>
+          <Link className={s.link} to={page.path} >{page.name}</Link>
         </div>
       );
     });
 
+
+
+    var scrollList = pk.currentPage(this.props.path).sections.map((section, index) => {
+
+      return (<a className={s.scrollLink} key={index} onClick={this.scrollToSection} data-scrollocation={section.scrollLocation}>{section.name}</a>);
+    });
+
     return (
-      <div className={cx(s.root, this.props.className)} role="navigation">
-        
-        <Row> 
-          { pageList }
-        </Row>
-        
-        <Row>
-          <a className={s.scrollLink} onClick={this.scrollToSection} data-scrollocation='profile'>About Me</a>
-          <a className={s.scrollLink} onClick={this.scrollToSection} data-scrollocation='projects'>Projects</a>
-          <a className={s.scrollLink} onClick={this.scrollToSection} data-scrollocation='contact'>Contact</a>
-        </Row>
+      <div className={cx(s.root, this.props.className, 'no-select')} id='shain-nav' role="navigation">
+
+        <div 
+          onClick={this.toggleMobileMenu.bind(this)} 
+          className={s.menuBarsContainer}
+          id='menuBarsContainer'>
+          <Icon className={s.menuBars}  small id='menuBars'>menu</Icon>
+        </div>
+
+        <div className={s.mobileMenu} id='mobileMenu'>
+          <Row>
+            { mobilePageList }
+          </Row>     
+        </div>
+
+        <div className={s.container}>
+          <Row>
+            { desktopPageList }
+          </Row>
+          <Row>
+            { scrollList }
+          </Row>
+        </div>
 
       </div>
     );

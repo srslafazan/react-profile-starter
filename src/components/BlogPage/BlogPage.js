@@ -11,7 +11,7 @@ import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './BlogPage.scss';
 
-import {Parallax, Background} from 'react-parallax';
+import { Parallax, Background } from 'react-parallax';
 import Splash from './Splash';
 import Profile from '../ProfilePage/Profile';
 import Contact from '../ProfilePage/Contact';
@@ -40,13 +40,18 @@ class BlogPage extends Component {
             
             <Splash
               heading="Mediocre At Best"
-              subheading='Tales of a Software Engineer, Life Hacker'
-              subheading2="Welcome! Please read about boring things I like :)"
-              buttonText='Contact Me'  
+              subheading='Tales of a Software and Life Hacker'
+              subheading2="Hold up! Scroll down if you want to learn about stuff."
+              buttonText='Contact Me'
+              path={this.props.path}
             ></Splash>          
           </Parallax>
 
-          <h1>The Blog Goes Here</h1>
+
+
+
+          <h1 id='blogs'>The blogs are coming for you.</h1>
+          <p style={{textAlign: 'center'}}>They've been getting lost lately. Don't worry, I've got a very experienced team of experts looking for them, right now. :)</p>
 
           <Profile />
           <Contact />

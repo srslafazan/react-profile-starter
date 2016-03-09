@@ -19,7 +19,7 @@ class Header extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <Navigation className={s.nav} />
+          <Navigation className={s.nav} path={this.props.path} />
         </div>
       </div>
     );
