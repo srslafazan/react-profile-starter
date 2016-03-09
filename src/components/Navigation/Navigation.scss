@@ -15,38 +15,43 @@ $nav-link-active-color: orange;
 $nav-link-visited-color: pink;
 $nav-link-font-weight: 600;
 
-
-// color: #26a69a;
-//   :hover {
-//     color: #2BBBAD;
-//     @include icon-spin;
-//   }
-
 .root {
 }
 
-.link {
-  display: inline-block;
+.link, .scrollLink {
   cursor: pointer;
   padding: 3px 8px;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: $nav-link-font-weight;
   margin: 1px 0 0 0;
-  // color: #989898;
-  color: $accent-color;
-}
+  text-transform: capitalize;
 
+  &:hover {
+    color: $nav-link-hover-color;
+  }
+
+  &:active {
+    color: orange !important;
+  }
+
+}
 .link {
-  // color: $primary-nav-font-color;
+  display: inline-block;
+  color: $accent-color;
+  // &:active {
+  //   color: purple;
+  // }
 }
-.link:active {
-  // color: $nav-link-active-color;
-}
-.link:hover {
-  color: $nav-link-hover-color;
-}
-.link:visited {
+.scrollLink {
+  display: block;
+  cursor: pointer;
+  padding: 3px 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: $nav-link-font-weight;
+  margin: 1px 0 0 0;
+  color: $accent-color;
 }
 
 .highlight {
@@ -55,13 +60,14 @@ $nav-link-font-weight: 600;
   border-radius: 3px;
   background: rgba(0, 0, 0, .15);
   color: #fff;
-}
-
-.highlight:hover {
-  background: rgba(0, 0, 0, .3);
+  &:hover {
+    background: rgba(0, 0, 0, .3);
+  }
 }
 
 .spacer {
   color: rgba(255, 255, 255, .3);
   // color: $accent-color;
 }
+
+

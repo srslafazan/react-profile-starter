@@ -24,10 +24,10 @@ class Splash extends Component {
       <div className={s.root} id='splash'>
         <div className={s.container}>
           <div className={s.lowerText}>
-            <h1 className={s.heading}>Shain Lafazan</h1>
-            <h2 className={s.subheading}>Software Engineer</h2>
-            <h2 className={s.subheading2}>Full Stack Web and Mobile Development</h2>
-            <Button onClick={this.scrollToBottom} >Contact Me</Button>
+            <h1 className={s.heading}>{this.props.heading}</h1>
+            <h2 className={s.subheading}>{this.props.subheading}</h2>
+            <h2 className={s.subheading2}>{this.props.subheading2}</h2>
+            <Button onClick={this.scrollToBottom} >{this.props.buttonText}</Button>
           </div>
           <div className={s.bottomTextContainer}>
             <a id='learn-more' className={s.bottomLink} onClick={this.scrollDown}>Learn more about what I do</a>

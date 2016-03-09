@@ -12,8 +12,26 @@ import cx from 'classnames';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Navigation.scss';
 import Link from '../Link';
-import Button from 'react-materialize';
+import { Button, Row } from 'react-materialize';
 import { STDEase } from '../constants';
+
+var pages = [
+  {
+    name: 'profile',
+    location: '/profile',
+    sections: [
+      'about me',
+    ]
+  },  
+  // {
+  //   name: 'blog',
+  //   location: '/blog',
+  //   sections: [
+  //     'about me',
+  //   ]
+  // },
+];
+
 
 class Navigation extends Component {
 
@@ -28,29 +46,34 @@ class Navigation extends Component {
   }
 
   render() {
+    var pageList = pages.map(function(page){
+      return (
+        <div style={{display: 'inline',}}>
+          <Link className={s.link} to={page.location} >{page.name}</Link>
+        </div>
+      );
+    });
+
     return (
       <div className={cx(s.root, this.props.className)} role="navigation">
         
-        <a className={s.link} onClick={this.scrollToSection} >Blog</a>
-        <a className={s.link} onClick={this.scrollToSection} >Other?</a>
+        <Row> 
+          { pageList }
+        </Row>
         
+        <Row>
+          <a className={s.scrollLink} onClick={this.scrollToSection} data-scrollocation='profile'>About Me</a>
+          <a className={s.scrollLink} onClick={this.scrollToSection} data-scrollocation='projects'>Projects</a>
+          <a className={s.scrollLink} onClick={this.scrollToSection} data-scrollocation='contact'>Contact</a>
+        </Row>
 
-
-        <span className={s.spacer}> | </span>
-        <span className={s.spacer}> | </span>
-
-        
-
-        <a className={s.link} onClick={this.scrollToSection} data-scrollocation='profile'>Profile</a>
-        <span className={s.spacer}> | </span>
-        <a className={s.link} onClick={this.scrollToSection} data-scrollocation='projects'>Projects</a>
-        <span className={s.spacer}> | </span>
-        <a className={s.link} onClick={this.scrollToSection} data-scrollocation='contact'>Contact</a>
       </div>
     );
   }
 
 }
+
+        // <span className={s.spacer}> | </span>
         // <Link className={s.link} to="/contact">Contact</Link>
         // <Link className={s.link} to="/profile">Profile</Link>
         // <Link className={cx(s.link, s.highlight)} to="/register">Sign up</Link>

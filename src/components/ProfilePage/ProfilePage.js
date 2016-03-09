@@ -9,7 +9,7 @@ import Contact from './Contact';
 import {Parallax, Background} from 'react-parallax';
 
 
-const title = 'Shain Lafazan';
+const title = "Shain's Profile";
 
 class ProfilePage extends Component {
 

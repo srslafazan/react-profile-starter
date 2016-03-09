@@ -18,6 +18,7 @@ import RegisterPage from './components/RegisterPage';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 import ProfilePage from './components/ProfilePage';
+import BlogPage from './components/BlogPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -27,6 +28,7 @@ const router = new Router(on => {
 
   on('/',           async () => <ProfilePage />);
   on('/profile',    async () => <ProfilePage />);
+  on('/blog',       async () => <BlogPage />);
   on('/contact',    async () => <ContactPage />);
   on('/login',      async () => <LoginPage />);
   on('/register',   async () => <RegisterPage />);  
