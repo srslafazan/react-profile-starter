@@ -38,7 +38,7 @@ var projects = [
 		imageUrl: "capuchinProject.png",
 		imageAlt: "Capuchin iOS app",
 		reference: {
-			name: "Skyler Gonsalves",
+			name: "Brian Schmidt",
 			title: "Engineer, Moody",
 			quote: "\"Shain's ability to efficiently pick up new technologies allows him to tackle any challenge.\"",
 			imageUrl: "brian_schmidt.jpg",

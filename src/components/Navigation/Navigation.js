@@ -30,6 +30,17 @@ class Navigation extends Component {
   render() {
     return (
       <div className={cx(s.root, this.props.className)} role="navigation">
+        
+        <a className={s.link} onClick={this.scrollToSection} >Blog</a>
+        <a className={s.link} onClick={this.scrollToSection} >Other?</a>
+        
+
+
+        <span className={s.spacer}> | </span>
+        <span className={s.spacer}> | </span>
+
+        
+
         <a className={s.link} onClick={this.scrollToSection} data-scrollocation='profile'>Profile</a>
         <span className={s.spacer}> | </span>
         <a className={s.link} onClick={this.scrollToSection} data-scrollocation='projects'>Projects</a>
