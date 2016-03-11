@@ -53,7 +53,9 @@ class Html extends Component {
         <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" />
         <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
         <style id="css" dangerouslySetInnerHTML={{ __html: this.props.css }} />
-        
+
+        <script src="https://html2canvas.hertzen.com/build/html2canvas.js" language="javascript"></script>
+
         <meta name="google-site-verification" content="IdWIRDw4xphA-QInOfH6qp7UA5sRjRQm9f1I11B4yoo" />
 
       </head>

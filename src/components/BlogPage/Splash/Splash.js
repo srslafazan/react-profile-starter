@@ -11,8 +11,6 @@ class Splash extends Component {
   scrollDown() {
     var n = $(window).height();
     $('html, body').animate({ scrollTop: n }, 1200, STDEase.InOut);
-    console.log(Cosntants);
-    console.log(Cosntants.STDEaseInOut);
   }
   scrollToBottom() {
     var n = $(document).height();

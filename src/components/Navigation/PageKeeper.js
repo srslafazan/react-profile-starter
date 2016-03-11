@@ -4,6 +4,8 @@ class PageKeeper {
       {
         name: 'profile',
         path: '/profile',
+        paths: ['/', '/profile'],
+        scrollLocation: 'body',
         sections: [
           {
             name: 'About Me',
@@ -22,9 +24,11 @@ class PageKeeper {
       {
         name: 'blog',
         path: '/blog',
+        paths: ['/blog'],
+        scrollLocation: 'body',
         sections: [
           {
-            name: 'Blogs',
+            name: 'Blog',
             scrollLocation: 'blogs',
           }, 
           { 
@@ -54,4 +58,4 @@ class PageKeeper {
   }
 }
 
-export default PageKeeper;
+export default new PageKeeper();

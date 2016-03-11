@@ -16,8 +16,8 @@ import { Button, Row, Icon } from 'react-materialize';
 import { STDEase } from '../constants';
 import Router from 'react-routing/src/Router';
 import PageKeeper from './PageKeeper';
+import StackBlur from "stackblur-canvas";
 
-var pk = new PageKeeper();
 
 class Navigation extends Component {
 
@@ -26,6 +26,7 @@ class Navigation extends Component {
     this.state = {
       menuOpen: false,
       mediaSize: 'desktop',
+      activePage: '',
     }
   }
 
@@ -34,10 +35,16 @@ class Navigation extends Component {
   };
 
   scrollToSection(e) {
-    let sectionName = e.target.getAttribute('data-scrollocation')
-    let n = $('#' + sectionName)
-    $('html, body').animate({ scrollTop: n.offset().top }, 1200, STDEase.InOut);
+    var page = $('html, body');
+    let sectionName = e.target.getAttribute('data-scrollocation');
+    let n = $('#' + sectionName);
+    $('html, body').animate( { scrollTop: n.offset().top }, 1200, STDEase.InOut );
   }
+
+  scrollToTop(e) {
+    $('html, body').animate( { scrollTop: 0 }, 1200, STDEase.InOut ); 
+  }
+
   toggleMobileMenu(e) {
     if(this.state.menuOpen){
       $('#mobileMenu').fadeOut();
@@ -54,35 +61,37 @@ class Navigation extends Component {
   }
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
-    this.setState({ currentPageTitle: document.title });
+    this.setState({ activePage: PageKeeper.currentPage(this.props.path).name } );
+    this.configureDesktopMenu();
+  }
+
+  configureDesktopMenu() {
+    var menu = document.getElementById('desktop-menu');
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
 
-  mixins() { 
-    return [ Router.State ];
-  } 
-
   render() {
-    var desktopPageList = pk.pages.map(function(page, index){
-      if( index < pk.pages.length - 1 ) {
+    var path = this.props.path;
+    var desktopPageList = PageKeeper.pages.map((page, index) => {
+      if( index < PageKeeper.pages.length - 1 ) {
         return (
           <div style={{display: 'inline',}} key={index}>
-            <Link className={s.link} to={page.path} >{page.name}</Link>
+            <Link className={s.link} to={page.path} path={path} >{page.name}</Link>
             <span className={s.spacer}> | </span>
           </div>
         );
       } else {
         return (
           <div style={{display: 'inline',}} key={index}>
-            <Link className={s.link} to={page.path} >{page.name}</Link>
+            <Link className={s.link} to={page.path} path={path} >{page.name}</Link>
           </div>
         );
       }
     });
-    var mobilePageList = pk.pages.map(function(page, index){
+    var mobilePageList = PageKeeper.pages.map(function(page, index){
       return (
         <div key={index}>
           <Link className={s.link} to={page.path} >{page.name}</Link>
@@ -90,38 +99,37 @@ class Navigation extends Component {
       );
     });
 
-
-
-    var scrollList = pk.currentPage(this.props.path).sections.map((section, index) => {
+    var scrollList = PageKeeper.currentPage(this.props.path).sections.map((section, index) => {
 
       return (<a className={s.scrollLink} key={index} onClick={this.scrollToSection} data-scrollocation={section.scrollLocation}>{section.name}</a>);
     });
 
     return (
-      <div className={cx(s.root, this.props.className, 'no-select')} id='shain-nav' role="navigation">
+      <div>
+        <div className={cx(s.root, this.props.className, 'no-select')} id='shain-nav' role="navigation">
 
-        <div 
-          onClick={this.toggleMobileMenu.bind(this)} 
-          className={s.menuBarsContainer}
-          id='menuBarsContainer'>
-          <Icon className={s.menuBars}  small id='menuBars'>menu</Icon>
+          <div 
+            onClick={this.toggleMobileMenu.bind(this)} 
+            className={s.menuBarsContainer}
+            id='menuBarsContainer'>
+            <Icon className={s.menuBars}  small id='menuBars'>menu</Icon>
+          </div>
+
+          <div className={s.mobileMenu} id='mobileMenu'>
+            <Row>
+              { mobilePageList }
+            </Row>     
+          </div>
+
+          <div className={s.container} id='desktop-menu'>
+            <Row>
+              { desktopPageList }
+            </Row>
+            <Row>
+              { scrollList }
+            </Row>
+          </div>
         </div>
-
-        <div className={s.mobileMenu} id='mobileMenu'>
-          <Row>
-            { mobilePageList }
-          </Row>     
-        </div>
-
-        <div className={s.container}>
-          <Row>
-            { desktopPageList }
-          </Row>
-          <Row>
-            { scrollList }
-          </Row>
-        </div>
-
       </div>
     );
   }

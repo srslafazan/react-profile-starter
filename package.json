@@ -39,6 +39,7 @@
     "redbox-react": "^1.2.2",
     "sequelize": "^3.19.2",
     "source-map-support": "0.4.0",
+    "stackblur-canvas": "^1.2.0",
     "webpack": "^1.12.13",
     "whatwg-fetch": "0.11.0"
   },
@@ -116,4 +117,3 @@
     "start": "babel-node tools/run start"
   }
 }
-
